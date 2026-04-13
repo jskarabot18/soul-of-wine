@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cluster Explorer — The Soul of Wine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --wine: #7B2D26;
+  --wine-dark: #5A1F1A;
+  --wine-light: #A04038;
+  --cream: #FAF6F1;
+  --parchment: #F2EBE0;
+  --ink: #1A1A1A;
+  --ink-light: #4A4A4A;
+  --ink-muted: #7A7A7A;
+  --border: #E0D8CC;
+  --white: #FFFFFF;
+
+  /* Cluster colors */
+  --c-owi: #7B2D26;
+  --c-oe: #C4883A;
+  --c-nwr: #3A7D6E;
+  --c-owe: #5B6AAF;
+  --c-ato: #8B5E3C;
+  --c-mod: #6B7B6B;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; }
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+nav {
+  background: rgba(250,246,241,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.8rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+}
+nav .brand a {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600; font-size: 1.15rem;
+  color: var(--wine);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+}
+nav .links { display: flex; gap: 1.8rem; }
+nav .links a {
+  font-size: 0.85rem; font-weight: 500;
+  color: var(--ink-light); text-decoration: none;
+  letter-spacing: 0.03em; transition: color 0.2s;
+}
+nav .links a:hover, nav .links a.active { color: var(--wine); }
+
+/* ── HEADER ── */
+.page-header {
+  padding: 3rem 2rem 1.5rem;
+  max-width: 1200px; margin: 0 auto;
+}
+.page-header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem; font-weight: 500;
+  color: var(--ink); margin-bottom: 0.3rem;
+}
+.page-header p { font-size: 0.95rem; color: var(--ink-muted); }
+
+/* ── FILTERS ── */
+.filters {
+  padding: 0 2rem; max-width: 1200px; margin: 0 auto 1.5rem;
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+}
+.filter-btn {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.82rem; font-weight: 500;
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--white);
+  color: var(--ink-light);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn:hover { border-color: var(--wine-light); color: var(--wine); }
+.filter-btn.active {
+  background: var(--wine);
+  border-color: var(--wine);
+  color: var(--white);
+}
+.filter-btn .dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
+
+/* ── MAIN GRID ── */
+.main-grid {
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 2rem 4rem;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 2rem;
+}
+@media (max-width: 900px) {
+  .main-grid { grid-template-columns: 1fr; }
+}
+
+/* ── REGION CARDS ── */
+.region-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.8rem;
+}
+.region-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.region-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 3px; height: 100%;
+  border-radius: 8px 0 0 8px;
+  transition: background 0.2s;
+}
+.region-card:hover { border-color: var(--wine-light); box-shadow: 0 2px 12px rgba(123,45,38,0.08); transform: translateY(-1px); }
+.region-card.selected { border-color: var(--wine); box-shadow: 0 4px 20px rgba(123,45,38,0.12); }
+
+.region-card .region-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 600;
+  color: var(--ink);
+}
+.region-card .region-meta {
+  font-size: 0.78rem; color: var(--ink-muted);
+  margin-top: 0.15rem;
+}
+.region-card .region-metaphor {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--wine);
+  margin-top: 0.3rem;
+}
+
+/* Cluster color stripes */
+.region-card[data-cluster="Old World Interior"]::before { background: var(--c-owi); }
+.region-card[data-cluster="Outward Ease"]::before { background: var(--c-oe); }
+.region-card[data-cluster="New World Reinvention"]::before { background: var(--c-nwr); }
+.region-card[data-cluster="Old World Exterior"]::before { background: var(--c-owe); }
+.region-card[data-cluster="Against the Odds"]::before { background: var(--c-ato); }
+.region-card[data-cluster="The Moderates"]::before { background: var(--c-mod); }
+
+/* ── DETAIL PANEL ── */
+.detail-panel {
+  position: sticky; top: 80px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.8rem;
+  height: fit-content;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+.detail-panel .empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+.detail-panel .empty-state svg {
+  width: 48px; height: 48px;
+  stroke: var(--border); fill: none;
+  margin-bottom: 1rem;
+}
+.detail-header {
+  display: flex; align-items: baseline; gap: 0.6rem;
+  margin-bottom: 0.3rem;
+}
+.detail-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem; font-weight: 600;
+  color: var(--ink);
+}
+.detail-country { font-size: 0.85rem; color: var(--ink-muted); }
+.detail-metaphor {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem; font-style: italic;
+  color: var(--wine);
+  margin-bottom: 0.5rem;
+}
+.detail-cluster {
+  display: inline-block;
+  font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border-radius: 12px;
+  color: var(--white);
+  margin-bottom: 1.5rem;
+}
+.detail-summary {
+  font-size: 0.9rem; color: var(--ink-light);
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Radar chart */
+.radar-container {
+  width: 100%; max-width: 280px;
+  margin: 0 auto 1rem;
+}
+.radar-container svg { width: 100%; height: auto; }
+
+/* D-score bars */
+.dscore-list { margin-top: 1rem; }
+.dscore-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 30px;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.dscore-label {
+  font-size: 0.75rem; font-weight: 500;
+  color: var(--ink-muted);
+  letter-spacing: 0.03em;
+}
+.dscore-bar-track {
+  height: 6px; background: var(--parchment);
+  border-radius: 3px; position: relative;
+  overflow: hidden;
+}
+.dscore-bar-fill {
+  position: absolute; top: 0; height: 100%;
+  border-radius: 3px;
+  background: var(--wine);
+  transition: width 0.4s ease, left 0.4s ease;
+}
+.dscore-val {
+  font-size: 0.8rem; font-weight: 600;
+  color: var(--ink);
+  text-align: right;
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 2rem;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem; color: var(--ink-muted);
+}
+footer a { color: var(--wine); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand"><a href="../index.html">The Soul of Wine</a></div>
+  <div class="links">
+    <a href="cluster-explorer.html" class="active">Cluster Explorer</a>
+    <a href="movement-map.html">Movement Map</a>
+    <a href="d-score-dashboard.html">Dashboard</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Cluster Explorer</h1>
+  <p>Select a cluster to filter, then click any region to see its identity profile.</p>
+</div>
+
+<div class="filters" id="filters"></div>
+
+<div class="main-grid">
+  <div class="region-grid" id="regionGrid"></div>
+  <div class="detail-panel" id="detailPanel">
+    <div class="empty-state">
+      <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/></svg>
+      <p>Click a region to explore its identity profile and D-score radar chart.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  The Soul of Wine · <a href="../index.html">Home</a> · <a href="https://github.com/jskarabot18/soul-of-wine">GitHub</a>
+</footer>
+
+<script>
+const CLUSTERS = [
+  { name: "Old World Interior", color: "#7B2D26" },
+  { name: "Outward Ease", color: "#C4883A" },
+  { name: "New World Reinvention", color: "#3A7D6E" },
+  { name: "Old World Exterior", color: "#5B6AAF" },
+  { name: "Against the Odds", color: "#8B5E3C" },
+  { name: "The Moderates", color: "#6B7B6B" }
+];
+
+const DIMS = ["D1","D2","D3","D4","D5","D6"];
+const DIM_LABELS = {
+  D1: "Interiority", D2: "Struggle", D3: "Tradition",
+  D4: "Individual", D5: "Urgency", D6: "Earthly"
+};
+const DIM_FULL = {
+  D1: "Interiority ↔ Exteriority",
+  D2: "Struggle ↔ Ease",
+  D3: "Tradition ↔ Reinvention",
+  D4: "Individual ↔ Collective",
+  D5: "Urgency ↔ Timelessness",
+  D6: "Earthly ↔ Transcendent"
+};
+
+/* Short summaries for each region — written from identity descriptions */
+const SUMMARIES = {
+  "Kamptal": "A region defined by disciplined precision. Austrian rigour applied to Grüner Veltliner and Riesling, where the winemaker's role is that of a meticulous craftsman working within inherited structures.",
+  "Steiermark": "Clarity as philosophy. Styria's steep slopes and cool climate produce wines of crystalline transparency, where the absence of ornament is itself a statement of identity.",
+  "Wachau": "Monumental in its terraces and its wines. The Danube gorge imposes a grandeur that winemakers honour through structured, age-worthy Rieslings and Grüner Veltliners of composed power.",
+  "Wagram": "Earth as identity. The loess plateau is not merely farmed — it is inhabited. Wagram's winemakers are custodians of a deep, traditional landscape where soil is the primary author.",
+  "Dalmatian Coast": "Tranquility as a mode of existence. A coastline where the pace of wine culture mirrors the Adriatic itself — unhurried, outward-facing in its warmth, deeply timeless in its rhythms.",
+  "Alsace": "A region of duality — French and Germanic, aromatic and structured, traditional and adaptable. Alsace navigates between two cultural worlds with extraordinary balance.",
+  "Beaujolais": "Joy as a deliberate cultural position. Beaujolais chooses pleasure and accessibility not from simplicity but from a conviction that wine should meet you more than halfway.",
+  "Bordeaux": "Wine as institutional enterprise. Bordeaux has translated centuries of history into a commercial and cultural apparatus of unmatched global reach. Business is not a metaphor — it is the organising principle.",
+  "Burgundy": "The archetype of devotion to place. Burgundy faces inward, defined by the weight of its own history and the irreducibility of its terroir. The winemaker is custodian, never creator.",
+  "Champagne": "Society — the wine as social currency. Champagne's identity is built on institutional power, collective discipline, and the transformation of a difficult northern climate into global prestige.",
+  "Châteauneuf-du-Pape": "Family in the deepest sense — generational continuity, collective memory, and the weight of inherited tradition in a landscape of ancient stones and papal history.",
+  "Jura": "Eccentricity elevated to philosophy. The Jura does things no other region would attempt, producing oxidative wines and vin jaune with a stubborn independence that defines its character.",
+  "Loire": "Sentimentality as an orientation to the world. The Loire invites affection rather than commanding respect — a long, gentle river of diverse wines unified by emotional approachability.",
+  "Northern Rhône": "Solitude as creative force. The Northern Rhône's identity is forged in the extreme individualism of its steep granite slopes, where the winemaker works alone against formidable terrain.",
+  "Provence": "Pleasure without apology. Provence's identity is built on sensory generosity and an outward-facing ease that makes its wines among the most immediately appealing in the world.",
+  "Baden": "Warmth — both climatic and cultural. Germany's sunniest wine region produces generous, accessible wines with an institutional depth that connects it to broader Old World tradition.",
+  "Mosel": "Poetry inscribed in slate. The Mosel is the most transcendent of all 59 regions — extreme in its difficulty, timeless in its orientation, producing Riesling that aspires to the ethereal.",
+  "Nahe": "Subtlety as a form of excellence. The Nahe works quietly, producing wines of understated complexity that reward patience and attention over immediate impact.",
+  "Pfalz": "Generosity in every dimension — warm climate, abundant production, and a culture of welcoming accessibility that makes the Pfalz Germany's most approachable wine region.",
+  "Rheingau": "Nobility — not as privilege but as a cultural ideal. The Rheingau's identity is built on hierarchical tradition, institutional prestige, and a deep commitment to Riesling as timeless expression.",
+  "Macedonia": "Austerity as identity. A region shaped by political isolation, economic hardship, and extreme continental conditions, where winemaking persists through sheer cultural stubbornness.",
+  "Santorini": "Survival is the organising principle. On a volcanic island of extreme wind, heat, and aridity, Assyrtiko grows in basket-trained vines as an act of defiance against the elements.",
+  "Tokaj": "Melancholy — the sweetness of Aszú carrying centuries of Hungarian history, loss, and the weight of a region whose greatest wines are inseparable from the sadness of time passing.",
+  "Alto Adige": "Precision as cultural inheritance. A bilingual region where Italian warmth and Germanic exactitude combine to produce wines of measured, balanced, technically impeccable character.",
+  "Campania": "Memory — deep, layered, and ancient. Campania's volcanic soils and Greek-era grape varieties carry a cultural weight that makes every bottle an encounter with accumulated time.",
+  "Etna": "Awakening — a volcano's ancient soils rediscovered by a new generation. Etna's identity is interior and struggle-defined, with extreme conditions producing wines of volcanic intensity.",
+  "Friuli-Venezia Giulia": "Dialogue — between Italian and Slavic cultures, between tradition and innovation, between orange wine revivalism and cool-climate precision. A region defined by conversation.",
+  "Liguria": "Intimacy at every scale. Tiny terraces, minuscule production, and a culture of privacy that makes Ligurian wine feel like a personal secret rather than a public commodity.",
+  "Piedmont": "Philosophy — not metaphorically but literally. Piedmont approaches winemaking as an intellectual discipline, debating Nebbiolo with the seriousness of a university seminar.",
+  "Sardinia": "Stubbornness as survival strategy. An island culture that maintains its own grape varieties, its own traditions, and its own timeline with a resistance to outside influence that borders on defiance.",
+  "Sicily": "Resurrection — from bulk wine anonymity to one of Italy's most dynamic fine wine regions. Sicily's reinvention is driven by a new generation reclaiming an ancient island's potential.",
+  "Tuscany": "Art — not heritage but the active, Renaissance-inflected creation of beauty. Tuscany's identity blends moderate ease with individual creative vision in a landscape of cultural richness.",
+  "Veneto": "Commerce as cultural engine. The Veneto's identity is built on volume, accessibility, and the outward-facing pragmatism of a region that has always understood markets.",
+  "Douro": "Endurance written into terraced schist. The Douro's winemakers have carved a living from one of Europe's most physically demanding landscapes over centuries of unbroken effort.",
+  "Goriška Brda": "Fortune — the accidental discovery of a crossroads identity where Slovenian, Italian, and Austrian influences meet to produce something none of them intended.",
+  "Catalonia": "Identity — political, cultural, and viticultural. Catalonia's wines are inseparable from the region's assertion of distinctiveness within and against the Spanish state.",
+  "Galicia": "Longing — morriña, the Galician word for homesickness. A culture shaped by emigration, Atlantic melancholy, and the persistent pull of return to a green, rain-soaked homeland.",
+  "Ribera del Duero": "Severity in climate, character, and wine. The Meseta's extreme continental conditions produce Tempranillo of dark concentration, reflecting a culture that equates harshness with authenticity.",
+  "Rioja": "Patience — the philosophy of extended aging as cultural practice. Rioja's identity is built on the belief that wine reveals itself through time, not force.",
+  "Mendoza": "Reinvention at altitude. Argentina's defining wine region has rebuilt its identity around Malbec and elevation, constructing a New World narrative of deliberate transformation.",
+  "Patagonia": "Extremity as frontier. Patagonia's winemakers push viticulture to its southern limit, where wind and cold define both the challenge and the character of the wines.",
+  "Barossa Valley": "Fortitude — old vines, extreme heat, and a multi-generational community that has endured through droughts, fashion shifts, and the constant threat of vine-pull schemes.",
+  "Hunter Valley": "Defiance of conditions that should make great wine impossible. The Hunter produces miraculous aged Semillon in heat and humidity that would defeat less stubborn cultures.",
+  "Margaret River": "Composure — calm, balanced, and measured. Margaret River's identity is defined not by extremity but by the absence of it, producing consistently excellent wines without drama.",
+  "Maipo Valley": "Pride — Chile's founding wine valley carries national significance, blending traditional Cabernet Sauvignon heritage with modern aspiration in a landscape of moderate, balanced conditions.",
+  "Central Otago": "Adventure — the world's southernmost wine region treats viticulture itself as an act of exploration, with Pinot Noir as the vehicle for discovering what the landscape can yield.",
+  "Hawke's Bay": "Confidence — quiet, earned, and unhurried. New Zealand's oldest wine region has the self-assurance of a place that knows what it can do without needing to shout about it.",
+  "Marlborough": "Assertion — Sauvignon Blanc as a statement so forceful it redefined how the world understands the variety. Marlborough's identity is its outward-facing, unmistakable clarity of purpose.",
+  "Stellenbosch": "Aspiration — South Africa's premier wine region is driven by individual professional ambition, building world-class credentials through disciplined, internationally-minded winemaking.",
+  "Swartland": "Rebellion — a wholesale rejection of the Cape wine establishment. The Swartland Revolution dismantled conventional structures and built new ones from the ground up.",
+  "Columbia Valley": "Determination — Washington State's vast AVA channels industrial-scale ambition into fine wine through irrigation engineering, research partnerships, and sheer productive will.",
+  "Finger Lakes": "Conviction — a cold-climate region that persists with Riesling against the odds, building its case through evidence, quality, and the stubborn belief that the terroir merits it.",
+  "Napa Valley": "Ambition — the defining force of American fine wine. Napa assembled the vocabulary of greatness from borrowed parts and made it unmistakably its own through individual drive.",
+  "Paso Robles": "Independence — a region that defines itself through the radical individualism of its producers, where no single variety or style dominates and freedom is the shared principle.",
+  "Santa Barbara": "Serendipity — a sideways discovery that cool-climate viticulture could thrive in Southern California. Santa Barbara's identity was found by accident and cultivated with increasing intention.",
+  "Santa Cruz Mountains": "Obsession — private, intense, and uncompromising. The Santa Cruz Mountains attract winemakers driven by singular vision rather than commercial ambition, creating wines of fierce individuality.",
+  "Sonoma": "Authenticity — a deliberate informality that masks serious winemaking intent. Sonoma defines itself partly against Napa's polish, choosing genuineness over grandeur.",
+  "Walla Walla": "Community — a wine region built on the principle that neighbours matter more than competition. Success is collective before it is individual.",
+  "Willamette Valley": "Idealism — founded on a bet against the odds. Oregon's Pinot Noir pioneers committed to a grape and a philosophy before the evidence warranted it."
+};
+
+let data = null;
+let activeCluster = null;
+let selectedRegion = null;
+
+function clusterColor(name) {
+  const c = CLUSTERS.find(c => c.name === name);
+  return c ? c.color : "#999";
+}
+
+function buildFilters() {
+  const el = document.getElementById('filters');
+  let html = `<button class="filter-btn active" onclick="filterCluster(null)">All (59)</button>`;
+  CLUSTERS.forEach(c => {
+    const count = data.regions.filter(r => r.cluster === c.name).length;
+    html += `<button class="filter-btn" data-cluster="${c.name}" onclick="filterCluster('${c.name}')">
+      <span class="dot" style="background:${c.color}"></span>${c.name} (${count})
+    </button>`;
+  });
+  el.innerHTML = html;
+}
+
+function filterCluster(cluster) {
+  activeCluster = cluster;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    const bc = b.dataset.cluster || null;
+    b.classList.toggle('active', bc === cluster || (cluster === null && !bc));
+  });
+  renderRegions();
+}
+
+function renderRegions() {
+  const grid = document.getElementById('regionGrid');
+  const regions = activeCluster
+    ? data.regions.filter(r => r.cluster === activeCluster)
+    : data.regions;
+
+  grid.innerHTML = regions.map(r => `
+    <div class="region-card ${selectedRegion && selectedRegion.id === r.id ? 'selected' : ''}"
+         data-cluster="${r.cluster}"
+         onclick="selectRegion(${r.id})">
+      <div class="region-name">${r.region}</div>
+      <div class="region-meta">${r.country} · ${r.world}</div>
+      <div class="region-metaphor">${r.metaphor}</div>
+    </div>
+  `).join('');
+}
+
+function selectRegion(id) {
+  selectedRegion = data.regions.find(r => r.id === id);
+  renderRegions();
+  renderDetail();
+}
+
+function renderDetail() {
+  const panel = document.getElementById('detailPanel');
+  if (!selectedRegion) {
+    panel.innerHTML = `<div class="empty-state">
+      <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" fill="none" stroke="currentColor"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/></svg>
+      <p>Click a region to explore its identity profile.</p>
+    </div>`;
+    return;
+  }
+
+  const r = selectedRegion;
+  const color = clusterColor(r.cluster);
+  const summary = SUMMARIES[r.region] || '';
+
+  /* Compute cluster mean */
+  const clusterRegions = data.regions.filter(cr => cr.cluster === r.cluster);
+  const means = {};
+  DIMS.forEach(d => {
+    means[d] = clusterRegions.reduce((s, cr) => s + cr[d], 0) / clusterRegions.length;
+  });
+
+  panel.innerHTML = `
+    <div class="detail-header">
+      <h2>${r.region}</h2>
+      <span class="detail-country">${r.country}</span>
+    </div>
+    <div class="detail-metaphor">${r.metaphor}</div>
+    <div class="detail-cluster" style="background:${color}">${r.cluster}</div>
+    <div class="detail-summary">${summary}</div>
+    <div class="radar-container" id="radarContainer"></div>
+    <div class="dscore-list" id="dscoreList"></div>
+  `;
+
+  drawRadar(r, means, color);
+  drawBars(r);
+}
+
+function drawRadar(region, means, color) {
+  const size = 280;
+  const cx = size / 2, cy = size / 2;
+  const maxR = 105;
+  const levels = 5; // -2, -1, 0, +1, +2 mapped to 0-4
+  const n = DIMS.length;
+  const angleStep = (2 * Math.PI) / n;
+  const startAngle = -Math.PI / 2;
+
+  function polarX(angle, radius) { return cx + radius * Math.cos(angle); }
+  function polarY(angle, radius) { return cy + radius * Math.sin(angle); }
+
+  function valueToRadius(val) {
+    return ((val + 2) / 4) * maxR; // maps -2..+2 to 0..maxR
+  }
+
+  let svg = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">`;
+
+  /* Grid rings */
+  for (let l = 0; l <= 4; l++) {
+    const r = (l / 4) * maxR;
+    let pts = [];
+    for (let i = 0; i < n; i++) {
+      const angle = startAngle + i * angleStep;
+      pts.push(`${polarX(angle, r)},${polarY(angle, r)}`);
+    }
+    svg += `<polygon points="${pts.join(' ')}" fill="none" stroke="#E0D8CC" stroke-width="${l === 2 ? 1.2 : 0.5}" ${l === 2 ? 'stroke-dasharray="3,2"' : ''}/>`;
+  }
+
+  /* Axis lines */
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    svg += `<line x1="${cx}" y1="${cy}" x2="${polarX(angle, maxR)}" y2="${polarY(angle, maxR)}" stroke="#E0D8CC" stroke-width="0.5"/>`;
+  }
+
+  /* Cluster mean polygon */
+  let meanPts = [];
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    const r = valueToRadius(means[DIMS[i]]);
+    meanPts.push(`${polarX(angle, r)},${polarY(angle, r)}`);
+  }
+  svg += `<polygon points="${meanPts.join(' ')}" fill="${color}" fill-opacity="0.08" stroke="${color}" stroke-width="1" stroke-dasharray="4,3"/>`;
+
+  /* Region polygon */
+  let regPts = [];
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    const r = valueToRadius(region[DIMS[i]]);
+    regPts.push(`${polarX(angle, r)},${polarY(angle, r)}`);
+  }
+  svg += `<polygon points="${regPts.join(' ')}" fill="${color}" fill-opacity="0.15" stroke="${color}" stroke-width="2"/>`;
+
+  /* Dots on region */
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    const r = valueToRadius(region[DIMS[i]]);
+    svg += `<circle cx="${polarX(angle, r)}" cy="${polarY(angle, r)}" r="3.5" fill="${color}" stroke="white" stroke-width="1.5"/>`;
+  }
+
+  /* Labels */
+  const labelR = maxR + 18;
+  for (let i = 0; i < n; i++) {
+    const angle = startAngle + i * angleStep;
+    const lx = polarX(angle, labelR);
+    const ly = polarY(angle, labelR);
+    const anchor = Math.abs(lx - cx) < 5 ? 'middle' : (lx > cx ? 'start' : 'end');
+    svg += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" dominant-baseline="central"
+      font-family="Source Sans 3, sans-serif" font-size="10" font-weight="500" fill="#7A7A7A">${DIM_LABELS[DIMS[i]]}</text>`;
+  }
+
+  /* Legend */
+  svg += `<rect x="8" y="${size - 28}" width="8" height="8" rx="1" fill="${color}" fill-opacity="0.15" stroke="${color}" stroke-width="1"/>`;
+  svg += `<text x="20" y="${size - 21}" font-family="Source Sans 3, sans-serif" font-size="9" fill="#7A7A7A">${region.region}</text>`;
+  svg += `<rect x="8" y="${size - 15}" width="8" height="8" rx="1" fill="${color}" fill-opacity="0.08" stroke="${color}" stroke-width="1" stroke-dasharray="3,2"/>`;
+  svg += `<text x="20" y="${size - 8}" font-family="Source Sans 3, sans-serif" font-size="9" fill="#7A7A7A">${region.cluster} mean</text>`;
+
+  svg += '</svg>';
+  document.getElementById('radarContainer').innerHTML = svg;
+}
+
+function drawBars(region) {
+  const el = document.getElementById('dscoreList');
+  el.innerHTML = DIMS.map(d => {
+    const val = region[d];
+    // Map -2..+2 to percentage: center at 50%
+    const center = 50;
+    const pct = (val / 2) * 50; // ±50% from center
+    const left = val >= 0 ? center : center + pct;
+    const width = Math.abs(pct);
+    return `<div class="dscore-row">
+      <div class="dscore-label">${DIM_FULL[d]}</div>
+      <div class="dscore-bar-track">
+        <div style="position:absolute;left:50%;top:0;width:1px;height:100%;background:#ccc;"></div>
+        <div class="dscore-bar-fill" style="left:${left}%;width:${width}%;background:${val >= 0 ? '#7B2D26' : '#5B6AAF'}"></div>
+      </div>
+      <div class="dscore-val">${val > 0 ? '+' : ''}${val}</div>
+    </div>`;
+  }).join('');
+}
+
+/* Load data */
+fetch('../data/regions.json')
+  .then(r => r.json())
+  .then(d => {
+    data = d;
+    buildFilters();
+    renderRegions();
+    renderDetail();
+  });
+</script>
+</body>
+</html>

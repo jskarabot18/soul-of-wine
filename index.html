@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Soul of Wine — Research Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --wine: #7B2D26;
+  --wine-dark: #5A1F1A;
+  --wine-light: #A04038;
+  --cream: #FAF6F1;
+  --parchment: #F2EBE0;
+  --ink: #1A1A1A;
+  --ink-light: #4A4A4A;
+  --ink-muted: #7A7A7A;
+  --border: #E0D8CC;
+  --white: #FFFFFF;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: 'Source Sans 3', 'Georgia', serif;
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(250, 246, 241, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.8rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+nav .brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600; font-size: 1.15rem;
+  color: var(--wine);
+  letter-spacing: 0.04em;
+}
+nav .links { display: flex; gap: 1.8rem; }
+nav .links a {
+  font-size: 0.85rem; font-weight: 500;
+  color: var(--ink-light);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color 0.2s;
+}
+nav .links a:hover { color: var(--wine); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  text-align: center;
+  padding: 6rem 2rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(123,45,38,0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 80% at 20% 80%, rgba(123,45,38,0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-overline {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--wine);
+  margin-bottom: 1.5rem;
+  opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+}
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.8rem, 6vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--ink);
+  max-width: 14ch;
+  margin-bottom: 1.5rem;
+  opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--wine);
+}
+.hero-subtitle {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 1.15rem; font-weight: 300;
+  color: var(--ink-light);
+  max-width: 42ch;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+}
+.hero-stat {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.85rem; color: var(--ink-muted);
+  opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+}
+.hero-stat strong {
+  font-weight: 600;
+  color: var(--wine);
+  font-size: 1rem;
+}
+.hero-scroll {
+  position: absolute; bottom: 2rem;
+  opacity: 0; animation: fadeUp 0.8s 1.2s forwards;
+}
+.hero-scroll svg { width: 20px; height: 20px; stroke: var(--ink-muted); animation: bob 2s ease-in-out infinite; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* ── SECTIONS ── */
+section { padding: 5rem 2rem; }
+.container { max-width: 860px; margin: 0 auto; }
+.container-wide { max-width: 1100px; margin: 0 auto; }
+
+.section-label {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--wine);
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+}
+
+/* ── ABSTRACT ── */
+#abstract { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+#abstract p {
+  font-size: 1.05rem;
+  color: var(--ink-light);
+  margin-bottom: 1.2rem;
+  max-width: 65ch;
+}
+#abstract p:last-of-type { margin-bottom: 0; }
+
+/* ── KEY FINDINGS ── */
+.findings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.finding-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.8rem;
+  position: relative;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.finding-card:hover {
+  border-color: var(--wine-light);
+  box-shadow: 0 4px 20px rgba(123,45,38,0.08);
+}
+.finding-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem; font-weight: 700;
+  color: var(--wine);
+  opacity: 0.15;
+  position: absolute; top: 1rem; right: 1.2rem;
+}
+.finding-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem; font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.6rem;
+  line-height: 1.3;
+}
+.finding-card p {
+  font-size: 0.92rem;
+  color: var(--ink-light);
+  line-height: 1.6;
+}
+
+/* ── EXPLORE ── */
+.explore-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.explore-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2rem;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+.explore-card:hover {
+  border-color: var(--wine);
+  box-shadow: 0 6px 28px rgba(123,45,38,0.1);
+  transform: translateY(-3px);
+}
+.explore-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: rgba(123,45,38,0.07);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1.2rem;
+}
+.explore-icon svg { width: 22px; height: 22px; stroke: var(--wine); fill: none; stroke-width: 1.6; }
+.explore-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem; font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+.explore-card p {
+  font-size: 0.9rem;
+  color: var(--ink-light);
+  line-height: 1.6;
+  flex: 1;
+}
+.explore-card .arrow {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-size: 0.85rem; font-weight: 500;
+  color: var(--wine);
+  margin-top: 1.2rem;
+  transition: gap 0.3s;
+}
+.explore-card:hover .arrow { gap: 0.7rem; }
+
+/* ── METHOD SUMMARY ── */
+#method { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.method-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.2rem;
+  margin-top: 2rem;
+}
+.method-step {
+  padding: 1.2rem;
+  border-left: 3px solid var(--border);
+  transition: border-color 0.3s;
+}
+.method-step:hover { border-color: var(--wine); }
+.method-step-label {
+  font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--wine);
+  margin-bottom: 0.4rem;
+}
+.method-step h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
+}
+.method-step p {
+  font-size: 0.85rem; color: var(--ink-muted); line-height: 1.5;
+}
+
+/* ── NUMBERS BAR ── */
+.numbers-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 3rem 2rem;
+  background: var(--parchment);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.number-item { text-align: center; }
+.number-item .val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem; font-weight: 700;
+  color: var(--wine);
+}
+.number-item .label {
+  font-size: 0.78rem; color: var(--ink-muted);
+  letter-spacing: 0.05em;
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 3rem 2rem;
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+footer p {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  line-height: 1.8;
+}
+footer a { color: var(--wine); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  nav { padding: 0.6rem 1rem; }
+  nav .links { gap: 1rem; }
+  nav .links a { font-size: 0.78rem; }
+  section { padding: 3rem 1.2rem; }
+  .findings-grid, .explore-grid { grid-template-columns: 1fr; }
+  .method-steps { grid-template-columns: 1fr 1fr; }
+  .numbers-bar { gap: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">The Soul of Wine</div>
+  <div class="links">
+    <a href="#abstract">Abstract</a>
+    <a href="#findings">Findings</a>
+    <a href="#explore">Explore</a>
+    <a href="#method">Method</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-overline">A Research Project by Jure Skarabot</div>
+  <h1>The <em>Soul</em> of Wine</h1>
+  <p class="hero-subtitle">Terroir shapes what grapes can become. History, ambition, and culture determine what a region chooses to be.</p>
+  <div class="hero-stat">
+    <span>59 regions</span>
+    <span style="color:var(--border)">·</span>
+    <span>6 identity clusters</span>
+    <span style="color:var(--border)">·</span>
+    <span>ARI = <strong>−0.001</strong></span>
+  </div>
+  <div class="hero-scroll">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+  </div>
+</section>
+
+<!-- ── ABSTRACT ── -->
+<section id="abstract">
+  <div class="container">
+    <div class="section-label">Abstract</div>
+    <div class="section-title">The map is not the soul</div>
+    <p>
+      This study asks whether the cultural identity of a wine region can be predicted from its physical terroir. We classify 59 wine regions from 16 countries along two independent axes: a terroir classification derived from TF-IDF vectorisation of climate, soil, and topographic profiles, and an identity classification derived from expert-scored dimensional ratings of anthropological character.
+    </p>
+    <p>
+      The result is unambiguous. The Adjusted Rand Index between the two clustering solutions is −0.001 — effectively zero. Knowing a region's terroir cluster provides no information about its identity cluster. The two systems are statistically independent.
+    </p>
+    <p>
+      The six identity clusters that emerge — Old World Interior, Outward Ease, New World Reinvention, Old World Exterior, Against the Odds, and The Moderates — reveal a typology of wine region character that transcends geography. Regions are grouped not by what the land gives them but by what they have chosen to make of it.
+    </p>
+  </div>
+</section>
+
+<!-- ── NUMBERS ── -->
+<div class="numbers-bar">
+  <div class="number-item"><div class="val">59</div><div class="label">Regions</div></div>
+  <div class="number-item"><div class="val">16</div><div class="label">Countries</div></div>
+  <div class="number-item"><div class="val">6</div><div class="label">Identity Clusters</div></div>
+  <div class="number-item"><div class="val">6</div><div class="label">D-Score Dimensions</div></div>
+  <div class="number-item"><div class="val">0.3110</div><div class="label">Silhouette Score</div></div>
+  <div class="number-item"><div class="val">−0.001</div><div class="label">ARI (Independence)</div></div>
+</div>
+
+<!-- ── KEY FINDINGS ── -->
+<section id="findings">
+  <div class="container-wide">
+    <div class="section-label">Key Findings</div>
+    <div class="section-title">Three discoveries</div>
+    <div class="findings-grid">
+      <div class="finding-card">
+        <div class="finding-number">1</div>
+        <h3>Terroir shapes identity, but history modulates the signal</h3>
+        <p>Physical geography creates the conditions for winemaking, but historical depth — time, tradition, institutional memory — is the dimension that most strongly differentiates identity clusters. The land sets constraints; the culture interprets them.</p>
+      </div>
+      <div class="finding-card">
+        <div class="finding-number">2</div>
+        <h3>The type of terroir predicts the type of identity</h3>
+        <p>Harsh, marginal terroir tends to produce identities of struggle and endurance. Generous terroir tends to produce identities of ease and pleasure. The relationship is real — but it is a tendency, not a law, and the exceptions are as revealing as the pattern.</p>
+      </div>
+      <div class="finding-card">
+        <div class="finding-number">3</div>
+        <h3>Where terroir's constraints are weakest, human ambition fills the void</h3>
+        <p>New World regions with favourable growing conditions show the highest winemaker ambition scores. When the land does not impose an identity, the winemaker constructs one. Ambition is the mirror image of terroir determinism.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EXPLORE ── -->
+<section id="explore" style="background: var(--parchment); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="container-wide">
+    <div class="section-label">Interactive Tools</div>
+    <div class="section-title">Explore the data</div>
+    <div class="explore-grid">
+
+      <a href="visualizations/cluster-explorer.html" class="explore-card">
+        <div class="explore-icon">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/></svg>
+        </div>
+        <h3>Cluster Explorer</h3>
+        <p>Radar charts showing the D-score identity profile of each region. Filter by cluster, click any region for its soul metaphor and character summary.</p>
+        <span class="arrow">Explore clusters →</span>
+      </a>
+
+      <a href="visualizations/movement-map.html" class="explore-card">
+        <div class="explore-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3>Movement Map</h3>
+        <p>Visual proof of independence: see where each region falls in terroir space versus identity space. Highlights the divergence cases that make the study compelling.</p>
+        <span class="arrow">View the map →</span>
+      </a>
+
+      <a href="visualizations/d-score-dashboard.html" class="explore-card">
+        <div class="explore-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <h3>D-Score Dashboard</h3>
+        <p>The full 59 × 6 score matrix. Colour-coded, sortable, filterable by cluster, country, or world. Includes cluster mean profiles.</p>
+        <span class="arrow">Open dashboard →</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── METHOD ── -->
+<section id="method">
+  <div class="container-wide">
+    <div class="section-label">Methodology</div>
+    <div class="section-title">How the study works</div>
+    <div class="method-steps">
+      <div class="method-step">
+        <div class="method-step-label">Layer 1</div>
+        <h4>Identity Descriptions</h4>
+        <p>280–320 word anthropological narrative per region. Five dimensions: core metaphor, relationship to time, relationship to the outside world, the winemaker's role, distinctiveness.</p>
+      </div>
+      <div class="method-step">
+        <div class="method-step-label">Layer 2</div>
+        <h4>Terroir Profiles</h4>
+        <p>Six factual fields: climate, soils, principal varieties, winemaking, production structure, historical position. TF-IDF vectorised independently.</p>
+      </div>
+      <div class="method-step">
+        <div class="method-step-label">D-Scores</div>
+        <h4>Identity Dimensions</h4>
+        <p>Six expert-scored axes (−2 to +2): Interiority, Struggle, Tradition, Individuality, Urgency, Earthliness. Derived from Layer 1 descriptions by SME.</p>
+      </div>
+      <div class="method-step">
+        <div class="method-step-label">Pipeline</div>
+        <h4>K-Means Clustering</h4>
+        <p>D-scores standardised, PCA-reduced, k=6 K-means. Terroir clustered separately. ARI tests independence between the two solutions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>
+    The Soul of Wine · A research project by <a href="https://github.com/jskarabot18">Jure Skarabot</a><br>
+    59 regions · 16 countries · 6 identity clusters · Pass 5 Post-SME Review · April 2026<br>
+    <a href="https://github.com/jskarabot18/soul-of-wine">GitHub Repository</a>
+  </p>
+</footer>
+
+</body>
+</html>

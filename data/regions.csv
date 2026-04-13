@@ -1,0 +1,60 @@
+id,world,country,region,metaphor,cluster,D1,D2,D3,D4,D5,D6
+1,Old World,Austria,Kamptal,Discipline,The Moderates,1,0,1,1,0,0
+2,Old World,Austria,Steiermark,Clarity,The Moderates,1,0,0,1,1,1
+3,Old World,Austria,Wachau,Monumentality,The Moderates,0,0,1,1,0,1
+4,Old World,Austria,Wagram,Earth,Against the Odds,2,0,2,0,0,1
+5,Old World,Croatia,Dalmatian Coast,Tranquility,Old World Exterior,2,-2,1,-1,-2,2
+6,Old World,France,Alsace,Duality,The Moderates,0,0,1,0,0,0
+7,Old World,France,Beaujolais,Joy,Outward Ease,-1,-1,-1,-1,1,1
+8,Old World,France,Bordeaux,Business,Old World Exterior,-2,-1,2,-2,0,1
+9,Old World,France,Burgundy,Devotion,Old World Interior,2,1,2,1,-1,-1
+10,Old World,France,Champagne,Society,Old World Exterior,-2,-1,2,-2,0,-1
+11,Old World,France,Châteauneuf-du-Pape,Family,Old World Exterior,-1,0,2,-2,-1,1
+12,Old World,France,Jura,Eccentricity,Against the Odds,2,1,2,1,0,1
+13,Old World,France,Loire,Sentimentality,The Moderates,-1,0,0,0,0,0
+14,Old World,France,Northern Rhône,Solitude,Old World Interior,2,2,2,2,-2,-1
+15,Old World,France,Provence,Pleasure,Outward Ease,-2,-2,0,-1,1,1
+16,Old World,Germany,Baden,Warmth,Old World Exterior,-1,-1,1,-1,-1,1
+17,Old World,Germany,Mosel,Poetry,Old World Interior,2,2,2,1,-2,-2
+18,Old World,Germany,Nahe,Subtlety,The Moderates,1,0,1,1,-1,0
+19,Old World,Germany,Pfalz,Generosity,Old World Exterior,-1,-2,1,-1,-1,1
+20,Old World,Germany,Rheingau,Nobility,Old World Interior,1,0,2,1,-2,0
+21,Old World,Greece,Macedonia,Austerity,Against the Odds,2,2,2,1,0,1
+22,Old World,Greece,Santorini,Survival,Against the Odds,2,2,1,1,1,1
+23,Old World,Hungary,Tokaj,Melancholy,Old World Interior,2,1,2,1,-2,-1
+24,Old World,Italy,Alto Adige,Precision,The Moderates,0,0,1,0,0,1
+25,Old World,Italy,Campania,Memory,Old World Interior,1,0,1,0,-1,-1
+26,Old World,Italy,Etna,Awakening,Old World Interior,1,2,0,0,1,-1
+27,Old World,Italy,Friuli-Venezia Giulia,Dialogue,The Moderates,-1,0,0,0,0,0
+28,Old World,Italy,Liguria,Intimacy,Against the Odds,2,1,1,1,-1,1
+29,Old World,Italy,Piedmont,Philosophy,Old World Interior,2,1,2,1,-2,-1
+30,Old World,Italy,Sardinia,Stubbornness,Against the Odds,2,1,2,-1,-1,2
+31,Old World,Italy,Sicily,Resurrection,New World Reinvention,-1,1,-2,1,1,1
+32,Old World,Italy,Tuscany,Art,The Moderates,-1,-1,0,1,0,0
+33,Old World,Italy,Veneto,Commerce,Outward Ease,-2,0,-1,-1,1,1
+34,Old World,Portugal,Douro,Endurance,Against the Odds,1,2,2,1,-1,1
+35,Old World,Slovenia,Goriška Brda,Fortune,The Moderates,-1,0,0,0,0,1
+36,Old World,Spain,Catalonia,Identity,New World Reinvention,-1,0,-1,1,2,1
+37,Old World,Spain,Galicia,Longing (Morriña),Old World Interior,1,1,1,1,0,-1
+38,Old World,Spain,Ribera del Duero,Severity,Against the Odds,1,2,1,1,0,2
+39,Old World,Spain,Rioja,Patience,Old World Exterior,-1,0,2,-1,-2,0
+40,New World,Argentina,Mendoza,Reinvention,New World Reinvention,-2,0,-2,1,2,1
+41,New World,Argentina,Patagonia,Extremity,New World Reinvention,-1,2,-2,1,1,1
+42,New World,Australia,Barossa Valley,Fortitude,Against the Odds,1,2,1,0,0,1
+43,New World,Australia,Hunter Valley,Defiance,Against the Odds,1,2,1,1,-1,1
+44,New World,Australia,Margaret River,Composure,The Moderates,0,0,0,0,-1,0
+45,New World,Chile,Maipo Valley,Pride,The Moderates,-1,0,1,0,-1,1
+46,New World,New Zealand,Central Otago,Adventure,New World Reinvention,-1,1,-2,1,1,1
+47,New World,New Zealand,Hawke's Bay,Confidence,The Moderates,0,0,0,0,-1,1
+48,New World,New Zealand,Marlborough,Assertion,Outward Ease,-2,0,-1,-1,2,1
+49,New World,S. Africa,Stellenbosch,Aspiration,New World Reinvention,-1,0,-1,1,1,1
+50,New World,S. Africa,Swartland,Rebellion,New World Reinvention,-1,1,-2,1,2,1
+51,New World,USA,Columbia Valley,Determination,New World Reinvention,-1,1,-1,0,1,2
+52,New World,USA,Finger Lakes,Conviction,New World Reinvention,-1,1,-1,1,1,1
+53,New World,USA,Napa Valley,Ambition,New World Reinvention,-2,0,-1,1,1,1
+54,New World,USA,Paso Robles,Independence,New World Reinvention,-1,0,-1,2,1,1
+55,New World,USA,Santa Barbara,Serendipity,The Moderates,-1,0,0,0,0,1
+56,New World,USA,Santa Cruz Mountains,Obsession,Old World Interior,2,1,0,2,0,0
+57,New World,USA,Sonoma,Authenticity,New World Reinvention,-1,0,-1,1,0,1
+58,New World,USA,Walla Walla,Community,Outward Ease,1,-1,-1,-2,1,1
+59,New World,USA,Willamette Valley,Idealism,The Moderates,-1,1,-1,1,0,-1

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D-Score Dashboard — The Soul of Wine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --wine: #7B2D26;
+  --wine-dark: #5A1F1A;
+  --wine-light: #A04038;
+  --cream: #FAF6F1;
+  --parchment: #F2EBE0;
+  --ink: #1A1A1A;
+  --ink-light: #4A4A4A;
+  --ink-muted: #7A7A7A;
+  --border: #E0D8CC;
+  --white: #FFFFFF;
+  --c-owi: #7B2D26; --c-oe: #C4883A; --c-nwr: #3A7D6E;
+  --c-owe: #5B6AAF; --c-ato: #8B5E3C; --c-mod: #6B7B6B;
+  --pos2: #2D6A2E; --pos1: #6B9F4B; --zero: #C8C0B4; --neg1: #C4883A; --neg2: #B94A3E;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; }
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--cream); color: var(--ink);
+  line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+
+nav {
+  background: rgba(250,246,241,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.8rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+}
+nav .brand a {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600; font-size: 1.15rem;
+  color: var(--wine); text-decoration: none; letter-spacing: 0.04em;
+}
+nav .links { display: flex; gap: 1.8rem; }
+nav .links a { font-size: 0.85rem; font-weight: 500; color: var(--ink-light); text-decoration: none; letter-spacing: 0.03em; transition: color 0.2s; }
+nav .links a:hover, nav .links a.active { color: var(--wine); }
+
+.page-header { padding: 3rem 2rem 1rem; max-width: 1300px; margin: 0 auto; }
+.page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 500; color: var(--ink); margin-bottom: 0.3rem; }
+.page-header p { font-size: 0.95rem; color: var(--ink-muted); }
+
+.content { max-width: 1300px; margin: 0 auto; padding: 1rem 2rem 4rem; }
+
+/* ── Controls ── */
+.controls {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.control-group { display: flex; align-items: center; gap: 0.4rem; }
+.control-group label {
+  font-size: 0.78rem; font-weight: 600; color: var(--ink-muted);
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.control-group select {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.85rem; padding: 0.4rem 0.8rem;
+  border: 1px solid var(--border); border-radius: 6px;
+  background: var(--white); color: var(--ink);
+  cursor: pointer;
+}
+.search-input {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.85rem; padding: 0.4rem 0.8rem;
+  border: 1px solid var(--border); border-radius: 6px;
+  background: var(--white); color: var(--ink);
+  width: 180px;
+}
+.region-count {
+  font-size: 0.82rem; color: var(--ink-muted);
+  margin-left: auto;
+}
+
+/* ── Table ── */
+.table-wrap {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow-x: auto;
+  margin-bottom: 2rem;
+}
+table { width: 100%; border-collapse: collapse; min-width: 800px; }
+thead th {
+  font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-muted);
+  padding: 0.8rem 0.6rem;
+  border-bottom: 2px solid var(--border);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s;
+  position: relative;
+}
+thead th:hover { color: var(--wine); }
+thead th.sorted { color: var(--wine); }
+thead th .sort-arrow { font-size: 0.7rem; margin-left: 0.2rem; }
+
+tbody tr {
+  border-bottom: 1px solid #F0EBE3;
+  transition: background 0.15s;
+}
+tbody tr:hover { background: rgba(123,45,38,0.03); }
+tbody td { padding: 0.55rem 0.6rem; font-size: 0.88rem; }
+
+.cell-region {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600; font-size: 1rem;
+  color: var(--ink);
+}
+.cell-meta { font-size: 0.78rem; color: var(--ink-muted); }
+.cell-metaphor {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; color: var(--wine);
+  font-size: 0.92rem;
+}
+.cell-cluster {
+  font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  color: var(--white);
+  display: inline-block;
+  white-space: nowrap;
+}
+.cell-dscore {
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.88rem;
+  border-radius: 4px;
+  min-width: 36px;
+}
+
+/* ── Cluster Means ── */
+.means-section {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 2rem;
+}
+.means-section h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem; font-weight: 600;
+  color: var(--ink); margin-bottom: 1.2rem;
+}
+.means-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+.mean-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+.mean-card h3 {
+  font-size: 0.78rem; font-weight: 600;
+  color: var(--white);
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 0.8rem;
+}
+.mean-card .mean-vals { text-align: left; }
+.mean-card .mean-row {
+  display: flex; justify-content: space-between;
+  font-size: 0.8rem; padding: 0.15rem 0;
+  border-bottom: 1px solid #F0EBE3;
+}
+.mean-card .mean-row:last-child { border-bottom: none; }
+.mean-card .mean-dim { color: var(--ink-muted); }
+.mean-card .mean-val { font-weight: 600; color: var(--ink); }
+
+/* ── Scale Legend ── */
+.legend {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.78rem; color: var(--ink-muted);
+}
+.legend-swatch {
+  width: 20px; height: 14px; border-radius: 3px;
+  display: inline-block;
+}
+
+footer { padding: 2rem; text-align: center; border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--ink-muted); }
+footer a { color: var(--wine); text-decoration: none; }
+
+@media (max-width: 640px) {
+  .controls { flex-direction: column; align-items: flex-start; }
+  .region-count { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand"><a href="../index.html">The Soul of Wine</a></div>
+  <div class="links">
+    <a href="cluster-explorer.html">Cluster Explorer</a>
+    <a href="movement-map.html">Movement Map</a>
+    <a href="d-score-dashboard.html" class="active">Dashboard</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>D-Score Dashboard</h1>
+  <p>The complete 59 × 6 identity score matrix. Filter, sort, and compare across all regions.</p>
+</div>
+
+<div class="content">
+
+  <div class="controls">
+    <div class="control-group">
+      <label>Cluster</label>
+      <select id="filterCluster">
+        <option value="">All clusters</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label>World</label>
+      <select id="filterWorld">
+        <option value="">Both</option>
+        <option value="Old World">Old World</option>
+        <option value="New World">New World</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label>Country</label>
+      <select id="filterCountry">
+        <option value="">All</option>
+      </select>
+    </div>
+    <input type="text" class="search-input" id="searchInput" placeholder="Search regions...">
+    <span class="region-count" id="regionCount"></span>
+  </div>
+
+  <div class="legend">
+    <span>Score scale:</span>
+    <span class="legend-swatch" style="background:var(--pos2)"></span><span>+2</span>
+    <span class="legend-swatch" style="background:var(--pos1)"></span><span>+1</span>
+    <span class="legend-swatch" style="background:var(--zero)"></span><span>0</span>
+    <span class="legend-swatch" style="background:var(--neg1)"></span><span>−1</span>
+    <span class="legend-swatch" style="background:var(--neg2)"></span><span>−2</span>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr id="tableHead"></tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="means-section">
+    <h2>Cluster Mean Profiles</h2>
+    <div class="means-grid" id="meansGrid"></div>
+  </div>
+
+</div>
+
+<footer>
+  The Soul of Wine · <a href="../index.html">Home</a> · <a href="https://github.com/jskarabot18/soul-of-wine">GitHub</a>
+</footer>
+
+<script>
+const CLUSTERS = [
+  { name: "Old World Interior", color: "#7B2D26" },
+  { name: "Outward Ease", color: "#C4883A" },
+  { name: "New World Reinvention", color: "#3A7D6E" },
+  { name: "Old World Exterior", color: "#5B6AAF" },
+  { name: "Against the Odds", color: "#8B5E3C" },
+  { name: "The Moderates", color: "#6B7B6B" }
+];
+
+const DIMS = ["D1","D2","D3","D4","D5","D6"];
+const DIM_SHORT = { D1: "D1 Interior", D2: "D2 Struggle", D3: "D3 Tradition", D4: "D4 Individual", D5: "D5 Urgency", D6: "D6 Earthly" };
+
+const COLUMNS = [
+  { key: "region", label: "Region" },
+  { key: "country", label: "Country" },
+  { key: "metaphor", label: "Metaphor" },
+  { key: "cluster", label: "Cluster" },
+  { key: "D1", label: "D1" },
+  { key: "D2", label: "D2" },
+  { key: "D3", label: "D3" },
+  { key: "D4", label: "D4" },
+  { key: "D5", label: "D5" },
+  { key: "D6", label: "D6" }
+];
+
+let allData = [];
+let sortKey = "region";
+let sortAsc = true;
+
+function clusterColor(name) {
+  const c = CLUSTERS.find(c => c.name === name);
+  return c ? c.color : "#999";
+}
+
+function scoreColor(val) {
+  if (val === 2) return "var(--pos2)";
+  if (val === 1) return "var(--pos1)";
+  if (val === 0) return "var(--zero)";
+  if (val === -1) return "var(--neg1)";
+  if (val === -2) return "var(--neg2)";
+  return "var(--zero)";
+}
+
+function scoreFg(val) {
+  return (val === 2 || val === -2) ? "#fff" : (val === 0 ? "#888" : "#fff");
+}
+
+function getFiltered() {
+  const cluster = document.getElementById('filterCluster').value;
+  const world = document.getElementById('filterWorld').value;
+  const country = document.getElementById('filterCountry').value;
+  const search = document.getElementById('searchInput').value.toLowerCase();
+
+  return allData.filter(r => {
+    if (cluster && r.cluster !== cluster) return false;
+    if (world && r.world !== world) return false;
+    if (country && r.country !== country) return false;
+    if (search && !r.region.toLowerCase().includes(search) && !r.metaphor.toLowerCase().includes(search)) return false;
+    return true;
+  });
+}
+
+function getSorted(rows) {
+  return [...rows].sort((a, b) => {
+    let va = a[sortKey], vb = b[sortKey];
+    if (typeof va === 'string') {
+      const cmp = va.localeCompare(vb);
+      return sortAsc ? cmp : -cmp;
+    }
+    return sortAsc ? va - vb : vb - va;
+  });
+}
+
+function renderHead() {
+  const tr = document.getElementById('tableHead');
+  tr.innerHTML = COLUMNS.map(col => {
+    const isSorted = sortKey === col.key;
+    const arrow = isSorted ? (sortAsc ? '▲' : '▼') : '';
+    return `<th class="${isSorted ? 'sorted' : ''}" onclick="doSort('${col.key}')">
+      ${col.label}<span class="sort-arrow">${arrow}</span>
+    </th>`;
+  }).join('');
+}
+
+function renderTable() {
+  const filtered = getFiltered();
+  const sorted = getSorted(filtered);
+  const tbody = document.getElementById('tableBody');
+
+  document.getElementById('regionCount').textContent = `${sorted.length} of 59 regions`;
+
+  tbody.innerHTML = sorted.map(r => {
+    const cc = clusterColor(r.cluster);
+    return `<tr>
+      <td><span class="cell-region">${r.region}</span></td>
+      <td><span class="cell-meta">${r.country}</span></td>
+      <td><span class="cell-metaphor">${r.metaphor}</span></td>
+      <td><span class="cell-cluster" style="background:${cc}">${r.cluster}</span></td>
+      ${DIMS.map(d => {
+        const v = r[d];
+        const bg = scoreColor(v);
+        const fg = scoreFg(v);
+        return `<td><span class="cell-dscore" style="background:${bg};color:${fg};display:inline-block;padding:0.15rem 0.45rem;">${v > 0 ? '+' : ''}${v}</span></td>`;
+      }).join('')}
+    </tr>`;
+  }).join('');
+}
+
+function renderMeans() {
+  const grid = document.getElementById('meansGrid');
+  grid.innerHTML = CLUSTERS.map(c => {
+    const members = allData.filter(r => r.cluster === c.name);
+    const means = {};
+    DIMS.forEach(d => {
+      means[d] = (members.reduce((s, r) => s + r[d], 0) / members.length).toFixed(2);
+    });
+    return `<div class="mean-card">
+      <h3 style="background:${c.color}">${c.name} (${members.length})</h3>
+      <div class="mean-vals">
+        ${DIMS.map(d => `<div class="mean-row"><span class="mean-dim">${DIM_SHORT[d]}</span><span class="mean-val">${means[d] > 0 ? '+' : ''}${means[d]}</span></div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function populateDropdowns() {
+  const clusterSel = document.getElementById('filterCluster');
+  CLUSTERS.forEach(c => {
+    clusterSel.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+  });
+
+  const countries = [...new Set(allData.map(r => r.country))].sort();
+  const countrySel = document.getElementById('filterCountry');
+  countries.forEach(c => {
+    countrySel.innerHTML += `<option value="${c}">${c}</option>`;
+  });
+}
+
+window.doSort = function(key) {
+  if (sortKey === key) {
+    sortAsc = !sortAsc;
+  } else {
+    sortKey = key;
+    sortAsc = DIMS.includes(key) ? false : true;
+  }
+  renderHead();
+  renderTable();
+};
+
+function init() {
+  renderHead();
+  renderTable();
+  renderMeans();
+}
+
+document.getElementById('filterCluster').addEventListener('change', () => { renderTable(); });
+document.getElementById('filterWorld').addEventListener('change', () => { renderTable(); });
+document.getElementById('filterCountry').addEventListener('change', () => { renderTable(); });
+document.getElementById('searchInput').addEventListener('input', () => { renderTable(); });
+
+fetch('../data/regions.json')
+  .then(r => r.json())
+  .then(d => {
+    allData = d.regions;
+    populateDropdowns();
+    init();
+  });
+</script>
+</body>
+</html>
