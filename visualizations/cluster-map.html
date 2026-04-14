@@ -6,8 +6,6 @@
 <title>Cluster Map — The Soul of Wine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
 :root {
   --wine: #7B2D26;
@@ -49,16 +47,16 @@ nav .links { display: flex; gap: 1.4rem; }
 nav .links a { font-size: 0.85rem; font-weight: 500; color: var(--ink-light); text-decoration: none; letter-spacing: 0.03em; transition: color 0.2s; }
 nav .links a:hover, nav .links a.active { color: var(--wine); }
 
-.page-header { padding: 2rem 2rem 1rem; max-width: 1300px; margin: 0 auto; }
+.page-header { padding: 2.5rem 2rem 1rem; max-width: 1200px; margin: 0 auto; }
 .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 500; color: var(--ink); margin-bottom: 0.3rem; }
-.page-header p { font-size: 0.95rem; color: var(--ink-muted); max-width: 70ch; }
+.page-header p { font-size: 0.95rem; color: var(--ink-muted); max-width: 75ch; }
 
-.content { max-width: 1300px; margin: 0 auto; padding: 1rem 2rem 2rem; }
+.content { max-width: 1200px; margin: 0 auto; padding: 1rem 2rem 4rem; }
 
-/* ── Filter bar ── */
+/* ── Filters ── */
 .filters {
   display: flex; flex-wrap: wrap; gap: 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 .filter-btn {
   font-family: 'Source Sans 3', sans-serif;
@@ -78,66 +76,114 @@ nav .links a:hover, nav .links a.active { color: var(--wine); }
   border-radius: 50%; margin-right: 0.3rem; vertical-align: middle;
 }
 
-/* ── Map ── */
-.map-wrap {
+/* ── Two-panel layout ── */
+.panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+@media (max-width: 850px) {
+  .panels { grid-template-columns: 1fr; }
+}
+
+.panel {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 1.5rem;
+  padding: 1.5rem;
 }
-#map { height: 560px; width: 100%; background: #E8E0D4; }
+.panel-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem; font-weight: 600;
+  color: var(--ink); margin-bottom: 0.2rem;
+}
+.panel-subtitle {
+  font-size: 0.82rem; color: var(--ink-muted);
+  margin-bottom: 1rem;
+}
 
-/* Leaflet popup overrides */
-.leaflet-popup-content-wrapper {
-  border-radius: 8px !important;
-  font-family: 'Source Sans 3', sans-serif !important;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+/* Scatter canvas */
+.scatter-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  max-height: 480px;
 }
-.leaflet-popup-content {
-  margin: 12px 16px !important;
-  line-height: 1.5 !important;
-  font-size: 0.9rem !important;
+.scatter-wrap canvas {
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
 }
-.popup-region {
+
+/* Tooltip */
+.scatter-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(26,26,26,0.92);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.scatter-tooltip.visible { opacity: 1; }
+.scatter-tooltip .tt-region {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.2rem; font-weight: 600;
-  color: var(--ink); margin-bottom: 2px;
+  font-weight: 600; font-size: 0.95rem;
 }
-.popup-country { font-size: 0.8rem; color: var(--ink-muted); margin-bottom: 4px; }
-.popup-metaphor {
+.scatter-tooltip .tt-meta { font-size: 0.72rem; opacity: 0.7; }
+.scatter-tooltip .tt-metaphor {
   font-family: 'Cormorant Garamond', serif;
-  font-style: italic; color: var(--wine);
-  font-size: 1rem; margin-bottom: 6px;
+  font-style: italic; color: #E8B4A8;
 }
-.popup-cluster {
-  display: inline-block;
-  font-size: 0.7rem; font-weight: 600;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  padding: 0.2rem 0.5rem; border-radius: 10px;
-  color: var(--white);
+
+/* Placeholder */
+.placeholder-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  max-height: 480px;
+  background: var(--parchment);
+  border-radius: 8px;
+  text-align: center;
+  padding: 2rem;
 }
-.popup-scores {
-  margin-top: 8px; font-size: 0.78rem; color: var(--ink-light);
-  border-top: 1px solid #eee; padding-top: 6px;
+.placeholder-content svg {
+  width: 48px; height: 48px;
+  stroke: var(--border); fill: none;
+  margin-bottom: 1rem;
 }
-.popup-scores span { margin-right: 6px; }
+.placeholder-content p {
+  font-size: 0.9rem; color: var(--ink-muted);
+  max-width: 28ch; line-height: 1.5;
+}
+.placeholder-content .coming {
+  font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--wine); margin-top: 0.8rem;
+}
 
 /* ── Legend ── */
 .map-legend {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 1.2rem 1.5rem;
+  padding: 1rem 1.5rem;
   display: flex; flex-wrap: wrap; gap: 1rem;
   align-items: center;
   margin-bottom: 1.5rem;
 }
 .legend-title {
-  font-size: 0.75rem; font-weight: 600;
+  font-size: 0.72rem; font-weight: 600;
   letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--ink-muted);
-  margin-right: 0.5rem;
+  color: var(--ink-muted); margin-right: 0.5rem;
 }
 .legend-item {
   display: flex; align-items: center; gap: 0.35rem;
@@ -146,10 +192,10 @@ nav .links a:hover, nav .links a.active { color: var(--wine); }
 .legend-dot {
   width: 10px; height: 10px; border-radius: 50%;
   border: 2px solid white;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.15);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.12);
 }
 
-/* ── Insight box ── */
+/* ── Insight ── */
 .insight-box {
   background: var(--parchment);
   border: 1px solid var(--border);
@@ -168,11 +214,6 @@ nav .links a:hover, nav .links a.active { color: var(--wine); }
 
 footer { padding: 2rem; text-align: center; border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--ink-muted); }
 footer a { color: var(--wine); text-decoration: none; }
-
-@media (max-width: 640px) {
-  #map { height: 400px; }
-  .map-legend { flex-direction: column; align-items: flex-start; }
-}
 </style>
 </head>
 <body>
@@ -189,22 +230,43 @@ footer a { color: var(--wine); text-decoration: none; }
 
 <div class="page-header">
   <h1>Cluster Map</h1>
-  <p>59 wine regions plotted by geography, coloured by identity cluster. Regions that share a map neighbourhood often belong to completely different identity types — and regions on opposite sides of the world can share the same soul.</p>
+  <p>Regions projected onto their first two principal components. Identity clusters (left) are derived from D-scores; terroir clusters (right) from Layer 2 TF-IDF. If terroir determined identity, the two plots would show the same structure. They do not.</p>
 </div>
 
 <div class="content">
 
   <div class="filters" id="filters"></div>
 
-  <div class="map-wrap">
-    <div id="map"></div>
+  <div class="panels">
+    <div class="panel">
+      <div class="panel-title">Identity Clusters</div>
+      <div class="panel-subtitle">D-scores → PCA → K-means (k=6) · Silhouette: 0.3110</div>
+      <div class="scatter-wrap" id="identityWrap">
+        <canvas id="identityCanvas"></canvas>
+        <div class="scatter-tooltip" id="identityTooltip"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Terroir Clusters</div>
+      <div class="panel-subtitle">Layer 2 TF-IDF → PCA → K-means (k=6)</div>
+      <div class="placeholder-content">
+        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M8 12h8"/>
+          <path d="M12 8v8"/>
+        </svg>
+        <p>Terroir PCA coordinates will be generated from the analysis pipeline and added here.</p>
+        <div class="coming">Coming in Deliverable 5</div>
+      </div>
+    </div>
   </div>
 
   <div class="map-legend" id="legend"></div>
 
   <div class="insight-box">
-    <h3>What the map reveals</h3>
-    <p>Geography clusters regions by proximity. Identity does not. Burgundy and Santa Cruz Mountains sit 9,000 km apart but share the same identity cluster (Old World Interior). Sicily and Napa Valley are separated by an ocean but both belong to New World Reinvention. The Barossa Valley and Santorini — antipodal in every geographic sense — are united by struggle. The map is not the soul.</p>
+    <h3>Reading the scatter plot</h3>
+    <p>Each dot is a wine region. Proximity means similar identity profile — regions close together score alike on the six D-score dimensions. Colour marks cluster membership. Well-separated, cohesive colour groups indicate strong cluster structure. Overlap between colours shows where the boundaries are softer — particularly among The Moderates, whose defining feature is the absence of extremes. When the terroir panel is populated, compare the two: regions that are neighbours in identity space are often scattered in terroir space, and vice versa.</p>
   </div>
 
 </div>
@@ -222,96 +284,238 @@ const CLUSTERS = [
   { name: "Against the Odds", color: "#8B5E3C" },
   { name: "The Moderates", color: "#6B7B6B" }
 ];
+const DIMS = ["D1","D2","D3","D4","D5","D6"];
 
-const COORDS = {
-  "Kamptal": [48.45, 15.74],
-  "Steiermark": [46.85, 15.60],
-  "Wachau": [48.37, 15.42],
-  "Wagram": [48.43, 15.88],
-  "Dalmatian Coast": [43.25, 16.70],
-  "Alsace": [48.15, 7.30],
-  "Beaujolais": [46.15, 4.60],
-  "Bordeaux": [44.84, -0.58],
-  "Burgundy": [47.05, 4.85],
-  "Champagne": [49.05, 3.95],
-  "Châteauneuf-du-Pape": [44.06, 4.83],
-  "Jura": [46.75, 5.85],
-  "Loire": [47.38, 0.70],
-  "Northern Rhône": [45.25, 4.85],
-  "Provence": [43.50, 6.10],
-  "Baden": [48.00, 7.85],
-  "Mosel": [49.95, 6.95],
-  "Nahe": [49.82, 7.72],
-  "Pfalz": [49.25, 8.15],
-  "Rheingau": [50.03, 8.00],
-  "Macedonia": [41.00, 22.20],
-  "Santorini": [36.40, 25.43],
-  "Tokaj": [48.12, 21.40],
-  "Alto Adige": [46.60, 11.35],
-  "Campania": [40.85, 14.50],
-  "Etna": [37.75, 15.00],
-  "Friuli-Venezia Giulia": [45.95, 13.50],
-  "Liguria": [44.30, 8.45],
-  "Piedmont": [44.70, 8.05],
-  "Sardinia": [39.60, 9.10],
-  "Sicily": [37.55, 14.00],
-  "Tuscany": [43.35, 11.30],
-  "Veneto": [45.45, 11.85],
-  "Douro": [41.18, -7.50],
-  "Goriška Brda": [45.97, 13.53],
-  "Catalonia": [41.40, 1.50],
-  "Galicia": [42.35, -8.10],
-  "Ribera del Duero": [41.65, -3.70],
-  "Rioja": [42.45, -2.50],
-  "Mendoza": [-33.00, -68.50],
-  "Patagonia": [-39.00, -68.00],
-  "Barossa Valley": [-34.55, 138.95],
-  "Hunter Valley": [-32.80, 151.30],
-  "Margaret River": [-33.95, 115.05],
-  "Maipo Valley": [-33.70, -70.60],
-  "Central Otago": [-45.05, 169.30],
-  "Hawke's Bay": [-39.65, 176.85],
-  "Marlborough": [-41.55, 173.95],
-  "Stellenbosch": [-33.93, 18.85],
-  "Swartland": [-33.45, 18.70],
-  "Columbia Valley": [46.30, -119.80],
-  "Finger Lakes": [42.65, -76.95],
-  "Napa Valley": [38.50, -122.35],
-  "Paso Robles": [35.63, -120.65],
-  "Santa Barbara": [34.72, -120.05],
-  "Santa Cruz Mountains": [37.15, -122.05],
-  "Sonoma": [38.50, -122.80],
-  "Walla Walla": [46.07, -118.33],
-  "Willamette Valley": [45.20, -123.10]
-};
-
-const DIM_LABELS = { D1: "D1", D2: "D2", D3: "D3", D4: "D4", D5: "D5", D6: "D6" };
-
-let map, markers = [], allData = [], activeCluster = null;
+let allData = [];
+let pcaCoords = [];
+let activeCluster = null;
 
 function clusterColor(name) {
   const c = CLUSTERS.find(c => c.name === name);
   return c ? c.color : "#999";
 }
 
-function createMarkerIcon(color, isHighlighted) {
-  const size = isHighlighted ? 14 : 11;
-  const border = isHighlighted ? 3 : 2;
-  return L.divIcon({
-    className: '',
-    html: `<div style="
-      width:${size}px; height:${size}px;
-      background:${color};
-      border:${border}px solid white;
-      border-radius:50%;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-    "></div>`,
-    iconSize: [size, size],
-    iconAnchor: [size/2, size/2],
-    popupAnchor: [0, -size/2 - 2]
+/* ── PCA: standardise then power-iteration for top 2 eigenvectors ── */
+function computePCA(regions) {
+  const n = regions.length;
+  const d = DIMS.length;
+
+  const raw = regions.map(r => DIMS.map(dim => r[dim]));
+
+  // Standardise columns
+  const means = [], stds = [];
+  for (let j = 0; j < d; j++) {
+    const col = raw.map(row => row[j]);
+    const mean = col.reduce((a, b) => a + b, 0) / n;
+    const std = Math.sqrt(col.reduce((a, b) => a + (b - mean) ** 2, 0) / n) || 1;
+    means.push(mean);
+    stds.push(std);
+  }
+  const X = raw.map(row => row.map((v, j) => (v - means[j]) / stds[j]));
+
+  // Covariance
+  const cov = Array.from({ length: d }, () => new Array(d).fill(0));
+  for (let i = 0; i < d; i++) {
+    for (let j = i; j < d; j++) {
+      let s = 0;
+      for (let k = 0; k < n; k++) s += X[k][i] * X[k][j];
+      cov[i][j] = s / n;
+      cov[j][i] = cov[i][j];
+    }
+  }
+
+  // Power iteration with deflation
+  function topEigenvectors(mat, numVecs) {
+    const sz = mat.length;
+    const vecs = [];
+    let M = mat.map(r => [...r]);
+
+    for (let v = 0; v < numVecs; v++) {
+      let vec = Array.from({ length: sz }, () => Math.random() - 0.5);
+      // Seed deterministically for reproducibility
+      vec = Array.from({ length: sz }, (_, i) => Math.sin(i * 7.3 + v * 13.1));
+      for (let iter = 0; iter < 300; iter++) {
+        const nv = new Array(sz).fill(0);
+        for (let i = 0; i < sz; i++)
+          for (let j = 0; j < sz; j++)
+            nv[i] += M[i][j] * vec[j];
+        const norm = Math.sqrt(nv.reduce((a, b) => a + b * b, 0)) || 1;
+        vec = nv.map(x => x / norm);
+      }
+      vecs.push(vec);
+
+      // Deflate
+      const eigenval = vec.reduce((s, vi, i) => {
+        let mv = 0;
+        for (let j = 0; j < sz; j++) mv += M[i][j] * vec[j];
+        return s + vi * mv;
+      }, 0);
+      for (let i = 0; i < sz; i++)
+        for (let j = 0; j < sz; j++)
+          M[i][j] -= eigenval * vec[i] * vec[j];
+    }
+    return vecs;
+  }
+
+  const evecs = topEigenvectors(cov, 2);
+
+  return X.map(row => ({
+    pc1: row.reduce((s, v, j) => s + v * evecs[0][j], 0),
+    pc2: row.reduce((s, v, j) => s + v * evecs[1][j], 0)
+  }));
+}
+
+/* ── Draw scatter ── */
+function drawScatter() {
+  const canvas = document.getElementById('identityCanvas');
+  const wrap = document.getElementById('identityWrap');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+
+  const rect = wrap.getBoundingClientRect();
+  const W = rect.width;
+  const H = rect.height;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const pad = 44;
+  const plotW = W - pad * 2;
+  const plotH = H - pad * 2;
+
+  // Stable axes from full data
+  const allPts = pcaCoords;
+  const pc1Vals = allPts.map(p => p.pc1);
+  const pc2Vals = allPts.map(p => p.pc2);
+  const pc1Min = Math.min(...pc1Vals), pc1Max = Math.max(...pc1Vals);
+  const pc2Min = Math.min(...pc2Vals), pc2Max = Math.max(...pc2Vals);
+  const pc1Range = pc1Max - pc1Min || 1;
+  const pc2Range = pc2Max - pc2Min || 1;
+  const m = 0.1;
+
+  function toX(v) { return pad + ((v - pc1Min) / pc1Range * (1 - 2*m) + m) * plotW; }
+  function toY(v) { return pad + plotH - ((v - pc2Min) / pc2Range * (1 - 2*m) + m) * plotH; }
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Light grid
+  ctx.strokeStyle = '#ECE6DC';
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i <= 4; i++) {
+    const x = pad + (i/4) * plotW;
+    const y = pad + (i/4) * plotH;
+    ctx.beginPath(); ctx.moveTo(x, pad); ctx.lineTo(x, pad + plotH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(pad + plotW, y); ctx.stroke();
+  }
+
+  // Zero crosshair
+  ctx.strokeStyle = '#D0C8BC';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 3]);
+  if (pc1Min < 0 && pc1Max > 0) {
+    const zx = toX(0);
+    ctx.beginPath(); ctx.moveTo(zx, pad); ctx.lineTo(zx, pad + plotH); ctx.stroke();
+  }
+  if (pc2Min < 0 && pc2Max > 0) {
+    const zy = toY(0);
+    ctx.beginPath(); ctx.moveTo(pad, zy); ctx.lineTo(pad + plotW, zy); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // Axis labels
+  ctx.font = '500 11px Source Sans 3, sans-serif';
+  ctx.fillStyle = '#7A7A7A';
+  ctx.textAlign = 'center';
+  ctx.fillText('PC1', pad + plotW / 2, H - 6);
+  ctx.save();
+  ctx.translate(13, pad + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('PC2', 0, 0);
+  ctx.restore();
+
+  // Dimmed points when filtering
+  if (activeCluster) {
+    allData.forEach((r, i) => {
+      if (r.cluster === activeCluster) return;
+      const pt = pcaCoords[i];
+      ctx.beginPath();
+      ctx.arc(toX(pt.pc1), toY(pt.pc2), 4, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(200,192,180,0.3)';
+      ctx.fill();
+    });
+  }
+
+  // Active points
+  const pointData = [];
+  allData.forEach((r, i) => {
+    if (activeCluster && r.cluster !== activeCluster) return;
+    const pt = pcaCoords[i];
+    const x = toX(pt.pc1);
+    const y = toY(pt.pc2);
+    const color = clusterColor(r.cluster);
+
+    ctx.beginPath();
+    ctx.arc(x, y, 6, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.globalAlpha = 0.85;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    pointData.push({ x, y, region: r });
+  });
+
+  canvas._pointData = pointData;
+}
+
+/* ── Hover ── */
+function setupHover() {
+  const canvas = document.getElementById('identityCanvas');
+  const tooltip = document.getElementById('identityTooltip');
+  const wrap = document.getElementById('identityWrap');
+
+  canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    let closest = null, minDist = 16;
+    (canvas._pointData || []).forEach(p => {
+      const dist = Math.hypot(p.x - mx, p.y - my);
+      if (dist < minDist) { minDist = dist; closest = p; }
+    });
+
+    if (closest) {
+      const r = closest.region;
+      tooltip.innerHTML = `
+        <div class="tt-region">${r.region}</div>
+        <div class="tt-meta">${r.country} · ${r.cluster}</div>
+        <div class="tt-metaphor">${r.metaphor}</div>
+      `;
+      tooltip.classList.add('visible');
+
+      const wrapRect = wrap.getBoundingClientRect();
+      let tx = closest.x + 14;
+      let ty = closest.y - 10;
+      if (tx + 170 > wrapRect.width) tx = closest.x - 170;
+      if (ty < 10) ty = closest.y + 14;
+      tooltip.style.left = tx + 'px';
+      tooltip.style.top = ty + 'px';
+    } else {
+      tooltip.classList.remove('visible');
+    }
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    tooltip.classList.remove('visible');
   });
 }
 
+/* ── Filters ── */
 function buildFilters() {
   const el = document.getElementById('filters');
   let html = `<button class="filter-btn active" onclick="filterCluster(null)">All (59)</button>`;
@@ -329,101 +533,32 @@ function buildLegend() {
   let html = `<span class="legend-title">Identity Clusters</span>`;
   CLUSTERS.forEach(c => {
     html += `<div class="legend-item">
-      <span class="legend-dot" style="background:${c.color}"></span>
-      ${c.name}
+      <span class="legend-dot" style="background:${c.color}"></span>${c.name}
     </div>`;
   });
   el.innerHTML = html;
 }
 
-function filterCluster(cluster) {
+window.filterCluster = function(cluster) {
   activeCluster = cluster;
   document.querySelectorAll('.filter-btn').forEach(b => {
     const bc = b.dataset.cluster || null;
     b.classList.toggle('active', bc === cluster || (cluster === null && !bc));
   });
-  updateMarkers();
-}
+  drawScatter();
+};
 
-function updateMarkers() {
-  markers.forEach(m => map.removeLayer(m));
-  markers = [];
-
-  const regions = activeCluster
-    ? allData.filter(r => r.cluster === activeCluster)
-    : allData;
-
-  regions.forEach(r => {
-    const coord = COORDS[r.region];
-    if (!coord) return;
-
-    const color = clusterColor(r.cluster);
-    const icon = createMarkerIcon(color, false);
-
-    const scores = ["D1","D2","D3","D4","D5","D6"].map(d => {
-      const v = r[d];
-      return `<span><b>${d}:</b>${v > 0 ? '+' : ''}${v}</span>`;
-    }).join('');
-
-    const popup = `
-      <div class="popup-region">${r.region}</div>
-      <div class="popup-country">${r.country} · ${r.world}</div>
-      <div class="popup-metaphor">${r.metaphor}</div>
-      <div class="popup-cluster" style="background:${color}">${r.cluster}</div>
-      <div class="popup-scores">${scores}</div>
-    `;
-
-    const marker = L.marker(coord, { icon })
-      .bindPopup(popup, { maxWidth: 260 })
-      .on('mouseover', function() {
-        this.setIcon(createMarkerIcon(color, true));
-      })
-      .on('mouseout', function() {
-        this.setIcon(createMarkerIcon(color, false));
-      })
-      .addTo(map);
-
-    markers.push(marker);
-  });
-
-  if (markers.length > 0) {
-    const group = L.featureGroup(markers);
-    map.fitBounds(group.getBounds().pad(0.15), { maxZoom: 6 });
-  }
-}
-
-function initMap() {
-  map = L.map('map', {
-    center: [30, 10],
-    zoom: 3,
-    minZoom: 2,
-    maxZoom: 10,
-    scrollWheelZoom: true,
-    zoomControl: true
-  });
-
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_noclabels/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 19
-  }).addTo(map);
-
-  /* Add minimal country labels */
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
-    subdomains: 'abcd',
-    maxZoom: 19,
-    pane: 'overlayPane'
-  }).addTo(map);
-}
-
+/* ── Init ── */
 fetch('../data/regions.json')
   .then(r => r.json())
   .then(d => {
     allData = d.regions;
-    initMap();
+    pcaCoords = computePCA(allData);
     buildFilters();
     buildLegend();
-    updateMarkers();
+    drawScatter();
+    setupHover();
+    window.addEventListener('resize', drawScatter);
   });
 </script>
 </body>
