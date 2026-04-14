@@ -7,8 +7,8 @@
     "metaphor": "Discipline",
     "identity_cluster": "The Moderates",
     "terroir_cluster": "Austrian Danube",
-    "pc1": 0.4576,
-    "pc2": -0.1024
+    "pc1": 0.4519,
+    "pc2": -0.1202
   },
   {
     "name": "Steiermark",
@@ -17,9 +17,9 @@
     "world": "Old",
     "metaphor": "Clarity",
     "identity_cluster": "The Moderates",
-    "terroir_cluster": "International Terroir",
-    "pc1": 0.2256,
-    "pc2": -0.0465
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": 0.2421,
+    "pc2": -0.0346
   },
   {
     "name": "Wachau",
@@ -29,8 +29,8 @@
     "metaphor": "Monumentality",
     "identity_cluster": "The Moderates",
     "terroir_cluster": "Austrian Danube",
-    "pc1": 0.3494,
-    "pc2": 0.0179
+    "pc1": 0.3558,
+    "pc2": -0.0009
   },
   {
     "name": "Wagram",
@@ -40,8 +40,8 @@
     "metaphor": "Earth",
     "identity_cluster": "Against the Odds",
     "terroir_cluster": "Austrian Danube",
-    "pc1": 0.3121,
-    "pc2": -0.016
+    "pc1": 0.2941,
+    "pc2": -0.0292
   },
   {
     "name": "Dalmatian Coast",
@@ -50,9 +50,9 @@
     "world": "Old",
     "metaphor": "Tranquility",
     "identity_cluster": "Old World Exterior",
-    "terroir_cluster": "European Mediterranean",
-    "pc1": -0.0754,
-    "pc2": 0.3516
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": -0.0787,
+    "pc2": 0.3363
   },
   {
     "name": "Alsace",
@@ -61,9 +61,9 @@
     "world": "Old",
     "metaphor": "Duality",
     "identity_cluster": "The Moderates",
-    "terroir_cluster": "Germanic Continental",
-    "pc1": 0.2732,
-    "pc2": -0.0031
+    "terroir_cluster": "French Viticultural",
+    "pc1": 0.2836,
+    "pc2": -0.0162
   },
   {
     "name": "Beaujolais",
@@ -72,9 +72,9 @@
     "world": "Old",
     "metaphor": "Joy",
     "identity_cluster": "Outward Ease",
-    "terroir_cluster": "French Atlantic",
-    "pc1": 0.0547,
-    "pc2": 0.0293
+    "terroir_cluster": "French Viticultural",
+    "pc1": 0.0607,
+    "pc2": 0.0404
   },
   {
     "name": "Bordeaux",
@@ -83,9 +83,9 @@
     "world": "Old",
     "metaphor": "Business",
     "identity_cluster": "Old World Exterior",
-    "terroir_cluster": "French Atlantic",
-    "pc1": -0.149,
-    "pc2": 0.0396
+    "terroir_cluster": "French Viticultural",
+    "pc1": -0.1362,
+    "pc2": 0.0408
   },
   {
     "name": "Burgundy",
@@ -94,9 +94,9 @@
     "world": "Old",
     "metaphor": "Devotion",
     "identity_cluster": "Old World Interior",
-    "terroir_cluster": "French Atlantic",
-    "pc1": 0.1721,
-    "pc2": 0.0347
+    "terroir_cluster": "French Viticultural",
+    "pc1": 0.1594,
+    "pc2": 0.0325
   },
   {
     "name": "Champagne",
@@ -105,9 +105,9 @@
     "world": "Old",
     "metaphor": "Society",
     "identity_cluster": "Old World Exterior",
-    "terroir_cluster": "French Atlantic",
-    "pc1": 0.0362,
-    "pc2": 0.1134
+    "terroir_cluster": "French Viticultural",
+    "pc1": 0.0597,
+    "pc2": 0.1031
   },
   {
     "name": "Châteauneuf-du-Pape",
@@ -116,9 +116,9 @@
     "world": "Old",
     "metaphor": "Family",
     "identity_cluster": "Old World Exterior",
-    "terroir_cluster": "French Atlantic",
-    "pc1": -0.202,
-    "pc2": 0.1121
+    "terroir_cluster": "French Viticultural",
+    "pc1": -0.1639,
+    "pc2": 0.1325
   },
   {
     "name": "Jura",
@@ -127,9 +127,9 @@
     "world": "Old",
     "metaphor": "Eccentricity",
     "identity_cluster": "Against the Odds",
-    "terroir_cluster": "French Atlantic",
-    "pc1": 0.0679,
-    "pc2": 0.1618
+    "terroir_cluster": "French Viticultural",
+    "pc1": 0.0706,
+    "pc2": 0.1397
   },
   {
     "name": "Loire",
@@ -138,9 +138,9 @@
     "world": "Old",
     "metaphor": "Sentimentality",
     "identity_cluster": "The Moderates",
-    "terroir_cluster": "French Atlantic",
-    "pc1": 0.0297,
-    "pc2": 0.0876
+    "terroir_cluster": "French Viticultural",
+    "pc1": 0.0397,
+    "pc2": 0.0737
   },
   {
     "name": "Northern Rhône",
@@ -149,9 +149,9 @@
     "world": "Old",
     "metaphor": "Solitude",
     "identity_cluster": "Old World Interior",
-    "terroir_cluster": "French Atlantic",
-    "pc1": -0.0581,
-    "pc2": -0.0299
+    "terroir_cluster": "French Viticultural",
+    "pc1": -0.0599,
+    "pc2": -0.0126
   },
   {
     "name": "Provence",
@@ -160,9 +160,9 @@
     "world": "Old",
     "metaphor": "Pleasure",
     "identity_cluster": "Outward Ease",
-    "terroir_cluster": "French Atlantic",
-    "pc1": -0.1551,
-    "pc2": 0.168
+    "terroir_cluster": "French Viticultural",
+    "pc1": -0.1423,
+    "pc2": 0.1741
   },
   {
     "name": "Baden",
@@ -171,9 +171,9 @@
     "world": "Old",
     "metaphor": "Warmth",
     "identity_cluster": "Old World Exterior",
-    "terroir_cluster": "Germanic Continental",
-    "pc1": 0.3352,
-    "pc2": -0.165
+    "terroir_cluster": "Germanic Rhine",
+    "pc1": 0.3375,
+    "pc2": -0.1568
   },
   {
     "name": "Mosel",
@@ -182,9 +182,9 @@
     "world": "Old",
     "metaphor": "Poetry",
     "identity_cluster": "Old World Interior",
-    "terroir_cluster": "Germanic Continental",
-    "pc1": 0.3731,
-    "pc2": -0.0738
+    "terroir_cluster": "Germanic Rhine",
+    "pc1": 0.3786,
+    "pc2": -0.0879
   },
   {
     "name": "Nahe",
@@ -193,9 +193,9 @@
     "world": "Old",
     "metaphor": "Subtlety",
     "identity_cluster": "Old World Interior",
-    "terroir_cluster": "Germanic Continental",
-    "pc1": 0.3715,
-    "pc2": -0.1418
+    "terroir_cluster": "Germanic Rhine",
+    "pc1": 0.3857,
+    "pc2": -0.1502
   },
   {
     "name": "Pfalz",
@@ -204,9 +204,9 @@
     "world": "Old",
     "metaphor": "Generosity",
     "identity_cluster": "Old World Exterior",
-    "terroir_cluster": "Germanic Continental",
-    "pc1": 0.412,
-    "pc2": -0.1713
+    "terroir_cluster": "Germanic Rhine",
+    "pc1": 0.4254,
+    "pc2": -0.1731
   },
   {
     "name": "Rheingau",
@@ -215,9 +215,9 @@
     "world": "Old",
     "metaphor": "Nobility",
     "identity_cluster": "Old World Interior",
-    "terroir_cluster": "Germanic Continental",
-    "pc1": 0.3874,
-    "pc2": -0.0816
+    "terroir_cluster": "Germanic Rhine",
+    "pc1": 0.3912,
+    "pc2": -0.0843
   },
   {
     "name": "Macedonia",
@@ -226,9 +226,9 @@
     "world": "Old",
     "metaphor": "Austerity",
     "identity_cluster": "Against the Odds",
-    "terroir_cluster": "European Mediterranean",
-    "pc1": -0.0338,
-    "pc2": 0.0952
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": -0.0229,
+    "pc2": 0.0993
   },
   {
     "name": "Santorini",
@@ -237,9 +237,9 @@
     "world": "Old",
     "metaphor": "Survival",
     "identity_cluster": "Against the Odds",
-    "terroir_cluster": "European Mediterranean",
-    "pc1": 0.0085,
-    "pc2": 0.2232
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": 0.0129,
+    "pc2": 0.2045
   },
   {
     "name": "Tokaj",
@@ -248,9 +248,9 @@
     "world": "Old",
     "metaphor": "Melancholy",
     "identity_cluster": "Old World Interior",
-    "terroir_cluster": "European Mediterranean",
-    "pc1": 0.1157,
-    "pc2": 0.1033
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": 0.092,
+    "pc2": 0.1166
   },
   {
     "name": "Alto Adige",
@@ -259,9 +259,9 @@
     "world": "Old",
     "metaphor": "Precision",
     "identity_cluster": "The Moderates",
-    "terroir_cluster": "International Terroir",
-    "pc1": 0.1055,
-    "pc2": -0.1346
+    "terroir_cluster": "Southern Hemisphere & International",
+    "pc1": 0.1079,
+    "pc2": -0.1111
   },
   {
     "name": "Campania",
@@ -270,9 +270,9 @@
     "world": "Old",
     "metaphor": "Memory",
     "identity_cluster": "Old World Interior",
-    "terroir_cluster": "European Mediterranean",
-    "pc1": -0.085,
-    "pc2": 0.4264
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": -0.0672,
+    "pc2": 0.4306
   },
   {
     "name": "Etna",
@@ -281,9 +281,9 @@
     "world": "Old",
     "metaphor": "Awakening",
     "identity_cluster": "Old World Interior",
-    "terroir_cluster": "European Mediterranean",
-    "pc1": 0.0041,
-    "pc2": 0.0707
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": 0.0051,
+    "pc2": 0.1012
   },
   {
     "name": "Friuli-Venezia Giulia",
@@ -292,9 +292,9 @@
     "world": "Old",
     "metaphor": "Dialogue",
     "identity_cluster": "The Moderates",
-    "terroir_cluster": "International Terroir",
-    "pc1": 0.1212,
-    "pc2": 0.1508
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": 0.111,
+    "pc2": 0.1604
   },
   {
     "name": "Liguria",
@@ -303,9 +303,9 @@
     "world": "Old",
     "metaphor": "Intimacy",
     "identity_cluster": "Against the Odds",
-    "terroir_cluster": "European Mediterranean",
-    "pc1": 0.0533,
-    "pc2": 0.2886
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": 0.0418,
+    "pc2": 0.2835
   },
   {
     "name": "Piedmont",
@@ -314,9 +314,9 @@
     "world": "Old",
     "metaphor": "Philosophy",
     "identity_cluster": "Old World Interior",
-    "terroir_cluster": "European Mediterranean",
-    "pc1": 0.0008,
-    "pc2": 0.1497
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": 0.0097,
+    "pc2": 0.1629
   },
   {
     "name": "Sardinia",
@@ -325,9 +325,9 @@
     "world": "Old",
     "metaphor": "Stubbornness",
     "identity_cluster": "Against the Odds",
-    "terroir_cluster": "European Mediterranean",
-    "pc1": -0.151,
-    "pc2": 0.4062
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": -0.1408,
+    "pc2": 0.422
   },
   {
     "name": "Sicily",
@@ -336,9 +336,9 @@
     "world": "Old",
     "metaphor": "Resurrection",
     "identity_cluster": "New World Reinvention",
-    "terroir_cluster": "European Mediterranean",
-    "pc1": -0.1392,
-    "pc2": 0.3435
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": -0.1368,
+    "pc2": 0.3533
   },
   {
     "name": "Tuscany",
@@ -347,9 +347,9 @@
     "world": "Old",
     "metaphor": "Art",
     "identity_cluster": "The Moderates",
-    "terroir_cluster": "European Mediterranean",
-    "pc1": -0.1299,
-    "pc2": 0.2386
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": -0.1335,
+    "pc2": 0.2575
   },
   {
     "name": "Veneto",
@@ -358,9 +358,9 @@
     "world": "Old",
     "metaphor": "Commerce",
     "identity_cluster": "Outward Ease",
-    "terroir_cluster": "European Mediterranean",
-    "pc1": 0.0061,
-    "pc2": 0.1618
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": 0.0125,
+    "pc2": 0.1735
   },
   {
     "name": "Douro",
@@ -369,9 +369,9 @@
     "world": "Old",
     "metaphor": "Endurance",
     "identity_cluster": "Against the Odds",
-    "terroir_cluster": "French Atlantic",
-    "pc1": 0.0846,
-    "pc2": 0.1836
+    "terroir_cluster": "Iberian Continental",
+    "pc1": 0.0831,
+    "pc2": 0.1661
   },
   {
     "name": "Goriška Brda",
@@ -380,9 +380,9 @@
     "world": "Old",
     "metaphor": "Fortune",
     "identity_cluster": "The Moderates",
-    "terroir_cluster": "International Terroir",
-    "pc1": 0.0251,
-    "pc2": 0.0536
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": 0.0247,
+    "pc2": 0.0527
   },
   {
     "name": "Catalonia",
@@ -391,9 +391,9 @@
     "world": "Old",
     "metaphor": "Identity",
     "identity_cluster": "New World Reinvention",
-    "terroir_cluster": "French Atlantic",
+    "terroir_cluster": "Iberian Continental",
     "pc1": -0.1333,
-    "pc2": 0.2164
+    "pc2": 0.2039
   },
   {
     "name": "Galicia",
@@ -402,9 +402,9 @@
     "world": "Old",
     "metaphor": "Longing (Morriña)",
     "identity_cluster": "Old World Interior",
-    "terroir_cluster": "French Atlantic",
-    "pc1": 0.0428,
-    "pc2": 0.1355
+    "terroir_cluster": "Iberian Continental",
+    "pc1": 0.0369,
+    "pc2": 0.128
   },
   {
     "name": "Ribera del Duero",
@@ -413,9 +413,9 @@
     "world": "Old",
     "metaphor": "Severity",
     "identity_cluster": "Against the Odds",
-    "terroir_cluster": "International Terroir",
-    "pc1": -0.1345,
-    "pc2": -0.0668
+    "terroir_cluster": "Iberian Continental",
+    "pc1": -0.1407,
+    "pc2": -0.0487
   },
   {
     "name": "Rioja",
@@ -424,9 +424,9 @@
     "world": "Old",
     "metaphor": "Patience",
     "identity_cluster": "Old World Exterior",
-    "terroir_cluster": "French Atlantic",
-    "pc1": -0.0883,
-    "pc2": 0.0862
+    "terroir_cluster": "Iberian Continental",
+    "pc1": -0.0872,
+    "pc2": 0.0974
   },
   {
     "name": "Mendoza",
@@ -435,9 +435,9 @@
     "world": "New",
     "metaphor": "Reinvention",
     "identity_cluster": "New World Reinvention",
-    "terroir_cluster": "International Terroir",
-    "pc1": -0.2489,
-    "pc2": -0.0793
+    "terroir_cluster": "Iberian Continental",
+    "pc1": -0.2532,
+    "pc2": -0.0637
   },
   {
     "name": "Patagonia",
@@ -446,9 +446,9 @@
     "world": "New",
     "metaphor": "Extremity",
     "identity_cluster": "New World Reinvention",
-    "terroir_cluster": "New World Cool-Climate",
-    "pc1": -0.1124,
-    "pc2": -0.236
+    "terroir_cluster": "Southern Hemisphere & International",
+    "pc1": -0.1184,
+    "pc2": -0.2228
   },
   {
     "name": "Barossa Valley",
@@ -457,9 +457,9 @@
     "world": "New",
     "metaphor": "Fortitude",
     "identity_cluster": "Against the Odds",
-    "terroir_cluster": "International Terroir",
-    "pc1": -0.2799,
-    "pc2": -0.0956
+    "terroir_cluster": "Southern Hemisphere & International",
+    "pc1": -0.2637,
+    "pc2": -0.0861
   },
   {
     "name": "Hunter Valley",
@@ -468,9 +468,9 @@
     "world": "New",
     "metaphor": "Defiance",
     "identity_cluster": "Against the Odds",
-    "terroir_cluster": "European Mediterranean",
-    "pc1": -0.0471,
-    "pc2": -0.0261
+    "terroir_cluster": "Southern Hemisphere & International",
+    "pc1": -0.0572,
+    "pc2": -0.0078
   },
   {
     "name": "Margaret River",
@@ -479,9 +479,9 @@
     "world": "New",
     "metaphor": "Composure",
     "identity_cluster": "The Moderates",
-    "terroir_cluster": "International Terroir",
-    "pc1": -0.1444,
-    "pc2": -0.1287
+    "terroir_cluster": "Southern Hemisphere & International",
+    "pc1": -0.1667,
+    "pc2": -0.1278
   },
   {
     "name": "Maipo Valley",
@@ -490,9 +490,9 @@
     "world": "New",
     "metaphor": "Pride",
     "identity_cluster": "The Moderates",
-    "terroir_cluster": "International Terroir",
-    "pc1": -0.2846,
-    "pc2": -0.2004
+    "terroir_cluster": "Southern Hemisphere & International",
+    "pc1": -0.2862,
+    "pc2": -0.18
   },
   {
     "name": "Central Otago",
@@ -501,9 +501,9 @@
     "world": "New",
     "metaphor": "Adventure",
     "identity_cluster": "New World Reinvention",
-    "terroir_cluster": "New World Cool-Climate",
-    "pc1": 0.0137,
-    "pc2": -0.2791
+    "terroir_cluster": "Southern Hemisphere & International",
+    "pc1": 0.004,
+    "pc2": -0.2735
   },
   {
     "name": "Hawke's Bay",
@@ -512,9 +512,9 @@
     "world": "New",
     "metaphor": "Confidence",
     "identity_cluster": "The Moderates",
-    "terroir_cluster": "International Terroir",
-    "pc1": -0.1926,
-    "pc2": -0.2162
+    "terroir_cluster": "Southern Hemisphere & International",
+    "pc1": -0.173,
+    "pc2": -0.2052
   },
   {
     "name": "Marlborough",
@@ -523,9 +523,9 @@
     "world": "New",
     "metaphor": "Assertion",
     "identity_cluster": "Outward Ease",
-    "terroir_cluster": "International Terroir",
-    "pc1": -0.0275,
-    "pc2": -0.251
+    "terroir_cluster": "Southern Hemisphere & International",
+    "pc1": -0.0266,
+    "pc2": -0.2506
   },
   {
     "name": "Stellenbosch",
@@ -534,9 +534,9 @@
     "world": "New",
     "metaphor": "Aspiration",
     "identity_cluster": "New World Reinvention",
-    "terroir_cluster": "International Terroir",
-    "pc1": -0.1934,
-    "pc2": -0.1724
+    "terroir_cluster": "Southern Hemisphere & International",
+    "pc1": -0.2014,
+    "pc2": -0.1492
   },
   {
     "name": "Swartland",
@@ -545,9 +545,9 @@
     "world": "New",
     "metaphor": "Rebellion",
     "identity_cluster": "New World Reinvention",
-    "terroir_cluster": "International Terroir",
-    "pc1": -0.1543,
-    "pc2": 0.0727
+    "terroir_cluster": "Mediterranean & Volcanic",
+    "pc1": -0.1394,
+    "pc2": 0.0845
   },
   {
     "name": "Columbia Valley",
@@ -556,9 +556,9 @@
     "world": "New",
     "metaphor": "Determination",
     "identity_cluster": "New World Reinvention",
-    "terroir_cluster": "New World Cool-Climate",
-    "pc1": -0.1628,
-    "pc2": -0.2173
+    "terroir_cluster": "Southern Hemisphere & International",
+    "pc1": -0.1814,
+    "pc2": -0.2205
   },
   {
     "name": "Finger Lakes",
@@ -567,9 +567,9 @@
     "world": "New",
     "metaphor": "Conviction",
     "identity_cluster": "New World Reinvention",
-    "terroir_cluster": "New World Cool-Climate",
-    "pc1": 0.0955,
-    "pc2": -0.0601
+    "terroir_cluster": "Southern Hemisphere & International",
+    "pc1": 0.0906,
+    "pc2": -0.107
   },
   {
     "name": "Napa Valley",
@@ -578,9 +578,9 @@
     "world": "New",
     "metaphor": "Ambition",
     "identity_cluster": "New World Reinvention",
-    "terroir_cluster": "International Terroir",
-    "pc1": -0.2377,
-    "pc2": -0.2747
+    "terroir_cluster": "American West Coast",
+    "pc1": -0.2629,
+    "pc2": -0.2784
   },
   {
     "name": "Paso Robles",
@@ -589,9 +589,9 @@
     "world": "New",
     "metaphor": "Independence",
     "identity_cluster": "New World Reinvention",
-    "terroir_cluster": "New World Cool-Climate",
-    "pc1": -0.2351,
-    "pc2": -0.1762
+    "terroir_cluster": "American West Coast",
+    "pc1": -0.2568,
+    "pc2": -0.1921
   },
   {
     "name": "Santa Barbara",
@@ -600,9 +600,9 @@
     "world": "New",
     "metaphor": "Serendipity",
     "identity_cluster": "The Moderates",
-    "terroir_cluster": "New World Cool-Climate",
-    "pc1": -0.145,
-    "pc2": -0.2166
+    "terroir_cluster": "American West Coast",
+    "pc1": -0.1434,
+    "pc2": -0.239
   },
   {
     "name": "Santa Cruz Mountains",
@@ -611,9 +611,9 @@
     "world": "New",
     "metaphor": "Obsession",
     "identity_cluster": "Old World Interior",
-    "terroir_cluster": "New World Cool-Climate",
-    "pc1": -0.0972,
-    "pc2": -0.0768
+    "terroir_cluster": "American West Coast",
+    "pc1": -0.1011,
+    "pc2": -0.109
   },
   {
     "name": "Sonoma",
@@ -622,9 +622,9 @@
     "world": "New",
     "metaphor": "Authenticity",
     "identity_cluster": "The Moderates",
-    "terroir_cluster": "New World Cool-Climate",
-    "pc1": -0.2308,
-    "pc2": -0.2529
+    "terroir_cluster": "American West Coast",
+    "pc1": -0.2522,
+    "pc2": -0.2695
   },
   {
     "name": "Walla Walla",
@@ -633,9 +633,9 @@
     "world": "New",
     "metaphor": "Community",
     "identity_cluster": "Outward Ease",
-    "terroir_cluster": "New World Cool-Climate",
-    "pc1": -0.1774,
-    "pc2": -0.2214
+    "terroir_cluster": "American West Coast",
+    "pc1": -0.1932,
+    "pc2": -0.2359
   },
   {
     "name": "Willamette Valley",
@@ -644,8 +644,8 @@
     "world": "New",
     "metaphor": "Idealism",
     "identity_cluster": "The Moderates",
-    "terroir_cluster": "New World Cool-Climate",
-    "pc1": -0.0289,
-    "pc2": -0.3083
+    "terroir_cluster": "American West Coast",
+    "pc1": -0.0479,
+    "pc2": -0.327
   }
 ]
