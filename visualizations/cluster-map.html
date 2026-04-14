@@ -249,7 +249,7 @@ footer a { color: var(--wine); text-decoration: none; }
 
     <div class="panel">
       <div class="panel-title">Terroir Clusters</div>
-      <div class="panel-subtitle">Layer 2 TF-IDF → PCA → K-means (k=6)</div>
+      <div class="panel-subtitle">Layer 2 TF-IDF → PCA → K-means (k=7) · Fully model-derived</div>
       <div class="scatter-wrap" id="terroirWrap">
         <canvas id="terroirCanvas"></canvas>
         <div class="scatter-tooltip" id="terroirTooltip"></div>
@@ -281,12 +281,13 @@ const CLUSTERS = [
 ];
 
 const TERROIR_COLORS = {
-  "French Atlantic": "#8C6D4F",
-  "European Mediterranean": "#C4883A",
-  "International Terroir": "#5B6AAF",
-  "Germanic Continental": "#3A7D6E",
-  "New World Cool-Climate": "#7B2D26",
-  "Austrian Danube": "#6B7B6B"
+  "Iberian Continental": "#8C6D4F",
+  "Southern Hemisphere & International": "#5B6AAF",
+  "American West Coast": "#7B2D26",
+  "French Viticultural": "#C4883A",
+  "Germanic Rhine": "#3A7D6E",
+  "Austrian Danube": "#6B7B6B",
+  "Mediterranean & Volcanic": "#9B5094"
 };
 
 const DIMS = ["D1","D2","D3","D4","D5","D6"];
