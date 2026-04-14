@@ -1,0 +1,78 @@
+THE SOUL OF WINE — Pipeline Report
+=============================================
+Pass 5 · Post-SME Review · 59 regions · 6 clusters
+
+IDENTITY CLUSTERING
+  Silhouette: 0.3029
+  PCA variance: 100.0%
+  Canonical match: 57/59
+
+TERROIR CLUSTERING
+  Silhouette: 0.2063
+  PCA variance (10 comp): 31.4%
+
+INDEPENDENCE TEST
+  ARI: 0.082
+  Chi-square: 44.089 (p = 0.011)
+  Result: NOT independent
+
+TERROIR CLUSTER ASSIGNMENTS
+  Kamptal: Austrian Danube
+  Steiermark: International Terroir
+  Wachau: Austrian Danube
+  Wagram: Austrian Danube
+  Dalmatian Coast: European Mediterranean
+  Alsace: Germanic Continental
+  Beaujolais: French Atlantic
+  Bordeaux: French Atlantic
+  Burgundy: French Atlantic
+  Champagne: French Atlantic
+  Châteauneuf-du-Pape: French Atlantic
+  Jura: French Atlantic
+  Loire: French Atlantic
+  Northern Rhône: French Atlantic
+  Provence: French Atlantic
+  Baden: Germanic Continental
+  Mosel: Germanic Continental
+  Nahe: Germanic Continental
+  Pfalz: Germanic Continental
+  Rheingau: Germanic Continental
+  Macedonia: European Mediterranean
+  Santorini: European Mediterranean
+  Tokaj: European Mediterranean
+  Alto Adige: International Terroir
+  Campania: European Mediterranean
+  Etna: European Mediterranean
+  Friuli-Venezia Giulia: International Terroir
+  Liguria: European Mediterranean
+  Piedmont: European Mediterranean
+  Sardinia: European Mediterranean
+  Sicily: European Mediterranean
+  Tuscany: European Mediterranean
+  Veneto: European Mediterranean
+  Douro: French Atlantic
+  Goriška Brda: International Terroir
+  Catalonia: French Atlantic
+  Galicia: French Atlantic
+  Ribera del Duero: International Terroir
+  Rioja: French Atlantic
+  Mendoza: International Terroir
+  Patagonia: New World Cool-Climate
+  Barossa Valley: International Terroir
+  Hunter Valley: European Mediterranean
+  Margaret River: International Terroir
+  Maipo Valley: International Terroir
+  Central Otago: New World Cool-Climate
+  Hawke's Bay: International Terroir
+  Marlborough: International Terroir
+  Stellenbosch: International Terroir
+  Swartland: International Terroir
+  Columbia Valley: New World Cool-Climate
+  Finger Lakes: New World Cool-Climate
+  Napa Valley: International Terroir
+  Paso Robles: New World Cool-Climate
+  Santa Barbara: New World Cool-Climate
+  Santa Cruz Mountains: New World Cool-Climate
+  Sonoma: New World Cool-Climate
+  Walla Walla: New World Cool-Climate
+  Willamette Valley: New World Cool-Climate

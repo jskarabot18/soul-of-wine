@@ -1,0 +1,1064 @@
+[
+  {
+    "name": "Kamptal",
+    "num": 1,
+    "country": "Austria",
+    "world": "Old",
+    "metaphor": "Discipline",
+    "cluster": "The Moderates",
+    "pc1": 0.8052,
+    "pc2": 0.1539,
+    "d_scores": [
+      1,
+      0,
+      1,
+      1,
+      0,
+      0
+    ]
+  },
+  {
+    "name": "Steiermark",
+    "num": 2,
+    "country": "Austria",
+    "world": "Old",
+    "metaphor": "Clarity",
+    "cluster": "The Moderates",
+    "pc1": -0.399,
+    "pc2": 0.7845,
+    "d_scores": [
+      1,
+      0,
+      0,
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "Wachau",
+    "num": 3,
+    "country": "Austria",
+    "world": "Old",
+    "metaphor": "Monumentality",
+    "cluster": "The Moderates",
+    "pc1": 0.0376,
+    "pc2": 0.0821,
+    "d_scores": [
+      0,
+      0,
+      1,
+      1,
+      0,
+      1
+    ]
+  },
+  {
+    "name": "Wagram",
+    "num": 4,
+    "country": "Austria",
+    "world": "Old",
+    "metaphor": "Earth",
+    "cluster": "Against the Odds",
+    "pc1": 0.9497,
+    "pc2": -0.6924,
+    "d_scores": [
+      2,
+      0,
+      2,
+      0,
+      0,
+      1
+    ]
+  },
+  {
+    "name": "Dalmatian Coast",
+    "num": 5,
+    "country": "Croatia",
+    "world": "Old",
+    "metaphor": "Tranquility",
+    "cluster": "Old World Exterior",
+    "pc1": 0.2538,
+    "pc2": -2.7353,
+    "d_scores": [
+      2,
+      -2,
+      1,
+      -1,
+      -2,
+      2
+    ]
+  },
+  {
+    "name": "Alsace",
+    "num": 6,
+    "country": "France",
+    "world": "Old",
+    "metaphor": "Duality",
+    "cluster": "The Moderates",
+    "pc1": 0.2176,
+    "pc2": -0.5497,
+    "d_scores": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "name": "Beaujolais",
+    "num": 7,
+    "country": "France",
+    "world": "Old",
+    "metaphor": "Joy",
+    "cluster": "Outward Ease",
+    "pc1": -2.2439,
+    "pc2": -0.8556,
+    "d_scores": [
+      -1,
+      -1,
+      -1,
+      -1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "Bordeaux",
+    "num": 8,
+    "country": "France",
+    "world": "Old",
+    "metaphor": "Business",
+    "cluster": "Old World Exterior",
+    "pc1": -1.271,
+    "pc2": -2.7835,
+    "d_scores": [
+      -2,
+      -1,
+      2,
+      -2,
+      0,
+      1
+    ]
+  },
+  {
+    "name": "Burgundy",
+    "num": 9,
+    "country": "France",
+    "world": "Old",
+    "metaphor": "Devotion",
+    "cluster": "Old World Interior",
+    "pc1": 2.6799,
+    "pc2": 0.1312,
+    "d_scores": [
+      2,
+      1,
+      2,
+      1,
+      -1,
+      -1
+    ]
+  },
+  {
+    "name": "Champagne",
+    "num": 10,
+    "country": "France",
+    "world": "Old",
+    "metaphor": "Society",
+    "cluster": "Old World Exterior",
+    "pc1": -0.486,
+    "pc2": -2.7918,
+    "d_scores": [
+      -2,
+      -1,
+      2,
+      -2,
+      0,
+      -1
+    ]
+  },
+  {
+    "name": "Châteauneuf-du-Pape",
+    "num": 11,
+    "country": "France",
+    "world": "Old",
+    "metaphor": "Family",
+    "cluster": "Old World Exterior",
+    "pc1": -0.1632,
+    "pc2": -2.5032,
+    "d_scores": [
+      -1,
+      0,
+      2,
+      -2,
+      -1,
+      1
+    ]
+  },
+  {
+    "name": "Jura",
+    "num": 12,
+    "country": "France",
+    "world": "Old",
+    "metaphor": "Eccentricity",
+    "cluster": "Against the Odds",
+    "pc1": 1.4576,
+    "pc2": 0.4669,
+    "d_scores": [
+      2,
+      1,
+      2,
+      1,
+      0,
+      1
+    ]
+  },
+  {
+    "name": "Loire",
+    "num": 13,
+    "country": "France",
+    "world": "Old",
+    "metaphor": "Sentimentality",
+    "cluster": "The Moderates",
+    "pc1": -0.5318,
+    "pc2": -0.3268,
+    "d_scores": [
+      -1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "name": "Northern Rhône",
+    "num": 14,
+    "country": "France",
+    "world": "Old",
+    "metaphor": "Solitude",
+    "cluster": "Old World Interior",
+    "pc1": 3.6251,
+    "pc2": 0.9631,
+    "d_scores": [
+      2,
+      2,
+      2,
+      2,
+      -2,
+      -1
+    ]
+  },
+  {
+    "name": "Provence",
+    "num": 15,
+    "country": "France",
+    "world": "Old",
+    "metaphor": "Pleasure",
+    "cluster": "Outward Ease",
+    "pc1": -2.5401,
+    "pc2": -1.7623,
+    "d_scores": [
+      -2,
+      -2,
+      0,
+      -1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "Baden",
+    "num": 16,
+    "country": "Germany",
+    "world": "Old",
+    "metaphor": "Warmth",
+    "cluster": "Old World Exterior",
+    "pc1": -0.6206,
+    "pc2": -2.1084,
+    "d_scores": [
+      -1,
+      -1,
+      1,
+      -1,
+      -1,
+      1
+    ]
+  },
+  {
+    "name": "Mosel",
+    "num": 17,
+    "country": "Germany",
+    "world": "Old",
+    "metaphor": "Poetry",
+    "cluster": "Old World Interior",
+    "pc1": 3.8051,
+    "pc2": 0.3313,
+    "d_scores": [
+      2,
+      2,
+      2,
+      1,
+      -2,
+      -2
+    ]
+  },
+  {
+    "name": "Nahe",
+    "num": 18,
+    "country": "Germany",
+    "world": "Old",
+    "metaphor": "Subtlety",
+    "cluster": "Old World Interior",
+    "pc1": 1.2424,
+    "pc2": -0.1735,
+    "d_scores": [
+      1,
+      0,
+      1,
+      1,
+      -1,
+      0
+    ]
+  },
+  {
+    "name": "Pfalz",
+    "num": 19,
+    "country": "Germany",
+    "world": "Old",
+    "metaphor": "Generosity",
+    "cluster": "Old World Exterior",
+    "pc1": -0.9161,
+    "pc2": -2.6401,
+    "d_scores": [
+      -1,
+      -2,
+      1,
+      -1,
+      -1,
+      1
+    ]
+  },
+  {
+    "name": "Rheingau",
+    "num": 20,
+    "country": "Germany",
+    "world": "Old",
+    "metaphor": "Nobility",
+    "cluster": "Old World Interior",
+    "pc1": 2.0541,
+    "pc2": -0.7999,
+    "d_scores": [
+      1,
+      0,
+      2,
+      1,
+      -2,
+      0
+    ]
+  },
+  {
+    "name": "Macedonia",
+    "num": 21,
+    "country": "Greece",
+    "world": "Old",
+    "metaphor": "Austerity",
+    "cluster": "Against the Odds",
+    "pc1": 1.7531,
+    "pc2": 0.9987,
+    "d_scores": [
+      2,
+      2,
+      2,
+      1,
+      0,
+      1
+    ]
+  },
+  {
+    "name": "Santorini",
+    "num": 22,
+    "country": "Greece",
+    "world": "Old",
+    "metaphor": "Survival",
+    "cluster": "Against the Odds",
+    "pc1": 0.9414,
+    "pc2": 1.625,
+    "d_scores": [
+      2,
+      2,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "Tokaj",
+    "num": 23,
+    "country": "Hungary",
+    "world": "Old",
+    "metaphor": "Melancholy",
+    "cluster": "Old World Interior",
+    "pc1": 3.1171,
+    "pc2": -0.1963,
+    "d_scores": [
+      2,
+      1,
+      2,
+      1,
+      -2,
+      -1
+    ]
+  },
+  {
+    "name": "Alto Adige",
+    "num": 24,
+    "country": "Italy",
+    "world": "Old",
+    "metaphor": "Precision",
+    "cluster": "The Moderates",
+    "pc1": -0.1749,
+    "pc2": -0.5456,
+    "d_scores": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      1
+    ]
+  },
+  {
+    "name": "Campania",
+    "num": 25,
+    "country": "Italy",
+    "world": "Old",
+    "metaphor": "Memory",
+    "cluster": "Old World Interior",
+    "pc1": 1.4225,
+    "pc2": -0.8053,
+    "d_scores": [
+      1,
+      0,
+      1,
+      0,
+      -1,
+      -1
+    ]
+  },
+  {
+    "name": "Etna",
+    "num": 26,
+    "country": "Italy",
+    "world": "Old",
+    "metaphor": "Awakening",
+    "cluster": "Old World Interior",
+    "pc1": 0.7645,
+    "pc2": 1.212,
+    "d_scores": [
+      1,
+      2,
+      0,
+      0,
+      1,
+      -1
+    ]
+  },
+  {
+    "name": "Friuli-Venezia Giulia",
+    "num": 27,
+    "country": "Italy",
+    "world": "Old",
+    "metaphor": "Dialogue",
+    "cluster": "The Moderates",
+    "pc1": -0.5318,
+    "pc2": -0.3268,
+    "d_scores": [
+      -1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "name": "Liguria",
+    "num": 28,
+    "country": "Italy",
+    "world": "Old",
+    "metaphor": "Intimacy",
+    "cluster": "Against the Odds",
+    "pc1": 1.5205,
+    "pc2": 0.4384,
+    "d_scores": [
+      2,
+      1,
+      1,
+      1,
+      -1,
+      1
+    ]
+  },
+  {
+    "name": "Piedmont",
+    "num": 29,
+    "country": "Italy",
+    "world": "Old",
+    "metaphor": "Philosophy",
+    "cluster": "Old World Interior",
+    "pc1": 3.1171,
+    "pc2": -0.1963,
+    "d_scores": [
+      2,
+      1,
+      2,
+      1,
+      -2,
+      -1
+    ]
+  },
+  {
+    "name": "Sardinia",
+    "num": 30,
+    "country": "Italy",
+    "world": "Old",
+    "metaphor": "Stubbornness",
+    "cluster": "Against the Odds",
+    "pc1": 1.0775,
+    "pc2": -1.1116,
+    "d_scores": [
+      2,
+      1,
+      2,
+      -1,
+      -1,
+      2
+    ]
+  },
+  {
+    "name": "Sicily",
+    "num": 31,
+    "country": "Italy",
+    "world": "Old",
+    "metaphor": "Resurrection",
+    "cluster": "New World Reinvention",
+    "pc1": -1.6025,
+    "pc2": 1.762,
+    "d_scores": [
+      -1,
+      1,
+      -2,
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "Tuscany",
+    "num": 32,
+    "country": "Italy",
+    "world": "Old",
+    "metaphor": "Art",
+    "cluster": "The Moderates",
+    "pc1": -0.6149,
+    "pc2": -0.2309,
+    "d_scores": [
+      -1,
+      -1,
+      0,
+      1,
+      0,
+      0
+    ]
+  },
+  {
+    "name": "Veneto",
+    "num": 33,
+    "country": "Italy",
+    "world": "Old",
+    "metaphor": "Commerce",
+    "cluster": "Outward Ease",
+    "pc1": -2.3235,
+    "pc2": -0.3999,
+    "d_scores": [
+      -2,
+      0,
+      -1,
+      -1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "Douro",
+    "num": 34,
+    "country": "Portugal",
+    "world": "Old",
+    "metaphor": "Endurance",
+    "cluster": "Against the Odds",
+    "pc1": 1.8153,
+    "pc2": 0.5952,
+    "d_scores": [
+      1,
+      2,
+      2,
+      1,
+      -1,
+      1
+    ]
+  },
+  {
+    "name": "Goriška Brda",
+    "num": 35,
+    "country": "Slovenia",
+    "world": "Old",
+    "metaphor": "Fortune",
+    "cluster": "The Moderates",
+    "pc1": -0.9244,
+    "pc2": -0.3227,
+    "d_scores": [
+      -1,
+      0,
+      0,
+      0,
+      0,
+      1
+    ]
+  },
+  {
+    "name": "Catalonia",
+    "num": 36,
+    "country": "Spain",
+    "world": "Old",
+    "metaphor": "Identity",
+    "cluster": "New World Reinvention",
+    "pc1": -1.9608,
+    "pc2": 1.2588,
+    "d_scores": [
+      -1,
+      0,
+      -1,
+      1,
+      2,
+      1
+    ]
+  },
+  {
+    "name": "Galicia",
+    "num": 37,
+    "country": "Spain",
+    "world": "Old",
+    "metaphor": "Longing (Morriña)",
+    "cluster": "Old World Interior",
+    "pc1": 1.4932,
+    "pc2": 0.6815,
+    "d_scores": [
+      1,
+      1,
+      1,
+      1,
+      0,
+      -1
+    ]
+  },
+  {
+    "name": "Ribera del Duero",
+    "num": 38,
+    "country": "Spain",
+    "world": "Old",
+    "metaphor": "Severity",
+    "cluster": "Against the Odds",
+    "pc1": 0.6111,
+    "pc2": 1.2257,
+    "d_scores": [
+      1,
+      2,
+      1,
+      1,
+      0,
+      2
+    ]
+  },
+  {
+    "name": "Rioja",
+    "num": 39,
+    "country": "Spain",
+    "world": "Old",
+    "metaphor": "Patience",
+    "cluster": "Old World Exterior",
+    "pc1": 0.879,
+    "pc2": -2.2072,
+    "d_scores": [
+      -1,
+      0,
+      2,
+      -1,
+      -2,
+      0
+    ]
+  },
+  {
+    "name": "Mendoza",
+    "num": 40,
+    "country": "Argentina",
+    "world": "New",
+    "metaphor": "Reinvention",
+    "cluster": "New World Reinvention",
+    "pc1": -2.7103,
+    "pc2": 1.4817,
+    "d_scores": [
+      -2,
+      0,
+      -2,
+      1,
+      2,
+      1
+    ]
+  },
+  {
+    "name": "Patagonia",
+    "num": 41,
+    "country": "Argentina",
+    "world": "New",
+    "metaphor": "Extremity",
+    "cluster": "New World Reinvention",
+    "pc1": -1.307,
+    "pc2": 2.2937,
+    "d_scores": [
+      -1,
+      2,
+      -2,
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "Barossa Valley",
+    "num": 42,
+    "country": "Australia",
+    "world": "New",
+    "metaphor": "Fortitude",
+    "cluster": "Against the Odds",
+    "pc1": 0.7912,
+    "pc2": 0.5939,
+    "d_scores": [
+      1,
+      2,
+      1,
+      0,
+      0,
+      1
+    ]
+  },
+  {
+    "name": "Hunter Valley",
+    "num": 43,
+    "country": "Australia",
+    "world": "New",
+    "metaphor": "Defiance",
+    "cluster": "Against the Odds",
+    "pc1": 1.4409,
+    "pc2": 0.8941,
+    "d_scores": [
+      1,
+      2,
+      1,
+      1,
+      -1,
+      1
+    ]
+  },
+  {
+    "name": "Margaret River",
+    "num": 44,
+    "country": "Australia",
+    "world": "New",
+    "metaphor": "Composure",
+    "cluster": "The Moderates",
+    "pc1": 0.2805,
+    "pc2": -0.5782,
+    "d_scores": [
+      0,
+      0,
+      0,
+      0,
+      -1,
+      0
+    ]
+  },
+  {
+    "name": "Maipo Valley",
+    "num": 45,
+    "country": "Chile",
+    "world": "New",
+    "metaphor": "Pride",
+    "cluster": "The Moderates",
+    "pc1": -0.1127,
+    "pc2": -0.949,
+    "d_scores": [
+      -1,
+      0,
+      1,
+      0,
+      -1,
+      1
+    ]
+  },
+  {
+    "name": "Central Otago",
+    "num": 46,
+    "country": "New Zealand",
+    "world": "New",
+    "metaphor": "Adventure",
+    "cluster": "New World Reinvention",
+    "pc1": -1.6025,
+    "pc2": 1.762,
+    "d_scores": [
+      -1,
+      1,
+      -2,
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "Hawke's Bay",
+    "num": 47,
+    "country": "New Zealand",
+    "world": "New",
+    "metaphor": "Confidence",
+    "cluster": "The Moderates",
+    "pc1": -0.112,
+    "pc2": -0.5741,
+    "d_scores": [
+      0,
+      0,
+      0,
+      0,
+      -1,
+      1
+    ]
+  },
+  {
+    "name": "Marlborough",
+    "num": 48,
+    "country": "New Zealand",
+    "world": "New",
+    "metaphor": "Assertion",
+    "cluster": "Outward Ease",
+    "pc1": -2.7608,
+    "pc2": -0.0725,
+    "d_scores": [
+      -2,
+      0,
+      -1,
+      -1,
+      2,
+      1
+    ]
+  },
+  {
+    "name": "Stellenbosch",
+    "num": 49,
+    "country": "South Africa",
+    "world": "New",
+    "metaphor": "Aspiration",
+    "cluster": "New World Reinvention",
+    "pc1": -1.5236,
+    "pc2": 0.9313,
+    "d_scores": [
+      -1,
+      0,
+      -1,
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "Swartland",
+    "num": 50,
+    "country": "South Africa",
+    "world": "New",
+    "metaphor": "Rebellion",
+    "cluster": "New World Reinvention",
+    "pc1": -2.0397,
+    "pc2": 2.0894,
+    "d_scores": [
+      -1,
+      1,
+      -2,
+      1,
+      2,
+      1
+    ]
+  },
+  {
+    "name": "Columbia Valley",
+    "num": 51,
+    "country": "USA",
+    "world": "New",
+    "metaphor": "Determination",
+    "cluster": "New World Reinvention",
+    "pc1": -1.833,
+    "pc2": 0.8396,
+    "d_scores": [
+      -1,
+      1,
+      -1,
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "name": "Finger Lakes",
+    "num": 52,
+    "country": "USA",
+    "world": "New",
+    "metaphor": "Conviction",
+    "cluster": "New World Reinvention",
+    "pc1": -1.2281,
+    "pc2": 1.4631,
+    "d_scores": [
+      -1,
+      1,
+      -1,
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "Napa Valley",
+    "num": 53,
+    "country": "USA",
+    "world": "New",
+    "metaphor": "Ambition",
+    "cluster": "New World Reinvention",
+    "pc1": -1.8986,
+    "pc2": 0.8553,
+    "d_scores": [
+      -2,
+      0,
+      -1,
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "Paso Robles",
+    "num": 54,
+    "country": "USA",
+    "world": "New",
+    "metaphor": "Independence",
+    "cluster": "New World Reinvention",
+    "pc1": -1.3111,
+    "pc2": 1.5589,
+    "d_scores": [
+      -1,
+      0,
+      -1,
+      2,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "Santa Barbara",
+    "num": 55,
+    "country": "USA",
+    "world": "New",
+    "metaphor": "Serendipity",
+    "cluster": "The Moderates",
+    "pc1": -0.9244,
+    "pc2": -0.3227,
+    "d_scores": [
+      -1,
+      0,
+      0,
+      0,
+      0,
+      1
+    ]
+  },
+  {
+    "name": "Santa Cruz Mountains",
+    "num": 56,
+    "country": "USA",
+    "world": "New",
+    "metaphor": "Obsession",
+    "cluster": "Old World Interior",
+    "pc1": 1.3138,
+    "pc2": 1.6882,
+    "d_scores": [
+      2,
+      1,
+      0,
+      2,
+      0,
+      0
+    ]
+  },
+  {
+    "name": "Sonoma",
+    "num": 57,
+    "country": "USA",
+    "world": "New",
+    "metaphor": "Authenticity",
+    "cluster": "The Moderates",
+    "pc1": -1.0863,
+    "pc2": 0.6039,
+    "d_scores": [
+      -1,
+      0,
+      -1,
+      1,
+      0,
+      1
+    ]
+  },
+  {
+    "name": "Walla Walla",
+    "num": 58,
+    "country": "USA",
+    "world": "New",
+    "metaphor": "Community",
+    "cluster": "Outward Ease",
+    "pc1": -1.7063,
+    "pc2": -1.3311,
+    "d_scores": [
+      1,
+      -1,
+      -1,
+      -2,
+      1,
+      1
+    ]
+  },
+  {
+    "name": "Willamette Valley",
+    "num": 59,
+    "country": "USA",
+    "world": "New",
+    "metaphor": "Idealism",
+    "cluster": "The Moderates",
+    "pc1": -0.0058,
+    "pc2": 1.1273,
+    "d_scores": [
+      -1,
+      1,
+      -1,
+      1,
+      0,
+      -1
+    ]
+  }
+]

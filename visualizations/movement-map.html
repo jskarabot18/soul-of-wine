@@ -211,67 +211,70 @@ const IDENTITY_CLUSTERS = [
   { name: "The Moderates", color: "#6B7B6B", short: "MOD" }
 ];
 
-/* Terroir clusters from the paper — 6 clusters from Layer 2 TF-IDF */
+/* Terroir clusters from pipeline (Layer 2 TF-IDF → PCA → k-means) */
 const TERROIR_CLUSTERS = [
-  "Mediterranean Warm",
-  "Continental Central European",
-  "Cool Maritime & Altitude",
-  "Atlantic & Oceanic",
-  "Arid & Semi-Arid",
-  "Cool Continental"
+  "French Atlantic",
+  "European Mediterranean",
+  "International Terroir",
+  "Germanic Continental",
+  "New World Cool-Climate",
+  "Austrian Danube"
 ];
 
-/* Approximate terroir cluster assignments (from the paper's terroir clustering) */
-const TERROIR_ASSIGN = {
-  "Kamptal": "Continental Central European", "Steiermark": "Continental Central European",
-  "Wachau": "Continental Central European", "Wagram": "Continental Central European",
-  "Dalmatian Coast": "Mediterranean Warm", "Alsace": "Cool Continental",
-  "Beaujolais": "Cool Maritime & Altitude", "Bordeaux": "Atlantic & Oceanic",
-  "Burgundy": "Cool Continental", "Champagne": "Cool Continental",
-  "Châteauneuf-du-Pape": "Mediterranean Warm", "Jura": "Cool Continental",
-  "Loire": "Atlantic & Oceanic", "Northern Rhône": "Cool Maritime & Altitude",
-  "Provence": "Mediterranean Warm", "Baden": "Continental Central European",
-  "Mosel": "Cool Continental", "Nahe": "Cool Continental",
-  "Pfalz": "Continental Central European", "Rheingau": "Cool Continental",
-  "Macedonia": "Mediterranean Warm", "Santorini": "Arid & Semi-Arid",
-  "Tokaj": "Continental Central European", "Alto Adige": "Cool Maritime & Altitude",
-  "Campania": "Mediterranean Warm", "Etna": "Mediterranean Warm",
-  "Friuli-Venezia Giulia": "Cool Maritime & Altitude", "Liguria": "Mediterranean Warm",
-  "Piedmont": "Cool Maritime & Altitude", "Sardinia": "Mediterranean Warm",
-  "Sicily": "Mediterranean Warm", "Tuscany": "Mediterranean Warm",
-  "Veneto": "Cool Maritime & Altitude", "Douro": "Arid & Semi-Arid",
-  "Goriška Brda": "Cool Maritime & Altitude", "Catalonia": "Mediterranean Warm",
-  "Galicia": "Atlantic & Oceanic", "Ribera del Duero": "Arid & Semi-Arid",
-  "Rioja": "Arid & Semi-Arid", "Mendoza": "Arid & Semi-Arid",
-  "Patagonia": "Arid & Semi-Arid", "Barossa Valley": "Mediterranean Warm",
-  "Hunter Valley": "Atlantic & Oceanic", "Margaret River": "Atlantic & Oceanic",
-  "Maipo Valley": "Arid & Semi-Arid", "Central Otago": "Cool Continental",
-  "Hawke's Bay": "Atlantic & Oceanic", "Marlborough": "Cool Maritime & Altitude",
-  "Stellenbosch": "Mediterranean Warm", "Swartland": "Mediterranean Warm",
-  "Columbia Valley": "Arid & Semi-Arid", "Finger Lakes": "Cool Continental",
-  "Napa Valley": "Mediterranean Warm", "Paso Robles": "Mediterranean Warm",
-  "Santa Barbara": "Cool Maritime & Altitude", "Santa Cruz Mountains": "Cool Maritime & Altitude",
-  "Sonoma": "Mediterranean Warm", "Walla Walla": "Arid & Semi-Arid",
-  "Willamette Valley": "Cool Maritime & Altitude"
+/* Terroir cluster assignments loaded dynamically */
+let TERROIR_ASSIGN = {};
+
+/* Preloaded fallback — pipeline-generated assignments */
+const TERROIR_ASSIGN_FALLBACK = {
+  "Kamptal": "Austrian Danube", "Steiermark": "International Terroir",
+  "Wachau": "Austrian Danube", "Wagram": "Austrian Danube",
+  "Dalmatian Coast": "European Mediterranean", "Alsace": "Germanic Continental",
+  "Beaujolais": "French Atlantic", "Bordeaux": "French Atlantic",
+  "Burgundy": "French Atlantic", "Champagne": "French Atlantic",
+  "Châteauneuf-du-Pape": "French Atlantic", "Jura": "French Atlantic",
+  "Loire": "French Atlantic", "Northern Rhône": "French Atlantic",
+  "Provence": "French Atlantic", "Baden": "Germanic Continental",
+  "Mosel": "Germanic Continental", "Nahe": "Germanic Continental",
+  "Pfalz": "Germanic Continental", "Rheingau": "Germanic Continental",
+  "Macedonia": "European Mediterranean", "Santorini": "European Mediterranean",
+  "Tokaj": "European Mediterranean", "Alto Adige": "International Terroir",
+  "Campania": "European Mediterranean", "Etna": "European Mediterranean",
+  "Friuli-Venezia Giulia": "International Terroir", "Liguria": "European Mediterranean",
+  "Piedmont": "European Mediterranean", "Sardinia": "European Mediterranean",
+  "Sicily": "European Mediterranean", "Tuscany": "European Mediterranean",
+  "Veneto": "European Mediterranean", "Douro": "French Atlantic",
+  "Goriška Brda": "International Terroir", "Catalonia": "French Atlantic",
+  "Galicia": "French Atlantic", "Ribera del Duero": "International Terroir",
+  "Rioja": "French Atlantic", "Mendoza": "International Terroir",
+  "Patagonia": "New World Cool-Climate", "Barossa Valley": "International Terroir",
+  "Hunter Valley": "European Mediterranean", "Margaret River": "International Terroir",
+  "Maipo Valley": "International Terroir", "Central Otago": "New World Cool-Climate",
+  "Hawke's Bay": "International Terroir", "Marlborough": "International Terroir",
+  "Stellenbosch": "International Terroir", "Swartland": "International Terroir",
+  "Columbia Valley": "New World Cool-Climate", "Finger Lakes": "New World Cool-Climate",
+  "Napa Valley": "International Terroir", "Paso Robles": "New World Cool-Climate",
+  "Santa Barbara": "New World Cool-Climate", "Santa Cruz Mountains": "New World Cool-Climate",
+  "Sonoma": "New World Cool-Climate", "Walla Walla": "New World Cool-Climate",
+  "Willamette Valley": "New World Cool-Climate"
 };
 
 const DIVERGENCE_CASES = [
-  { region: "Santorini", metaphor: "Survival", terroir: "Arid & Semi-Arid", identity: "Against the Odds",
-    note: "Volcanic island with extreme aridity shares terroir type with Mendoza and Rioja, but its identity is defined by existential struggle — not reinvention or institutional patience." },
-  { region: "Sicily", metaphor: "Resurrection", terroir: "Mediterranean Warm", identity: "New World Reinvention",
-    note: "Shares Mediterranean terroir with Provence, Tuscany, and Champagne-region neighbours, but its identity is one of radical reinvention — an Old World region behaving like a New World pioneer." },
-  { region: "Santa Cruz Mountains", metaphor: "Obsession", terroir: "Cool Maritime & Altitude", identity: "Old World Interior",
+  { region: "Santorini", metaphor: "Survival", terroir: "European Mediterranean", identity: "Against the Odds",
+    note: "Volcanic island shares terroir vocabulary with Italian and Greek Mediterranean neighbours, but its identity is defined by existential struggle — not warmth or ease." },
+  { region: "Sicily", metaphor: "Resurrection", terroir: "European Mediterranean", identity: "New World Reinvention",
+    note: "Shares Mediterranean terroir with Tuscany, Sardinia, and Campania, but its identity is one of radical reinvention — an Old World region behaving like a New World pioneer." },
+  { region: "Santa Cruz Mountains", metaphor: "Obsession", terroir: "New World Cool-Climate", identity: "Old World Interior",
     note: "A New World region in California whose obsessive, private, inward-facing identity places it among Burgundy, Piedmont, and the Northern Rhône — not among its geographic neighbours." },
-  { region: "Barossa Valley", metaphor: "Fortitude", terroir: "Mediterranean Warm", identity: "Against the Odds",
-    note: "Warm Mediterranean conditions suggest ease, but the Barossa's identity is forged through multi-generational endurance against drought, market shifts, and vine-pull pressures." },
-  { region: "Catalonia", metaphor: "Identity", terroir: "Mediterranean Warm", identity: "New World Reinvention",
-    note: "An ancient Mediterranean region whose political and cultural assertion of distinctiveness gives it the urgency and constructedness of a New World identity." },
-  { region: "Finger Lakes", metaphor: "Conviction", terroir: "Cool Continental", identity: "New World Reinvention",
-    note: "Shares cool continental climate with Burgundy and Champagne, but its identity is built on deliberate construction and the urgency of proving itself — not inherited tradition." },
-  { region: "Dalmatian Coast", metaphor: "Tranquility", terroir: "Mediterranean Warm", identity: "Old World Exterior",
-    note: "Mediterranean warmth typically correlates with interior or struggle-based identities nearby (Etna, Sardinia), but Dalmatia's deep calm and outward ease place it with Bordeaux and Champagne." },
-  { region: "Walla Walla", metaphor: "Community", terroir: "Arid & Semi-Arid", identity: "Outward Ease",
-    note: "Arid terroir shared with Ribera del Duero and Columbia Valley, but Walla Walla's communal, outward-facing identity has nothing in common with the struggle or determination of its terroir peers." }
+  { region: "Barossa Valley", metaphor: "Fortitude", terroir: "International Terroir", identity: "Against the Odds",
+    note: "International terroir conditions suggest commercial ease, but the Barossa's identity is forged through multi-generational endurance against drought, market shifts, and vine-pull pressures." },
+  { region: "Catalonia", metaphor: "Identity", terroir: "French Atlantic", identity: "New World Reinvention",
+    note: "The TF-IDF vocabulary groups it with French Atlantic regions, but its political and cultural assertion of distinctiveness gives it the urgency of a New World identity." },
+  { region: "Finger Lakes", metaphor: "Conviction", terroir: "New World Cool-Climate", identity: "New World Reinvention",
+    note: "Shares cool-climate terroir vocabulary with Willamette Valley and Sonoma, but its identity is built on deliberate construction and the urgency of proving itself." },
+  { region: "Dalmatian Coast", metaphor: "Tranquility", terroir: "European Mediterranean", identity: "Old World Exterior",
+    note: "Mediterranean terroir typically correlates with interior or struggle-based identities nearby (Etna, Sardinia), but Dalmatia's deep calm and outward ease place it with Bordeaux and Champagne." },
+  { region: "Walla Walla", metaphor: "Community", terroir: "New World Cool-Climate", identity: "Outward Ease",
+    note: "Shares cool-climate terroir with Columbia Valley and Willamette Valley, but Walla Walla's communal, outward-facing identity has nothing in common with the determination of its terroir peers." }
 ];
 
 function clusterColor(name) {
@@ -401,13 +404,15 @@ function renderDivergence() {
   }).join('');
 }
 
-fetch('../data/regions.json')
-  .then(r => r.json())
-  .then(d => {
-    drawAlluvial(d.regions);
-    renderDivergence();
-    window.addEventListener('resize', () => drawAlluvial(d.regions));
-  });
+Promise.all([
+  fetch('../data/regions.json').then(r => r.json()),
+  fetch('../data/terroir_clusters.json').then(r => r.json()).catch(() => null)
+]).then(([regionsData, terroirClusters]) => {
+  TERROIR_ASSIGN = terroirClusters || TERROIR_ASSIGN_FALLBACK;
+  drawAlluvial(regionsData.regions);
+  renderDivergence();
+  window.addEventListener('resize', () => drawAlluvial(regionsData.regions));
+});
 </script>
 </body>
 </html>

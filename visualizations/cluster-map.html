@@ -250,14 +250,9 @@ footer a { color: var(--wine); text-decoration: none; }
     <div class="panel">
       <div class="panel-title">Terroir Clusters</div>
       <div class="panel-subtitle">Layer 2 TF-IDF → PCA → K-means (k=6)</div>
-      <div class="placeholder-content">
-        <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M8 12h8"/>
-          <path d="M12 8v8"/>
-        </svg>
-        <p>Terroir PCA coordinates will be generated from the analysis pipeline and added here.</p>
-        <div class="coming">Coming in Deliverable 5</div>
+      <div class="scatter-wrap" id="terroirWrap">
+        <canvas id="terroirCanvas"></canvas>
+        <div class="scatter-tooltip" id="terroirTooltip"></div>
       </div>
     </div>
   </div>
@@ -284,15 +279,30 @@ const CLUSTERS = [
   { name: "Against the Odds", color: "#8B5E3C" },
   { name: "The Moderates", color: "#6B7B6B" }
 ];
+
+const TERROIR_COLORS = {
+  "French Atlantic": "#8C6D4F",
+  "European Mediterranean": "#C4883A",
+  "International Terroir": "#5B6AAF",
+  "Germanic Continental": "#3A7D6E",
+  "New World Cool-Climate": "#7B2D26",
+  "Austrian Danube": "#6B7B6B"
+};
+
 const DIMS = ["D1","D2","D3","D4","D5","D6"];
 
 let allData = [];
 let pcaCoords = [];
+let terroirData = [];
 let activeCluster = null;
 
 function clusterColor(name) {
   const c = CLUSTERS.find(c => c.name === name);
   return c ? c.color : "#999";
+}
+
+function terroirColor(name) {
+  return TERROIR_COLORS[name] || "#999";
 }
 
 /* ── PCA: standardise then power-iteration for top 2 eigenvectors ── */
@@ -331,9 +341,7 @@ function computePCA(regions) {
     let M = mat.map(r => [...r]);
 
     for (let v = 0; v < numVecs; v++) {
-      let vec = Array.from({ length: sz }, () => Math.random() - 0.5);
-      // Seed deterministically for reproducibility
-      vec = Array.from({ length: sz }, (_, i) => Math.sin(i * 7.3 + v * 13.1));
+      let vec = Array.from({ length: sz }, (_, i) => Math.sin(i * 7.3 + v * 13.1));
       for (let iter = 0; iter < 300; iter++) {
         const nv = new Array(sz).fill(0);
         for (let i = 0; i < sz; i++)
@@ -344,7 +352,6 @@ function computePCA(regions) {
       }
       vecs.push(vec);
 
-      // Deflate
       const eigenval = vec.reduce((s, vi, i) => {
         let mv = 0;
         for (let j = 0; j < sz; j++) mv += M[i][j] * vec[j];
@@ -365,10 +372,10 @@ function computePCA(regions) {
   }));
 }
 
-/* ── Draw scatter ── */
-function drawScatter() {
-  const canvas = document.getElementById('identityCanvas');
-  const wrap = document.getElementById('identityWrap');
+/* ── Generic scatter draw function ── */
+function drawGenericScatter(canvasId, wrapId, tooltipId, points, getColor, getCluster, filterKey) {
+  const canvas = document.getElementById(canvasId);
+  const wrap = document.getElementById(wrapId);
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
 
@@ -385,10 +392,8 @@ function drawScatter() {
   const plotW = W - pad * 2;
   const plotH = H - pad * 2;
 
-  // Stable axes from full data
-  const allPts = pcaCoords;
-  const pc1Vals = allPts.map(p => p.pc1);
-  const pc2Vals = allPts.map(p => p.pc2);
+  const pc1Vals = points.map(p => p.pc1);
+  const pc2Vals = points.map(p => p.pc2);
   const pc1Min = Math.min(...pc1Vals), pc1Max = Math.max(...pc1Vals);
   const pc2Min = Math.min(...pc2Vals), pc2Max = Math.max(...pc2Vals);
   const pc1Range = pc1Max - pc1Min || 1;
@@ -437,9 +442,8 @@ function drawScatter() {
 
   // Dimmed points when filtering
   if (activeCluster) {
-    allData.forEach((r, i) => {
-      if (r.cluster === activeCluster) return;
-      const pt = pcaCoords[i];
+    points.forEach((pt, i) => {
+      if (getCluster(pt, i) === activeCluster) return;
       ctx.beginPath();
       ctx.arc(toX(pt.pc1), toY(pt.pc2), 4, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(200,192,180,0.3)';
@@ -449,12 +453,11 @@ function drawScatter() {
 
   // Active points
   const pointData = [];
-  allData.forEach((r, i) => {
-    if (activeCluster && r.cluster !== activeCluster) return;
-    const pt = pcaCoords[i];
+  points.forEach((pt, i) => {
+    if (activeCluster && getCluster(pt, i) !== activeCluster) return;
     const x = toX(pt.pc1);
     const y = toY(pt.pc2);
-    const color = clusterColor(r.cluster);
+    const color = getColor(pt, i);
 
     ctx.beginPath();
     ctx.arc(x, y, 6, 0, Math.PI * 2);
@@ -466,17 +469,42 @@ function drawScatter() {
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    pointData.push({ x, y, region: r });
+    pointData.push({ x, y, pt, idx: i });
   });
 
   canvas._pointData = pointData;
 }
 
-/* ── Hover ── */
-function setupHover() {
-  const canvas = document.getElementById('identityCanvas');
-  const tooltip = document.getElementById('identityTooltip');
-  const wrap = document.getElementById('identityWrap');
+/* ── Draw both panels ── */
+function drawScatters() {
+  // Identity panel
+  drawGenericScatter('identityCanvas', 'identityWrap', 'identityTooltip',
+    pcaCoords.map((p, i) => ({ ...p, region: allData[i] })),
+    (pt) => clusterColor(pt.region.cluster),
+    (pt) => pt.region.cluster,
+    'cluster'
+  );
+
+  // Terroir panel
+  if (terroirData.length > 0) {
+    drawGenericScatter('terroirCanvas', 'terroirWrap', 'terroirTooltip',
+      terroirData,
+      (pt) => terroirColor(pt.terroir_cluster),
+      (pt) => {
+        // When filtering by identity cluster, dim regions not in that cluster
+        const region = allData.find(r => r.region === pt.name);
+        return region ? region.cluster : '';
+      },
+      'terroir_cluster'
+    );
+  }
+}
+
+/* ── Hover setup ── */
+function setupHover(canvasId, tooltipId, wrapId, getTooltipHTML) {
+  const canvas = document.getElementById(canvasId);
+  const tooltip = document.getElementById(tooltipId);
+  const wrap = document.getElementById(wrapId);
 
   canvas.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
@@ -490,12 +518,7 @@ function setupHover() {
     });
 
     if (closest) {
-      const r = closest.region;
-      tooltip.innerHTML = `
-        <div class="tt-region">${r.region}</div>
-        <div class="tt-meta">${r.country} · ${r.cluster}</div>
-        <div class="tt-metaphor">${r.metaphor}</div>
-      `;
+      tooltip.innerHTML = getTooltipHTML(closest);
       tooltip.classList.add('visible');
 
       const wrapRect = wrap.getBoundingClientRect();
@@ -536,6 +559,15 @@ function buildLegend() {
       <span class="legend-dot" style="background:${c.color}"></span>${c.name}
     </div>`;
   });
+
+  // Terroir legend
+  html += `<span class="legend-title" style="margin-left:1.5rem">Terroir Clusters</span>`;
+  Object.entries(TERROIR_COLORS).forEach(([name, color]) => {
+    html += `<div class="legend-item">
+      <span class="legend-dot" style="background:${color}"></span>${name}
+    </div>`;
+  });
+
   el.innerHTML = html;
 }
 
@@ -545,21 +577,37 @@ window.filterCluster = function(cluster) {
     const bc = b.dataset.cluster || null;
     b.classList.toggle('active', bc === cluster || (cluster === null && !bc));
   });
-  drawScatter();
+  drawScatters();
 };
 
 /* ── Init ── */
-fetch('../data/regions.json')
-  .then(r => r.json())
-  .then(d => {
-    allData = d.regions;
-    pcaCoords = computePCA(allData);
-    buildFilters();
-    buildLegend();
-    drawScatter();
-    setupHover();
-    window.addEventListener('resize', drawScatter);
+Promise.all([
+  fetch('../data/regions.json').then(r => r.json()),
+  fetch('../data/terroir_pca.json').then(r => r.json()).catch(() => [])
+]).then(([regionsData, terroirPcaData]) => {
+  allData = regionsData.regions;
+  pcaCoords = computePCA(allData);
+  terroirData = terroirPcaData;
+  buildFilters();
+  buildLegend();
+  drawScatters();
+
+  setupHover('identityCanvas', 'identityTooltip', 'identityWrap', (p) => {
+    const r = p.pt.region;
+    return `<div class="tt-region">${r.region}</div>
+      <div class="tt-meta">${r.country} · ${r.cluster}</div>
+      <div class="tt-metaphor">${r.metaphor}</div>`;
   });
+
+  setupHover('terroirCanvas', 'terroirTooltip', 'terroirWrap', (p) => {
+    const r = p.pt;
+    return `<div class="tt-region">${r.name}</div>
+      <div class="tt-meta">${r.country} · ${r.terroir_cluster}</div>
+      <div class="tt-metaphor">${r.metaphor} · Identity: ${r.identity_cluster}</div>`;
+  });
+
+  window.addEventListener('resize', drawScatters);
+});
 </script>
 </body>
 </html>
