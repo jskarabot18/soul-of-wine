@@ -464,6 +464,26 @@ function renderDetail() {
     means[d] = clusterRegions.reduce((s, cr) => s + cr[d], 0) / clusterRegions.length;
   });
 
+  /* Cluster-level insight notes */
+  const CLUSTER_NOTES = {
+    "Old World Exterior": "Old World Exterior is the most internally diverse cluster — united by institutional, outward-facing character but varied in how each region expresses it. Expect wider divergence from the cluster mean than in other groups."
+  };
+
+  /* Region-specific radar notes for outliers */
+  const RADAR_NOTES = {
+    "Dalmatian Coast": "Dalmatian Coast is this cluster's most distinctive member. Its strongly interior orientation (D1 = +2) runs counter to the cluster's outward-facing tendency, but its deep timelessness, ease, and tradition place it here rather than in Outward Ease or The Moderates.",
+    "Bordeaux": "Bordeaux and Champagne define the extreme end of this cluster — the most outward-facing (D1 = −2), most collective (D4 = −2), and most tradition-anchored (D3 = +2) of all 59 regions. Their radar shapes overshoot the cluster mean on nearly every axis.",
+    "Champagne": "Champagne mirrors Bordeaux's extreme institutional profile — maximally outward (D1 = −2) and collective (D4 = −2) with deep tradition (D3 = +2). The two regions are the archetype this cluster is named for; the others express the same character more moderately."
+  };
+
+  const clusterNote = CLUSTER_NOTES[r.cluster] || '';
+  const radarNote = RADAR_NOTES[r.region] || '';
+  const notesHtml = (clusterNote || radarNote) ?
+    `<div style="font-size:0.82rem;color:var(--ink-muted);line-height:1.55;margin-top:0.8rem;padding:0.8rem;background:var(--parchment);border-radius:6px;border-left:3px solid ${color};">
+      ${radarNote ? `<div style="margin-bottom:${clusterNote ? '0.5rem' : '0'}">${radarNote}</div>` : ''}
+      ${clusterNote ? `<div style="font-style:italic;">${clusterNote}</div>` : ''}
+    </div>` : '';
+
   panel.innerHTML = `
     <div class="detail-header">
       <h2>${r.region}</h2>
@@ -473,6 +493,7 @@ function renderDetail() {
     <div class="detail-cluster" style="background:${color}">${r.cluster}</div>
     <div class="detail-summary">${summary}</div>
     <div class="radar-container" id="radarContainer"></div>
+    ${notesHtml}
     <div class="dscore-list" id="dscoreList"></div>
   `;
 
