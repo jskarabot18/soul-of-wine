@@ -180,13 +180,13 @@ footer a { color: var(--wine); text-decoration: none; }
   <div class="viz-container">
     <h2>Terroir → Identity Flow</h2>
     <div class="viz-subtitle">Each band shows regions flowing from their terroir cluster to their identity cluster. Colour follows identity cluster. Hover for details.</div>
-    <svg id="alluvialChart" height="580"></svg>
+    <svg id="alluvialChart" height="520"></svg>
   </div>
 
   <div class="independence-box" style="margin-bottom:2rem;">
-    <div class="stat">Zero</div>
-    <div class="stat-label">Overlap Between Terroir and Identity Classifications</div>
-    <p>The two clustering solutions share no structure beyond chance. Knowing a region's terroir type tells you nothing about its cultural identity. The map is not the soul.</p>
+    <div class="stat">0.023</div>
+    <div class="stat-label">Adjusted Rand Index (Terroir vs Identity)</div>
+    <p>An ARI near zero means the two clustering solutions share no structure beyond chance. The terroir map and the identity soul are orthogonal classification systems.</p>
   </div>
 
   <div class="divergence-section">
@@ -211,7 +211,7 @@ const IDENTITY_CLUSTERS = [
   { name: "The Moderates", color: "#6B7B6B", short: "MOD" }
 ];
 
-/* Terroir clusters from pipeline (Layer 2 TF-IDF → PCA → k-means, k=7) */
+/* Terroir clusters from pipeline (Layer 2 TF-IDF → PCA → k-means, k=7, fully model-derived) */
 const TERROIR_CLUSTERS = [
   "Iberian Continental",
   "Southern Hemisphere & International",
@@ -251,9 +251,9 @@ const TERROIR_ASSIGN_FALLBACK = {
   "Hunter Valley": "Southern Hemisphere & International", "Margaret River": "Southern Hemisphere & International",
   "Maipo Valley": "Southern Hemisphere & International", "Central Otago": "Southern Hemisphere & International",
   "Hawke's Bay": "Southern Hemisphere & International", "Marlborough": "Southern Hemisphere & International",
-  "Stellenbosch": "Southern Hemisphere & International", "Swartland": "Mediterranean & Volcanic",
-  "Columbia Valley": "Southern Hemisphere & International", "Finger Lakes": "Southern Hemisphere & International",
-  "Napa Valley": "American West Coast", "Paso Robles": "American West Coast",
+  "Stellenbosch": "Southern Hemisphere & International", "Swartland": "Southern Hemisphere & International",
+  "Columbia Valley": "American West Coast", "Finger Lakes": "Mediterranean & Volcanic",
+  "Napa Valley": "Southern Hemisphere & International", "Paso Robles": "American West Coast",
   "Santa Barbara": "American West Coast", "Santa Cruz Mountains": "American West Coast",
   "Sonoma": "American West Coast", "Walla Walla": "American West Coast",
   "Willamette Valley": "American West Coast"
@@ -261,21 +261,21 @@ const TERROIR_ASSIGN_FALLBACK = {
 
 const DIVERGENCE_CASES = [
   { region: "Santorini", metaphor: "Survival", terroir: "Mediterranean & Volcanic", identity: "Against the Odds",
-    note: "Shares Mediterranean and volcanic terroir with Italian neighbours like Tuscany and Campania, but its identity is defined by existential struggle — not warmth or ease." },
+    note: "Volcanic island shares terroir vocabulary with Italian and Greek Mediterranean neighbours, but its identity is defined by existential struggle — not warmth or ease." },
   { region: "Sicily", metaphor: "Resurrection", terroir: "Mediterranean & Volcanic", identity: "New World Reinvention",
     note: "Shares Mediterranean terroir with Tuscany, Sardinia, and Campania, but its identity is one of radical reinvention — an Old World region behaving like a New World pioneer." },
   { region: "Santa Cruz Mountains", metaphor: "Obsession", terroir: "American West Coast", identity: "Old World Interior",
-    note: "Grouped by terroir with Napa and Sonoma, but its obsessive, private, inward-facing identity places it among Burgundy, Piedmont, and the Northern Rhône — not among its Californian neighbours." },
+    note: "A New World region in California whose obsessive, private, inward-facing identity places it among Burgundy, Piedmont, and the Northern Rhône — not among its geographic neighbours." },
   { region: "Barossa Valley", metaphor: "Fortitude", terroir: "Southern Hemisphere & International", identity: "Against the Odds",
     note: "International terroir conditions suggest commercial ease, but the Barossa's identity is forged through multi-generational endurance against drought, market shifts, and vine-pull pressures." },
-  { region: "Mendoza", metaphor: "Reinvention", terroir: "Iberian Continental", identity: "New World Reinvention",
-    note: "The model groups Mendoza's high-altitude, continental terroir with Iberian plateau regions like Ribera del Duero. But its identity is pure New World ambition — Malbec reinvented as a global statement." },
-  { region: "Finger Lakes", metaphor: "Conviction", terroir: "Southern Hemisphere & International", identity: "New World Reinvention",
-    note: "Terroir groups it internationally rather than with its American West Coast neighbours. Its identity is built on deliberate construction and the urgency of proving itself." },
+  { region: "Catalonia", metaphor: "Identity", terroir: "Iberian Continental", identity: "New World Reinvention",
+    note: "Grouped with Iberian neighbours by terroir vocabulary, but its political and cultural assertion of distinctiveness gives it the urgency of a New World identity." },
+  { region: "Finger Lakes", metaphor: "Conviction", terroir: "Mediterranean & Volcanic", identity: "New World Reinvention",
+    note: "Terroir vocabulary unexpectedly groups it with Mediterranean and volcanic regions, but its identity is built on deliberate construction and the urgency of proving itself as a serious wine region." },
   { region: "Dalmatian Coast", metaphor: "Tranquility", terroir: "Mediterranean & Volcanic", identity: "Old World Exterior",
     note: "Mediterranean terroir typically correlates with interior or struggle-based identities nearby (Etna, Sardinia), but Dalmatia's deep calm and outward ease place it with Bordeaux and Champagne." },
   { region: "Walla Walla", metaphor: "Community", terroir: "American West Coast", identity: "Outward Ease",
-    note: "Shares American West Coast terroir with Napa and Sonoma, but Walla Walla's communal, outward-facing identity has nothing in common with the ambition of its terroir peers." }
+    note: "Shares terroir with Columbia Valley and Willamette Valley, but Walla Walla's communal, outward-facing identity has nothing in common with the determination of its terroir peers." }
 ];
 
 function clusterColor(name) {
@@ -286,11 +286,11 @@ function clusterColor(name) {
 function drawAlluvial(regions) {
   const svg = document.getElementById('alluvialChart');
   const W = svg.clientWidth || 900;
-  const H = 580;
+  const H = 520;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
   const padTop = 30, padBot = 20;
-  const colLeft = 100, colRight = W - 100;
+  const colLeft = 170, colRight = W - 120;
   const bandW = 18;
   const usableH = H - padTop - padBot;
 

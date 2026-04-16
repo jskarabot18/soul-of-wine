@@ -240,7 +240,7 @@ footer a { color: var(--wine); text-decoration: none; }
   <div class="panels">
     <div class="panel">
       <div class="panel-title">Identity Clusters</div>
-      <div class="panel-subtitle">D-scores → PCA → K-means (k=6) · Silhouette: 0.3110</div>
+      <div class="panel-subtitle">D-scores → PCA → K-means (k=6) · Silhouette: 0.3029</div>
       <div class="scatter-wrap" id="identityWrap">
         <canvas id="identityCanvas"></canvas>
         <div class="scatter-tooltip" id="identityTooltip"></div>
@@ -249,7 +249,7 @@ footer a { color: var(--wine); text-decoration: none; }
 
     <div class="panel">
       <div class="panel-title">Terroir Clusters</div>
-      <div class="panel-subtitle">Layer 2 TF-IDF → PCA → K-means (k=7) · Fully model-derived</div>
+      <div class="panel-subtitle">Layer 2 TF-IDF → PCA → K-means (k=7) · Fully model-derived · Silhouette: 0.2457</div>
       <div class="scatter-wrap" id="terroirWrap">
         <canvas id="terroirCanvas"></canvas>
         <div class="scatter-tooltip" id="terroirTooltip"></div>
@@ -282,9 +282,9 @@ const CLUSTERS = [
 
 const TERROIR_COLORS = {
   "Iberian Continental": "#8C6D4F",
-  "Southern Hemisphere & International": "#5B6AAF",
+  "Southern Hemisphere & International": "#C4883A",
   "American West Coast": "#7B2D26",
-  "French Viticultural": "#C4883A",
+  "French Viticultural": "#5B6AAF",
   "Germanic Rhine": "#3A7D6E",
   "Austrian Danube": "#6B7B6B",
   "Mediterranean & Volcanic": "#9B5094"
