@@ -446,7 +446,8 @@ function drawGenericScatter(canvasId, wrapId, tooltipId, points, getColor, getCl
   // Dimmed points when filtering
   if (activeFilter) {
     points.forEach((pt, i) => {
-      if (getCluster(pt, i) === activeFilter) return;
+      const regionName = getCluster(pt, i);
+      if (activeFilter.has(regionName)) return;
       ctx.beginPath();
       ctx.arc(toX(pt.pc1), toY(pt.pc2), 4, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(200,192,180,0.3)';
@@ -457,7 +458,8 @@ function drawGenericScatter(canvasId, wrapId, tooltipId, points, getColor, getCl
   // Active points
   const pointData = [];
   points.forEach((pt, i) => {
-    if (activeFilter && getCluster(pt, i) !== activeFilter) return;
+    const regionName = getCluster(pt, i);
+    if (activeFilter && !activeFilter.has(regionName)) return;
     const x = toX(pt.pc1);
     const y = toY(pt.pc2);
     const color = getColor(pt, i);
@@ -480,23 +482,31 @@ function drawGenericScatter(canvasId, wrapId, tooltipId, points, getColor, getCl
 
 /* ── Draw both panels ── */
 function drawScatters() {
-  // Identity panel — filtered by activeCluster (identity)
+  // Compute the set of highlighted region names based on active filter
+  let highlightSet = null; // null = show all
+  if (activeCluster) {
+    highlightSet = new Set(allData.filter(r => r.cluster === activeCluster).map(r => r.region));
+  } else if (activeTerroir) {
+    highlightSet = new Set(terroirData.filter(r => r.terroir_cluster === activeTerroir).map(r => r.name));
+  }
+
+  // Identity panel — highlight by region name
   drawGenericScatter('identityCanvas', 'identityWrap', 'identityTooltip',
     pcaCoords.map((p, i) => ({ ...p, region: allData[i] })),
     (pt) => clusterColor(pt.region.cluster),
-    (pt) => pt.region.cluster,
+    (pt) => pt.region.region, // return region name for matching
     'cluster',
-    activeCluster
+    highlightSet
   );
 
-  // Terroir panel — filtered by activeTerroir (terroir)
+  // Terroir panel — highlight by region name
   if (terroirData.length > 0) {
     drawGenericScatter('terroirCanvas', 'terroirWrap', 'terroirTooltip',
       terroirData,
       (pt) => terroirColor(pt.terroir_cluster),
-      (pt) => pt.terroir_cluster,
+      (pt) => pt.name, // return region name for matching
       'terroir_cluster',
-      activeTerroir
+      highlightSet
     );
   }
 }
@@ -588,18 +598,28 @@ function buildLegend() {
 
 window.filterIdentity = function(cluster) {
   activeCluster = cluster;
+  activeTerroir = null; // clear terroir filter
   document.querySelectorAll('.filter-btn[data-type="identity"]').forEach(b => {
     const bc = b.dataset.cluster || null;
     b.classList.toggle('active', bc === cluster || (cluster === null && !bc));
+  });
+  // Reset terroir buttons to "All"
+  document.querySelectorAll('.filter-btn[data-type="terroir"]').forEach(b => {
+    b.classList.toggle('active', !b.dataset.terroir);
   });
   drawScatters();
 };
 
 window.filterTerroir = function(terroir) {
   activeTerroir = terroir;
+  activeCluster = null; // clear identity filter
   document.querySelectorAll('.filter-btn[data-type="terroir"]').forEach(b => {
     const bt = b.dataset.terroir || null;
     b.classList.toggle('active', bt === terroir || (terroir === null && !bt));
+  });
+  // Reset identity buttons to "All"
+  document.querySelectorAll('.filter-btn[data-type="identity"]').forEach(b => {
+    b.classList.toggle('active', !b.dataset.cluster);
   });
   drawScatters();
 };
