@@ -236,6 +236,7 @@ footer a { color: var(--wine); text-decoration: none; }
 <div class="content">
 
   <div class="filters" id="filters"></div>
+  <div class="filters" id="terroirFilters" style="margin-top:-0.5rem;"></div>
 
   <div class="panels">
     <div class="panel">
@@ -296,6 +297,7 @@ let allData = [];
 let pcaCoords = [];
 let terroirData = [];
 let activeCluster = null;
+let activeTerroir = null;
 
 function clusterColor(name) {
   const c = CLUSTERS.find(c => c.name === name);
@@ -374,7 +376,7 @@ function computePCA(regions) {
 }
 
 /* ── Generic scatter draw function ── */
-function drawGenericScatter(canvasId, wrapId, tooltipId, points, getColor, getCluster, filterKey) {
+function drawGenericScatter(canvasId, wrapId, tooltipId, points, getColor, getCluster, filterKey, activeFilter) {
   const canvas = document.getElementById(canvasId);
   const wrap = document.getElementById(wrapId);
   const ctx = canvas.getContext('2d');
@@ -442,9 +444,9 @@ function drawGenericScatter(canvasId, wrapId, tooltipId, points, getColor, getCl
   ctx.restore();
 
   // Dimmed points when filtering
-  if (activeCluster) {
+  if (activeFilter) {
     points.forEach((pt, i) => {
-      if (getCluster(pt, i) === activeCluster) return;
+      if (getCluster(pt, i) === activeFilter) return;
       ctx.beginPath();
       ctx.arc(toX(pt.pc1), toY(pt.pc2), 4, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(200,192,180,0.3)';
@@ -455,7 +457,7 @@ function drawGenericScatter(canvasId, wrapId, tooltipId, points, getColor, getCl
   // Active points
   const pointData = [];
   points.forEach((pt, i) => {
-    if (activeCluster && getCluster(pt, i) !== activeCluster) return;
+    if (activeFilter && getCluster(pt, i) !== activeFilter) return;
     const x = toX(pt.pc1);
     const y = toY(pt.pc2);
     const color = getColor(pt, i);
@@ -478,25 +480,23 @@ function drawGenericScatter(canvasId, wrapId, tooltipId, points, getColor, getCl
 
 /* ── Draw both panels ── */
 function drawScatters() {
-  // Identity panel
+  // Identity panel — filtered by activeCluster (identity)
   drawGenericScatter('identityCanvas', 'identityWrap', 'identityTooltip',
     pcaCoords.map((p, i) => ({ ...p, region: allData[i] })),
     (pt) => clusterColor(pt.region.cluster),
     (pt) => pt.region.cluster,
-    'cluster'
+    'cluster',
+    activeCluster
   );
 
-  // Terroir panel
+  // Terroir panel — filtered by activeTerroir (terroir)
   if (terroirData.length > 0) {
     drawGenericScatter('terroirCanvas', 'terroirWrap', 'terroirTooltip',
       terroirData,
       (pt) => terroirColor(pt.terroir_cluster),
-      (pt) => {
-        // When filtering by identity cluster, dim regions not in that cluster
-        const region = allData.find(r => r.region === pt.name);
-        return region ? region.cluster : '';
-      },
-      'terroir_cluster'
+      (pt) => pt.terroir_cluster,
+      'terroir_cluster',
+      activeTerroir
     );
   }
 }
@@ -541,15 +541,29 @@ function setupHover(canvasId, tooltipId, wrapId, getTooltipHTML) {
 
 /* ── Filters ── */
 function buildFilters() {
+  // Identity filters
   const el = document.getElementById('filters');
-  let html = `<button class="filter-btn active" onclick="filterCluster(null)">All (59)</button>`;
+  let html = `<span class="legend-title" style="margin-right:0.5rem">IDENTITY</span>`;
+  html += `<button class="filter-btn active" data-type="identity" onclick="filterIdentity(null)">All (59)</button>`;
   CLUSTERS.forEach(c => {
     const count = allData.filter(r => r.cluster === c.name).length;
-    html += `<button class="filter-btn" data-cluster="${c.name}" onclick="filterCluster('${c.name}')">
+    html += `<button class="filter-btn" data-type="identity" data-cluster="${c.name}" onclick="filterIdentity('${c.name}')">
       <span class="dot" style="background:${c.color}"></span>${c.name} (${count})
     </button>`;
   });
   el.innerHTML = html;
+
+  // Terroir filters
+  const tel = document.getElementById('terroirFilters');
+  let thtml = `<span class="legend-title" style="margin-right:0.5rem">TERROIR</span>`;
+  thtml += `<button class="filter-btn active" data-type="terroir" onclick="filterTerroir(null)">All (59)</button>`;
+  Object.entries(TERROIR_COLORS).forEach(([name, color]) => {
+    const count = terroirData.filter(r => r.terroir_cluster === name).length;
+    thtml += `<button class="filter-btn" data-type="terroir" data-terroir="${name}" onclick="filterTerroir('${name}')">
+      <span class="dot" style="background:${color}"></span>${name} (${count})
+    </button>`;
+  });
+  tel.innerHTML = thtml;
 }
 
 function buildLegend() {
@@ -572,11 +586,20 @@ function buildLegend() {
   el.innerHTML = html;
 }
 
-window.filterCluster = function(cluster) {
+window.filterIdentity = function(cluster) {
   activeCluster = cluster;
-  document.querySelectorAll('.filter-btn').forEach(b => {
+  document.querySelectorAll('.filter-btn[data-type="identity"]').forEach(b => {
     const bc = b.dataset.cluster || null;
     b.classList.toggle('active', bc === cluster || (cluster === null && !bc));
+  });
+  drawScatters();
+};
+
+window.filterTerroir = function(terroir) {
+  activeTerroir = terroir;
+  document.querySelectorAll('.filter-btn[data-type="terroir"]').forEach(b => {
+    const bt = b.dataset.terroir || null;
+    b.classList.toggle('active', bt === terroir || (terroir === null && !bt));
   });
   drawScatters();
 };
