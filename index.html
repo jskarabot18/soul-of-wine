@@ -416,17 +416,54 @@
 
     /* ── FOOTER ── */
     footer {
-      padding: 3rem 2rem;
+      padding: 3rem 2rem 2.5rem;
       text-align: center;
       border-top: 1px solid var(--border);
     }
-    footer p {
-      font-size: 0.82rem;
-      color: var(--ink-muted);
-      line-height: 1.8;
+    footer .motto {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.35rem;
+      font-weight: 400;
+      color: var(--wine);
+      letter-spacing: 0.01em;
+      margin-bottom: 1.4rem;
     }
-    footer a { color: var(--wine); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
+    footer .prose {
+      max-width: 620px;
+      margin: 0 auto 1.5rem;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--ink-light);
+    }
+    footer hr.rule {
+      border: none;
+      border-top: 1px solid var(--border);
+      max-width: 680px;
+      margin: 0 auto 1.3rem;
+    }
+    footer .links {
+      display: flex; justify-content: center; align-items: center;
+      gap: 1.9rem; flex-wrap: wrap; margin-bottom: 1.4rem;
+      font-size: 0.7rem; letter-spacing: 0.18em;
+      text-transform: uppercase; font-weight: 500;
+    }
+    footer .links a {
+      color: var(--ink-light);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    footer .links a:hover {
+      color: var(--wine);
+      text-decoration: none;
+    }
+    footer .copyright {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--ink-muted);
+    }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 640px) {
@@ -739,11 +776,20 @@
 
 <!-- ── FOOTER ── -->
 <footer>
-  <p>
-    The Soul of Wine<br>
-    59 regions · 16 countries · 6 identity clusters · 7 terroir clusters<br>
-    <a href="https://github.com/jskarabot18/soul-of-wine">GitHub Repository</a>
+  <div class="motto">— <em>in vino, cognitio</em> —</div>
+  <p class="prose">
+    Built, researched, and written over long evenings in New York.
+    Source-available and free for personal and non-commercial use.
+    Corrections, arguments, and recommended bottles are warmly received.
   </p>
+  <hr class="rule" />
+  <nav class="links">
+    <a href="https://jskarabot18.github.io/vinotheca/">Vinotheca</a>
+    <a href="https://github.com/jskarabot18/soul-of-wine" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/jskarabot18/soul-of-wine/blob/main/LICENSE" target="_blank" rel="noopener">License · CC BY-NC 4.0</a>
+    <a href="mailto:skarabot@yahoo.com">Correspondence</a>
+  </nav>
+  <div class="copyright">© Jure Skarabot · MMXXVI</div>
 </footer>
 
 </body>
