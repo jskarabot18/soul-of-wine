@@ -1,0 +1,182 @@
+\documentclass[11pt]{article}
+\usepackage{vinotheca}
+
+\begin{document}
+
+\vinothecaTitle{The Soul of Wine}{Summary}{Independence of Terroir and Cultural Identity in Wine Regions \textperiodcentered{} Plain-Language Overview}
+\vinothecaAuthor{Jure Skarabot}{May 2026}
+\vinothecaCompanions{Summary \textperiodcentered{} Technical Appendix \textperiodcentered{} Methods Primer \textperiodcentered{} Data Appendix \textperiodcentered{} Region Reference (Identity, Terroir)}
+
+\begin{abstract}
+Wine regions are conventionally classified by what the land gives them --- climate, geology, topography --- or by what they have made of themselves --- narrative, ambition, historical depth, cultural character. This study asks whether these two modes of classification agree. Across 59 wine regions spanning 16 countries, we construct independent clustering solutions for terroir (six factual geographic and climatic features, TF-IDF vectorised, $k = 7$) and for cultural identity (six expert-scored identity dimensions D1--D6 derived from anthropological descriptions, $k = 6$). Agreement is tested using the Adjusted Rand Index (ARI) and the chi-squared test of independence. The two solutions are statistically independent: ARI $= 0.023$ and chi-squared $p = 0.131$. Knowing a region's physical terroir cluster provides essentially no information about its cultural identity cluster. We discuss the principal cluster contents, the most informative cross-system divergences (Santorini, Sicily, Santa Cruz Mountains, Barossa Valley, and others), and the implications for terroir theory and wine region identity studies. The framework is presented as the analytical foundation of the Region Affinities tool, which visualises both kinship structures and their disagreement.
+\end{abstract}
+
+\section{Introduction}
+
+The dominant framework for understanding wine regions is geographic. Appellation systems --- from Burgundy's grands crus to Napa's sub-AVAs --- are organised by land. The working assumption, rarely questioned, is that physical terroir is the primary organising principle of wine regional identity. Regions in similar climatic and geological settings, the logic runs, should develop similar characters.
+
+This study tests that assumption directly. We apply two independent classification systems to the same set of 59 wine regions: one grounded in physical terroir features, one grounded in cultural and anthropological identity dimensions. We then ask: do regions that cluster together by terroir also cluster together by identity? Measured with statistical precision, the answer is no.
+
+The finding is not an argument against terroir. It is an argument for recognising that identity is a second system --- one that operates in parallel to geography, governed by its own logic. A region with harsh volcanic soils may develop an identity of survival and struggle, or one of ancient civility and philosophical depth. A young New World region with ideal growing conditions may channel those conditions into reinvention and ambition, or into quiet confidence. The physical substrate creates a range of possible identities; which one emerges is determined by history, culture, and human choice.
+
+The remainder of this Summary is organised as follows. Section 2 describes the data: the 59-region universe, the six-dimensional D-score identity encoding, and the six-field terroir profiles. Section 3 describes the methodology: independent clustering pipelines for identity and for terroir, and the formal independence test. Section 4 presents the results: the silhouette scores of the two solutions, the contents of the six identity clusters and seven terroir clusters, and the most informative cross-system divergences. Section 5 reports robustness checks. Section 6 concludes with implications and limitations. Full mathematical detail is in the Technical Appendix; the data tables underlying the results are in the Data Appendix; per-region narratives are in the companion Region Reference documents.
+
+\section{Data}
+
+\subsection{The 59 Regions}
+The study covers 59 wine regions: 39 Old World regions across 10 countries (Austria, Croatia, France, Germany, Greece, Hungary, Italy, Portugal, Slovenia, Spain) and 20 New World regions across 6 countries (Argentina, Australia, Chile, New Zealand, South Africa, USA). Regions were selected to provide broad geographic and stylistic coverage while maintaining sufficient identity distinctiveness for clustering to be meaningful. Each region carries a canonical \emph{soul metaphor} --- a single word or short phrase distilling its essential identity character, assigned through anthropological analysis prior to and independent of the clustering. The full list and metaphors are in the Data Appendix.
+
+\subsection{Layer 1: Identity Encoding (D-Scores)}
+Each region is described in a standardised 280--320 word identity narrative (Layer 1), written to capture cultural, historical, and anthropological character while remaining blind to geographic or terroir information. From these narratives, six identity dimensions $D_1, \ldots, D_6$ are scored by the primary researcher acting as subject-matter expert, on the integer scale $\{-2, -1, 0, +1, +2\}$:
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Dimension & $+2$ pole & $-2$ pole \\
+\midrule
+$D_1$ Interiority $\leftrightarrow$ Exteriority & Interior, place-defined           & Outward-facing, market-oriented \\
+$D_2$ Struggle $\leftrightarrow$ Ease           & Extreme difficulty, endurance     & Pleasure, comfort, ease \\
+$D_3$ Tradition $\leftrightarrow$ Reinvention   & Deep custodial tradition          & Radical reinvention, disruption \\
+$D_4$ Individual $\leftrightarrow$ Collective   & Strongly individual, solitary     & Strongly collective, communal \\
+$D_5$ Urgency $\leftrightarrow$ Timelessness    & Urgent, present-focused           & Timeless, eternal \\
+$D_6$ Earthly $\leftrightarrow$ Transcendent    & Deeply grounded, earthly          & Transcendent, spiritual \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The six D-scores are Z-score standardised before clustering. The D-score system is an expert-curated alternative to attitudinal survey instruments used in cross-cultural research (Hofstede, GLOBE, Ronen--Shenkar): rather than asking subjects about values directly, identity dimensions are derived from expert-curated textual descriptions.
+
+\subsection{Layer 2: Terroir Encoding}
+Each region is also described in a standardised six-field factual profile (Layer 2) covering: climate type, predominant soil composition, topographic character, principal grape varieties, winemaking techniques, and historical position. Layer 2 narratives are deliberately disjoint in content from Layer 1: the two encodings cannot leak information into each other. The terroir field is TF-IDF vectorised independently of Layer 1, using a separate vectoriser (n-gram range 1--2, max 800 features, sublinear TF scaling). The full per-region narratives for both layers appear in the Region Reference (Identity) and Region Reference (Terroir) companion documents.
+
+\section{Methodology}
+
+\subsection{Identity Clustering Pipeline}
+The six-dimensional D-score matrix is standardised with \texttt{StandardScaler} (zero mean, unit variance per dimension). Principal component analysis is applied to the standardised matrix; with six input dimensions, six principal components are retained, capturing 100\% of the variance. K-means clustering is then applied with $k = 6$, $n_\text{init} = 20$, $\texttt{random\_state} = 42$.
+
+\subsection{Terroir Clustering Pipeline}
+The Layer 2 TF-IDF features are standardised with \texttt{StandardScaler}. PCA reduces the 800-feature TF-IDF space to 10 components, capturing 32.2\% of the variance --- a deliberately conservative reduction that preserves the bulk of inter-region terroir vocabulary structure. K-means clustering is then applied with $k = 7$, $n_\text{init} = 20$, $\texttt{random\_state} = 42$. The terroir clustering is fully model-derived: cluster count, membership, and naming are determined by the algorithm with no manual override.
+
+\subsection{Cluster Quality}
+Cluster quality is assessed with the silhouette score, an internal validity index that compares each region's similarity to its own cluster against its similarity to the nearest neighbouring cluster. Scores range from $-1$ to $+1$; in social-science data, scores above 0.2 indicate meaningful structure. Detailed per-cluster silhouette breakdowns are in the Data Appendix.
+
+\subsection{Independence Test}
+Agreement between the identity and terroir clustering solutions is measured using the Adjusted Rand Index (ARI; Hubert and Arabie, 1985). For two partitions $P$ and $Q$ of the same $n$ regions, ARI examines all $\binom{n}{2}$ pairs of regions and counts how often the two partitions agree on co-membership versus separation, corrected for chance:
+\[
+\mathrm{ARI}(P, Q) = \frac{\mathrm{RI}(P, Q) - \mathbb{E}[\mathrm{RI}]}{\max \mathrm{RI} - \mathbb{E}[\mathrm{RI}]}.
+\]
+Values of $\mathrm{ARI} = 1$ indicate perfect agreement; $\mathrm{ARI} = 0$ indicates chance-level agreement; $\mathrm{ARI} < 0$ indicates less agreement than expected by chance. The ARI is supplemented by a chi-squared test of independence on the $6 \times 7$ cluster membership contingency table. Full derivations of both tests are in the Technical Appendix.
+
+\section{Results}
+
+\subsection{Cluster Quality}
+The identity clustering ($k = 6$) achieves a silhouette score of 0.3029, indicating meaningful cluster structure. The terroir clustering ($k = 7$, fully model-derived) achieves a silhouette score of 0.2457. Both values exceed the conventional 0.2 threshold for interpretable structure in social-science data.
+
+\subsection{Independence Test}
+The Adjusted Rand Index between the identity and terroir partitions is $\mathrm{ARI} = 0.023$ --- effectively zero. The chi-squared test on the $6 \times 7$ contingency table yields $\chi^2 = 38.776$ with $p = 0.131$, failing to reject the null of independence at $\alpha = 0.05$. The two classification systems are statistically independent: knowing a region's terroir cluster provides essentially no information about its identity cluster.
+
+\subsection{Identity Cluster Contents}
+The D-score model yields six identity clusters. Each is named for its dominant character.
+
+\begin{center}
+\begin{tabular}{@{}lrp{8.4cm}@{}}
+\toprule
+Identity cluster & $n$ & Representative regions and metaphors \\
+\midrule
+Old World Interior      & 10 & Burgundy (Devotion), Northern Rh\^one (Solitude), Piedmont (Philosophy), Mosel (Poetry) \\
+Outward Ease            &  5 & Beaujolais (Joy), Provence (Pleasure), Veneto (Commerce), Marlborough (Assertion) \\
+New World Reinvention   & 12 & Napa Valley (Ambition), Swartland (Rebellion), Sicily (Resurrection), Stellenbosch (Aspiration) \\
+Old World Exterior      &  7 & Bordeaux (Business), Champagne (Society), Rioja (Patience), Ch\^ateauneuf-du-Pape (Family) \\
+Against the Odds        & 10 & Santorini (Survival), Jura (Eccentricity), Hunter Valley (Defiance), Barossa Valley (Fortitude) \\
+The Moderates           & 15 & Tuscany (Art), Margaret River (Composure), Willamette Valley (Idealism), Alsace (Duality) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Terroir Cluster Contents}
+The terroir model yields seven geographically coherent clusters reflecting climate type, soil composition, and topographic character.
+
+\begin{center}
+\begin{tabular}{@{}lrp{8.0cm}@{}}
+\toprule
+Terroir cluster & $n$ & Top TF-IDF terms (representative) \\
+\midrule
+Iberian Continental                 &  6 & spain, rioja, do \\
+Southern Hemisphere \& International & 12 & zealand, new zealand, australia \\
+American West Coast                 &  7 & ava, wineries, california \\
+French Viticultural                 & 10 & france, c\^ote, de \\
+Germanic Rhine                      &  5 & germany, vdp, mosel \\
+Austrian Danube                     &  3 & dac, veltliner, austria \\
+Mediterranean \& Volcanic           & 16 & italy, di, indigenous \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Key Cross-System Divergences}
+The most revealing finding is not the aggregate independence statistic but the individual region trajectories --- cases where a region's terroir cluster membership would predict one identity, but the actual identity cluster tells a different story.
+
+\begin{center}
+\begin{tabular}{@{}lllp{6.8cm}@{}}
+\toprule
+Region & Terroir cluster & Identity cluster & Nature of the divergence \\
+\midrule
+Santorini   & Mediterranean \& Volcanic  & Against the Odds      & Volcanic isolation and Assyrtiko's survival character drive an identity of extremity rather than ease. \\
+Sicily      & Mediterranean \& Volcanic  & New World Reinvention & Old World terroir; identity of radical reinvention --- behaving like a New World pioneer. \\
+Santa Cruz Mtns & American West Coast    & Old World Interior    & A New World region whose obsessive, private, inward-facing identity places it among Burgundy and Piedmont. \\
+Barossa Valley & Southern Hem.\ \& Intl. & Against the Odds      & International terroir conditions; identity forged through multi-generational endurance. \\
+Catalonia   & Iberian Continental         & New World Reinvention & Iberian terroir vocabulary; political and cultural assertion gives it New World urgency. \\
+Finger Lakes & Mediterranean \& Volcanic & New World Reinvention & Terroir vocabulary groups it with Mediterranean regions; identity built on deliberate construction. \\
+Dalmatian Coast & Mediterranean \& Volcanic & Old World Exterior & Mediterranean terroir; deep calm and outward ease place it with Bordeaux and Champagne. \\
+Walla Walla & American West Coast        & Outward Ease          & Communal, outward-facing identity unrelated to its terroir peers. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Robustness Checks}
+
+\subsection{Sensitivity to $k$ in the Identity Pipeline}
+Varying $k$ from 4 through 8 for the identity clustering produces silhouette scores ranging from 0.21 ($k = 8$) to 0.31 ($k = 6$). The six-cluster solution is the silhouette optimum and is also the smallest $k$ at which all six conceptually distinct identity types (Interior, Exterior, Reinvention, Ease, Against-the-Odds, Moderate) emerge as separate clusters. At $k = 5$, the Old World Interior and Old World Exterior clusters merge despite their substantial D-score differences; at $k = 7$ and beyond, the Moderates cluster fragments into sub-clusters that lack a clear interpretive label.
+
+\subsection{Sensitivity to $k$ in the Terroir Pipeline}
+Varying $k$ from 5 through 9 for the terroir clustering produces silhouette scores ranging from 0.19 ($k = 9$) to 0.27 ($k = 5$). The seven-cluster solution is preferred for two reasons: it produces the most geographically interpretable partition (each cluster maps to a recognisable wine geography), and the ARI against the identity solution is stable across $k = 5$ through $k = 8$ (range: $0.011$ to $0.041$), all well within the chance band.
+
+\subsection{Stability of the Independence Result}
+The independence finding is robust to the specific clustering parameters chosen. Across the 25 combinations of $k_{\text{identity}} \in \{4, \ldots, 8\}$ and $k_{\text{terroir}} \in \{5, \ldots, 9\}$, the ARI never exceeds 0.07. The chi-squared independence test fails to reject the null in all 25 combinations at $\alpha = 0.05$. The result is not an artefact of the specific $(k = 6, k = 7)$ choice but a property of the underlying data.
+
+\section{Conclusion}
+
+\subsection{Key Findings}
+The 59-region analysis yields three findings.
+
+First, the terroir and identity classifications are statistically independent. Across all parameter choices examined, the Adjusted Rand Index between the two solutions remains in the chance band ($\mathrm{ARI} < 0.07$), and the chi-squared test fails to reject the independence null. A region's physical terroir cluster carries essentially no information about its cultural identity cluster.
+
+Second, the divergences between the two systems are systematic and interpretable. Santorini, Sicily, Santa Cruz Mountains, Barossa Valley, Catalonia, Finger Lakes, Dalmatian Coast, and Walla Walla each illustrate the principle that physical conditions create the range of possible identities, while history, ambition, and cultural transmission determine which identity emerges. The map and the soul are coupled but not collinear.
+
+Third, the framework joins a family of dual-classification findings across disciplines. Cross-cultural psychology (Ronen--Shenkar; GLOBE), historical linguistics (genetic vs.\ areal classification), biogeography (environment vs.\ evolutionary history), and network neuroscience (structural vs.\ functional connectivity) all document the same pattern: physical substrate and emergent identity diverge in ways that are statistically significant and intellectually informative. Wine regions are an additional instance of this broader regularity.
+
+\subsection{Limitations and Future Work}
+Three limitations bear emphasis.
+
+The D-scores are scored by a single subject-matter expert. Even when calibrated against detailed identity narratives, single-rater scoring carries the risk of systematic bias --- particularly along axes (such as $D_5$ Urgency--Timelessness) that are inherently more interpretive. Multi-rater scoring with inter-rater agreement statistics would strengthen the identity pipeline without altering its analytical structure.
+
+The Layer 2 terroir profiles are limited to six fields. A richer terroir encoding (incorporating, for example, quantitative climatic variables, soil chemistry, or vineyard-area statistics) might shift the terroir partition. The independence finding is robust to the cluster-count choice within the present encoding, but the question of how it would respond to a substantially different terroir feature space remains open.
+
+The framework is cross-sectional. The 59 regions are treated as a static set, scored at a single point in time. Region identities and terroir vocabularies both evolve --- often slowly, but sometimes in response to climate, market pressure, or institutional change. A longitudinal extension that tracked D-score and terroir cluster drift over decades would test whether independence is structurally permanent or whether the two systems re-couple under specific conditions.
+
+\section*{References}
+
+\begin{itemize}[leftmargin=2em,itemsep=0.2em]
+\item Crofts, J. J. et al.\ (2022). Structure-function clustering in weighted brain networks. \emph{Scientific Reports}.
+\item Demossier, M. (2018). \emph{Burgundy: The Global Story of Terroir}. Berghahn Books.
+\item Hartigan, J. A. \& Wong, M. A. (1979). A K-Means Clustering Algorithm. \emph{Applied Statistics}, 28(1), 100--108.
+\item House, R. J. et al.\ (2004). \emph{Culture, Leadership, and Organizations: The GLOBE Study of 62 Societies}. Sage.
+\item Hubert, L. \& Arabie, P. (1985). Comparing partitions. \emph{Journal of Classification}, 2(1), 193--218.
+\item Jolliffe, I. T. (2002). \emph{Principal Component Analysis} (2nd ed.). Springer.
+\item Pearson, K. (1900). On the criterion that a given system of deviations from the probable in the case of a correlated system of variables is such that it can be reasonably supposed to have arisen from random sampling. \emph{Philosophical Magazine}, 50(302), 157--175.
+\item Ronen, S. \& Shenkar, O. (2013). Mapping world cultures: Cluster formation, sources and implications. \emph{Journal of International Business Studies}, 44(9), 867--897.
+\item Rousseeuw, P. J. (1987). Silhouettes: A graphical aid to the interpretation and validation of cluster analysis. \emph{Journal of Computational and Applied Mathematics}, 20, 53--65.
+\item Salton, G. \& Buckley, C. (1988). Term-weighting approaches in automatic text retrieval. \emph{Information Processing \& Management}, 24(5), 513--523.
+\item Trubek, A. (2008). \emph{The Taste of Place: A Cultural Journey into Terroir}. University of California Press.
+\end{itemize}
+
+\end{document}

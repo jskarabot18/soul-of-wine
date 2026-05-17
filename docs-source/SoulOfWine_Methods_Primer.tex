@@ -1,0 +1,136 @@
+\documentclass[11pt]{article}
+\usepackage{vinotheca}
+
+\begin{document}
+
+\vinothecaTitle{The Soul of Wine}{Methods Primer}{A Guide to the Statistical and Network Methods}
+\vinothecaAuthor{Jure Skarabot}{May 2026}
+\vinothecaCompanions{Summary \textperiodcentered{} Technical Appendix \textperiodcentered{} Methods Primer \textperiodcentered{} Data Appendix \textperiodcentered{} Region Reference (Identity, Terroir)}
+
+\section*{Introduction}
+The Region Affinities tool runs two independent classification pipelines over 59 wine regions and tests whether they agree. The identity pipeline takes six expert-scored cultural dimensions, standardises them, and clusters the regions into six groups. The terroir pipeline takes factual text descriptions of each region's geography and climate, converts them into numerical features, compresses those features, and clusters the regions into seven groups. The two pipelines never share data. A formal independence test then asks whether the two cluster solutions agree more than chance would predict.
+
+This primer explains the methods used at each stage, in plain language. Each section explains the intuition, gives the formal definition, and describes the algorithm. The treatment assumes comfort with basic statistics (mean, variance, correlation) but not prior exposure to clustering or text vectorisation. For full mathematical detail, see the Technical Appendix.
+
+\section{TF-IDF Vectorisation}
+
+\textbf{What it does.} TF-IDF (Term Frequency--Inverse Document Frequency) converts a collection of text documents into a matrix of numbers. Each row is a document; each column is a word or short phrase; each cell records how distinctively that word characterises that document. Words that appear often in one document but rarely across the corpus get high scores. Words that appear in nearly every document --- ``the'', ``and'', ``wine'' --- get low scores because they fail to distinguish documents.
+
+\textbf{How it works.} For each (term, document) pair, TF-IDF multiplies two quantities. The term frequency measures how often the term appears in that document; the version used here applies sublinear scaling, $1 + \log f_{t,d}$, which dampens the impact of very frequent terms. The inverse document frequency measures how rare the term is across the corpus, computed as $\log(N / N_t)$, where $N$ is the corpus size and $N_t$ is the number of documents containing the term. The product gives high weight to terms that are frequent in a specific document but rare in the corpus overall.
+
+\textbf{In Region Affinities.} The Layer 2 terroir narratives for the 59 regions are TF-IDF vectorised over a vocabulary of unigrams and bigrams (single words and two-word phrases), capped at 800 features. The result is a $59 \times 800$ matrix. Distinctive terms emerge naturally: ``volcanic basalt'' for Etna and Santorini, ``slate slopes'' for the Mosel, ``alluvial gravels'' for Bordeaux's Left Bank, ``schist'' for the Douro and parts of the Languedoc.
+
+\textbf{Why TF-IDF rather than raw word counts?} Raw word counts let common words dominate. The word ``wine'' appears in every region's terroir description, so it provides no information about which regions are similar. TF-IDF down-weights such ubiquitous terms and up-weights distinctive ones --- which is exactly what is needed for clustering by terroir vocabulary.
+
+\section{Standardisation}
+
+\textbf{What it does.} Standardisation puts all features on a common scale. For each feature, it subtracts the mean and divides by the standard deviation, producing values with zero mean and unit variance. This step matters because clustering algorithms measure distances, and distance computations are biased toward features with larger numerical ranges.
+
+\textbf{Why both pipelines need it.} The D-scores already share a common scale ($-2$ to $+2$), but they differ in how they vary across regions. Standardisation ensures each of the six dimensions contributes equally regardless of which dimension happens to span a wider empirical range. The TF-IDF features have very different scales --- some terms appear in many documents, others in only one --- and standardisation neutralises this disparity before PCA.
+
+\section{Principal Component Analysis (PCA)}
+
+\textbf{What it does.} PCA finds new axes (the principal components) that capture as much variance in the data as possible, in order. The first component is the direction along which the data varies most. The second is orthogonal to the first and captures the next-most variance. And so on.
+
+\textbf{Why use it.} Two reasons. First, dimensionality reduction: a $59 \times 800$ TF-IDF matrix is too sparse and too noisy for clustering directly. Reducing to 10 components retains the structural patterns while discarding much of the noise. Second, decorrelation: even when no dimensionality reduction is needed (as for the six D-scores), PCA produces orthogonal coordinates, which makes K-means more numerically stable.
+
+\textbf{Mechanics.} For a centred data matrix $X$, the principal components are the eigenvectors of the covariance matrix $\Sigma = X^\top X / (n - 1)$. The eigenvalues give the variance captured by each component. The cumulative ratio
+\[
+\rho_m = \frac{\lambda_1 + \cdots + \lambda_m}{\lambda_1 + \cdots + \lambda_p}
+\]
+tells how much of the total variance the first $m$ components retain.
+
+\textbf{In Region Affinities.} The identity pipeline retains all 6 components ($\rho_6 = 100\%$), so PCA acts as an orthonormal rotation rather than a reduction. The terroir pipeline reduces 800 TF-IDF features to 10 components, capturing 32.2\% of the variance. The retained variance may seem modest, but for high-dimensional sparse text data, 32\% across 10 components is substantial --- the discarded variance is largely per-term noise that would not contribute meaningfully to cluster structure.
+
+\section{K-Means Clustering}
+
+\textbf{What it does.} K-means partitions $n$ points into $k$ disjoint clusters by alternating two steps until the cluster boundaries stabilise. (1) Each point is assigned to the cluster whose centre is closest. (2) Each cluster's centre is recomputed as the mean of its assigned points. The objective minimised is the sum of squared distances from each point to its cluster centre.
+
+\textbf{Lloyd's algorithm.} The classic implementation. Starting from $k$ initial centroids:
+\begin{enumerate}[leftmargin=2em,itemsep=0.1em,topsep=0.1em]
+\item Assign each point to its nearest centroid.
+\item Recompute each centroid as the mean of its assigned points.
+\item Repeat until no points change cluster.
+\end{enumerate}
+
+\textbf{The initialisation problem.} K-means with random initial centroids can converge to local minima --- partitions that are locally stable but globally suboptimal. Two standard countermeasures are used: \emph{k-means++ seeding} chooses initial centroids that are spread far apart, dramatically improving convergence quality; and \emph{$n_\text{init}$ random restarts} run the algorithm $n_\text{init}$ times from different seedings and return the best result. The pipeline uses k-means++ with $n_\text{init} = 20$.
+
+\textbf{Choosing $k$.} The cluster count $k$ is not learnt by the algorithm; it must be specified. The choice is justified by a combination of silhouette scores (which prefer clusters that are internally cohesive and well-separated), interpretability (whether each cluster has a clear character), and stability (whether perturbations of the algorithm produce comparable results). For Region Affinities, $k_I = 6$ is the silhouette optimum and the smallest $k$ at which all conceptually distinct identity types emerge as separate clusters. $k_T = 7$ produces the most geographically interpretable terroir partition.
+
+\textbf{In Region Affinities.} K-means is applied independently to the PCA-reduced identity matrix ($k_I = 6$) and the PCA-reduced terroir matrix ($k_T = 7$). Each pipeline is run 20 times with different random initialisations; the best partition (lowest within-cluster sum of squares) is retained.
+
+\section{Silhouette Score}
+
+\textbf{What it does.} The silhouette score measures how good a clustering solution is, on a scale from $-1$ to $+1$. For each point, the score compares how close it is to other points in its own cluster versus points in the next-nearest cluster. A score near $+1$ means the point is firmly inside its cluster and far from any neighbouring cluster. A score near 0 means the point is on a cluster boundary. A score near $-1$ means the point is closer to a neighbouring cluster than its own --- a likely misassignment.
+
+\textbf{Formal definition.} For each point $i$, $a(i)$ is the average distance from $i$ to other points in its own cluster, and $b(i)$ is the average distance from $i$ to points in the nearest neighbouring cluster. The silhouette is
+\[
+s(i) = \frac{b(i) - a(i)}{\max\{a(i), b(i)\}}.
+\]
+The overall silhouette is the mean of $s(i)$ over all points.
+
+\textbf{Interpreting the value.} For tabular data with well-separated clusters, silhouettes above 0.5 are excellent. For social-science data with inherently overlapping categories, silhouettes between 0.2 and 0.4 are the typical range for meaningful structure. Identity scores 0.3029 and terroir 0.2457 --- both in the meaningful-structure range, with identity stronger than terroir, consistent with D-scores being a deliberately designed bipolar encoding versus terroir being derived from open-ended text.
+
+\section{The Adjusted Rand Index (ARI)}
+
+\textbf{What it does.} The ARI measures how much two clustering solutions agree on the same set of objects. It examines all possible pairs of objects and asks: do the two solutions agree on whether this pair belongs together or apart? Crucially, it adjusts for the fact that some agreement happens by chance --- the more clusters there are, the more often two random partitions will accidentally agree.
+
+\textbf{The intuition.} Take 59 wine regions. There are $\binom{59}{2} = 1{,}711$ possible pairs. For each pair, the identity partition either places them in the same cluster or different clusters; the terroir partition does the same. Each pair therefore falls into one of four categories: \emph{both same} (in the same cluster in both solutions), \emph{both different} (in different clusters in both solutions), or one of two mixed categories. The Rand Index is the fraction of pairs in the two ``agree'' categories. The Adjusted Rand Index corrects for the agreement that would occur if the two partitions were random.
+
+\textbf{Properties.} ARI $= 1$ if the two partitions are identical (modulo cluster relabelling). ARI $= 0$ if they agree no more than two random partitions of the same sizes would. ARI $< 0$ if they actively disagree (less agreement than chance). ARI is symmetric: $\mathrm{ARI}(P, Q) = \mathrm{ARI}(Q, P)$. ARI is meaningful when the two partitions have different numbers of clusters --- the comparison does not depend on label matching.
+
+\textbf{In Region Affinities.} The ARI between the identity and terroir partitions is 0.023 --- effectively zero. The two classification systems agree no more than random partitions would.
+
+\section{Chi-Squared Test of Independence}
+
+\textbf{What it does.} The chi-squared test of independence is a classical statistical test. It asks: in a two-way contingency table (rows: identity clusters; columns: terroir clusters; cells: counts of regions in each combination), is there evidence that the row variable and the column variable are statistically dependent?
+
+\textbf{How it works.} If the two variables are independent, the expected count in cell $(i, j)$ is $e_{ij} = \mathrm{(row\,total)}_i \cdot \mathrm{(col\,total)}_j / n$. The chi-squared statistic measures how far the observed counts $n_{ij}$ deviate from these expected counts:
+\[
+\chi^2 = \sum_{i, j} \frac{(n_{ij} - e_{ij})^2}{e_{ij}}.
+\]
+Under the null hypothesis of independence, this statistic follows a chi-squared distribution with $(\text{rows} - 1)(\text{cols} - 1)$ degrees of freedom. Large values produce small $p$-values and reject the null. Small values produce large $p$-values, consistent with independence.
+
+\textbf{A practical caveat.} The chi-squared distribution is an asymptotic approximation that requires expected counts of at least 5 per cell. With 59 regions distributed across a $6 \times 7$ table, many cells have expected counts well below 5, weakening the test's accuracy. The ARI is therefore the primary independence measure; the chi-squared test is reported as a corroborating diagnostic.
+
+\textbf{In Region Affinities.} $\chi^2 = 38.776$ with $\mathrm{df} = 30$ and $p = 0.131$. The null of independence is not rejected at $\alpha = 0.05$.
+
+\section{The D-Score System}
+
+\textbf{What it does.} The D-scores are six expert-scored dimensions that capture the cultural identity of each wine region. Unlike the terroir classification, which is fully algorithmic, the D-scores involve structured human judgement: a subject matter expert reads each region's identity narrative (Layer 1) and scores it on six bipolar axes, each ranging from $-2$ to $+2$.
+
+\textbf{The dimensions.}
+\begin{itemize}[leftmargin=2em,itemsep=0.1em,topsep=0.1em]
+\item $D_1$ Interiority $\leftrightarrow$ Exteriority --- inward-facing and place-defined ($+2$) vs.\ outward-facing and market-oriented ($-2$).
+\item $D_2$ Struggle $\leftrightarrow$ Ease --- defined by difficulty and endurance ($+2$) vs.\ pleasure and comfort ($-2$).
+\item $D_3$ Tradition $\leftrightarrow$ Reinvention --- anchored in deep custodial tradition ($+2$) vs.\ defined by disruption and reinvention ($-2$).
+\item $D_4$ Individual $\leftrightarrow$ Collective --- driven by solitary vision ($+2$) vs.\ communal, cooperative character ($-2$).
+\item $D_5$ Urgency $\leftrightarrow$ Timelessness --- urgent and present-focused ($+2$) vs.\ timeless and eternal ($-2$).
+\item $D_6$ Earthly $\leftrightarrow$ Transcendent --- grounded and earthly ($+2$) vs.\ reaching toward something spiritual ($-2$).
+\end{itemize}
+
+\textbf{Why expert scoring rather than survey instruments?} Cross-cultural psychology (Hofstede, GLOBE, Ronen--Shenkar) typically derives identity dimensions from large-scale attitudinal surveys. Wine regions cannot easily be polled in this manner --- a region is not a population of respondents. The D-score system substitutes expert reading of a structured identity narrative for survey collection, accepting the trade-off of single-rater subjectivity in exchange for tractability across a moderately sized region set. The structured narrative format constrains the rater's interpretation; the bipolar dimensional framing constrains the dimensions of judgement.
+
+\section{The Pipeline in Summary}
+
+The methods form two parallel pipelines that produce comparable cluster outputs.
+
+\textbf{Identity pipeline.} 6-dimensional D-score matrix $\to$ standardisation $\to$ PCA (6 components, 100\% variance) $\to$ K-means ($k = 6$) $\to$ silhouette score 0.3029.
+
+\textbf{Terroir pipeline.} 6-field text per region $\to$ TF-IDF vectorisation (800 features) $\to$ standardisation $\to$ PCA (10 components, 32.2\% variance) $\to$ K-means ($k = 7$) $\to$ silhouette score 0.2457.
+
+\textbf{Independence test.} The two cluster assignments form a $6 \times 7$ contingency table. The Adjusted Rand Index is 0.023; chi-squared is 38.776 with $\mathrm{df} = 30$, $p = 0.131$. Both measures fail to find evidence that the partitions are related. Terroir and cultural identity are independent classification systems.
+
+\section*{References}
+
+\begin{itemize}[leftmargin=2em,itemsep=0.2em]
+\item Arthur, D. \& Vassilvitskii, S. (2007). k-means++: The advantages of careful seeding. In \emph{Proceedings of the Eighteenth Annual ACM-SIAM Symposium on Discrete Algorithms}, 1027--1035.
+\item Hartigan, J. A. \& Wong, M. A. (1979). A K-Means Clustering Algorithm. \emph{Applied Statistics}, 28(1), 100--108.
+\item Hubert, L. \& Arabie, P. (1985). Comparing partitions. \emph{Journal of Classification}, 2(1), 193--218.
+\item Jolliffe, I. T. (2002). \emph{Principal Component Analysis} (2nd ed.). Springer.
+\item Pearson, K. (1900). On the criterion that a given system of deviations from the probable in the case of a correlated system of variables is such that it can be reasonably supposed to have arisen from random sampling. \emph{Philosophical Magazine}, 50(302), 157--175.
+\item Rousseeuw, P. J. (1987). Silhouettes: A graphical aid to the interpretation and validation of cluster analysis. \emph{Journal of Computational and Applied Mathematics}, 20, 53--65.
+\item Salton, G. \& Buckley, C. (1988). Term-weighting approaches in automatic text retrieval. \emph{Information Processing \& Management}, 24(5), 513--523.
+\end{itemize}
+
+\end{document}

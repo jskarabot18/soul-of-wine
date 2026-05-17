@@ -1,0 +1,81 @@
+% =====================================================================
+% vinotheca.sty — Vinotheca Tools shared LaTeX package
+%
+% Loaded by every Vinotheca document via \usepackage{vinotheca}.
+% Provides typography, spacing, sectioning, abstract styling, and the
+% front-matter macros \vinothecaTitle, \vinothecaAuthor,
+% \vinothecaCompanions used in every document's title block.
+%
+% Build environment: this package is shipped alongside each docs-source/
+% directory. Builds run from inside the docs-source folder so that
+% \usepackage{vinotheca} resolves to the adjacent vinotheca.sty.
+% =====================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{vinotheca}[2026/05/17 v1.0 Vinotheca Tools shared package]
+
+% --- Page geometry and core typography ---
+\RequirePackage[a4paper,margin=1in]{geometry}
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage{lmodern}
+\RequirePackage{microtype}
+
+% --- Math and tables ---
+\RequirePackage{amsmath,amssymb,amsthm}
+\RequirePackage{booktabs}
+\RequirePackage{longtable}
+\RequirePackage{array}
+\RequirePackage{tabularx}
+
+% --- Lists, headings, links, algorithms, captions ---
+\RequirePackage{enumitem}
+\RequirePackage{titlesec}
+\RequirePackage[hidelinks]{hyperref}
+\RequirePackage{algorithm}
+\RequirePackage{algpseudocode}
+\RequirePackage{caption}
+
+% --- Section heading style — consistent across all docs ---
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% --- Paragraph spacing ---
+\setlength{\parskip}{0.6\baselineskip}
+\setlength{\parindent}{0pt}
+
+% --- Front-matter macros ---
+% Three macros, used in sequence at the start of every document's body:
+%   \vinothecaTitle{Work Name}{Document Type}{Subtitle line}
+%   \vinothecaAuthor{Author}{Date}
+%   \vinothecaCompanions{Companion document list (centred dots)}
+%
+\newcommand{\vinothecaTitle}[3]{%
+  \begin{center}
+    {\Large\bfseries #1}\\[2pt]
+    {\large #2}\\[6pt]
+    {\itshape #3}
+  \end{center}
+}
+
+\newcommand{\vinothecaAuthor}[2]{%
+  \begin{center}
+    #1 \quad\textperiodcentered\quad #2
+  \end{center}
+}
+
+\newcommand{\vinothecaCompanions}[1]{%
+  \begin{center}
+    {\small\itshape Companion documents: #1}
+  \end{center}
+  \vspace{1em}
+  \hrule
+  \vspace{1.5em}
+}
+
+% --- Abstract environment styled consistently ---
+\renewenvironment{abstract}{%
+  \vspace{0.5em}
+  \noindent\textbf{Abstract.}\itshape\quad
+}{\par\vspace{1em}\hrule\vspace{1em}}
+
+\endinput

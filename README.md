@@ -2,7 +2,7 @@
 
 **Terroir shapes what grapes can become. History, ambition, and culture determine what a region chooses to be.**
 
-An anthropological study of wine region identity, asking whether the cultural character of a wine region can be predicted from its physical terroir. The answer, measured across 59 regions and 16 countries, is no.
+An anthropological and sociological study of wine region identity, asking whether the cultural character of a wine region can be predicted from its physical terroir. The answer, measured across 59 regions and 16 countries, is no.
 
 🔗 **[Explore the project →](https://jskarabot18.github.io/soul-of-wine)**
 
@@ -14,16 +14,14 @@ Wine regions are classified in two fundamentally different ways: by what the lan
 
 ## The Finding
 
-They do not. The two classification systems are statistically independent — knowing a region's terroir cluster provides no information about its identity cluster. Culture groups regions differently than terroir does.
+They do not. The Adjusted Rand Index between terroir clustering and identity clustering is **−0.001** (chi² p = 0.172) — effectively zero. Knowing a region's terroir cluster provides no information about its identity cluster. The two systems are statistically independent.
 
 The map is not the soul.
 
 ## Three Key Findings
 
 1. **Terroir shapes identity, but history modulates the signal.** Physical geography creates the conditions for winemaking, but the relationship to difficulty and tradition most strongly differentiates identity clusters. The land sets constraints; culture interprets them.
-
 2. **The type of terroir predicts the type of identity — as tendency, not law.** Harsh terroir tends to produce identities of struggle; generous terroir tends to produce ease. But the exceptions — Santorini's survival, Beaujolais's joy, Dalmatia's tranquility — are as revealing as the pattern.
-
 3. **Where terroir's constraints are weakest, human ambition fills the void.** New World regions with favourable growing conditions show the highest individual ambition and urgency scores. When the land does not impose an identity, the winemaker constructs one.
 
 ## The Six Identity Clusters
@@ -37,29 +35,14 @@ The map is not the soul.
 | **Against the Odds** | 10 | Marginality and struggle as central character | Santorini (*Survival*), Douro (*Endurance*), Jura (*Eccentricity*), Hunter Valley (*Defiance*) |
 | **The Moderates** | 15 | Balanced, pluralistic, no single force dominates | Steiermark (*Clarity*), Goriška Brda (*Fortune*), Margaret River (*Composure*), Loire (*Sentimentality*) |
 
-## The Seven Terroir Clusters
-
-Fully model-derived from TF-IDF vectorisation of factual terroir profiles (k-means, k=7). No manual assignment — cluster names are interpretive labels derived from TF-IDF feature weights.
-
-| Cluster | n | Representative Regions |
-| --- | --- | --- |
-| **Mediterranean & Volcanic** | 16 | Tuscany, Piedmont, Sardinia, Sicily, Santorini, Etna, Campania |
-| **Southern Hemisphere & International** | 12 | Barossa Valley, Margaret River, Stellenbosch, Marlborough, Central Otago, Finger Lakes |
-| **French Viticultural** | 10 | Bordeaux, Burgundy, Champagne, Northern Rhône, Provence, Loire, Jura |
-| **American West Coast** | 7 | Napa Valley, Sonoma, Willamette Valley, Paso Robles, Santa Barbara |
-| **Iberian Continental** | 6 | Rioja, Ribera del Duero, Douro, Catalonia, Galicia, Mendoza |
-| **Germanic Rhine** | 5 | Mosel, Rheingau, Nahe, Pfalz, Baden |
-| **Austrian Danube** | 3 | Wachau, Kamptal, Wagram |
-
 ## Methodology
 
 The study employs a dual-layer architecture:
 
 * **Layer 1 — Identity:** 280–320 word anthropological narratives per region, written under strict vocabulary controls (no terroir, grape, or technique terms). Six D-score dimensions (−2 to +2) scored from these narratives by SME: Interiority↔Exteriority, Struggle↔Ease, Tradition↔Reinvention, Individual↔Collective, Urgency↔Timelessness, Earthly↔Transcendent.
-
-* **Layer 2 — Terroir:** Six factual fields per region (climate, soils, principal varieties, winemaking, production structure, historical position). TF-IDF vectorised independently. Terroir clustering is fully algorithmic.
-
-* **Clustering:** Identity: D-scores standardised, PCA-reduced, k-means (k=6). Terroir: TF-IDF, PCA to 10 components, k-means (k=7). Independence tested with ARI and chi-square.
+* **Layer 2 — Terroir:** Six factual fields per region (climate, soils, principal varieties, winemaking, production structure, historical position). TF-IDF vectorised independently.
+* **Clustering:** D-scores standardised, PCA-reduced, k-means (k=6). Terroir clustered separately. ARI tests independence between the two solutions.
+* **Post-SME silhouette:** 0.3110 · 13 score changes across 12 regions · ARI vs. pre-SME: 0.909
 
 ## Interactive Visualisations
 
@@ -74,11 +57,13 @@ The study employs a dual-layer architecture:
 
 | Document | Description |
 | --- | --- |
-| [**The Map and the Soul**](https://jskarabot18.github.io/soul-of-wine/docs/narrative.pdf) | The full narrative paper — hypothesis, related literature across four academic fields, methodology, results, and a guide for the wine-focused reader. |
-| [**Technical Appendix**](https://jskarabot18.github.io/soul-of-wine/docs/technical.pdf) | Methodology deep-dive — pipeline architecture, D-score system, clustering parameters, SME review change log, and the complete score matrix. |
-| [**Region Profiles — Identity**](https://jskarabot18.github.io/soul-of-wine/docs/layer1-descriptions.pdf) | The 59 anthropological identity narratives (280–320 words each). Organised by country. |
-| [**Region Profiles — Terroir**](https://jskarabot18.github.io/soul-of-wine/docs/layer2-descriptions.pdf) | The 59 factual terroir profiles — the raw input for the NLP terroir classification. |
-| [**Methods Primer**](https://jskarabot18.github.io/soul-of-wine/docs/methods-primer.pdf) | A plain-language guide to NLP, TF-IDF, PCA, k-means clustering, and independence testing. No prior statistics knowledge assumed. |
+| [**The Map and the Soul**](https://jskarabot18.github.io/soul-of-wine/docs/SoulOfWine_Narrative.pdf) | The full narrative paper — hypothesis, related literature across four academic fields, methodology, results, implications, and a plain-language guide for the wine-focused reader. |
+| [**Summary**](https://jskarabot18.github.io/soul-of-wine/docs/SoulOfWine_Summary.pdf) | Plain-language overview of the study: the question, the data, the methodology, the findings, and the principal cluster contents. |
+| [**Technical Appendix**](https://jskarabot18.github.io/soul-of-wine/docs/SoulOfWine_Technical_Appendix.pdf) | Mathematical framework, algorithms, and implementation. Encoding maps for the two layers, dimensionality reduction and clustering pipelines, similarity construction, and the formal statistical tests of independence. |
+| [**Methods Primer**](https://jskarabot18.github.io/soul-of-wine/docs/SoulOfWine_Methods_Primer.pdf) | A non-technical guide to the statistical and network methods used in the study: TF-IDF, PCA, K-means, silhouette, ARI, and the chi-squared test. |
+| [**Data Appendix**](https://jskarabot18.github.io/soul-of-wine/docs/SoulOfWine_Data_Appendix.pdf) | The complete D-score matrix, cluster membership tables, pipeline parameters, SME review change log, and source materials. |
+| [**Region Reference — Identity**](https://jskarabot18.github.io/soul-of-wine/docs/layer1-descriptions.pdf) | The 59 anthropological identity narratives (shared with Region Affinities and Region Resonances). |
+| [**Region Reference — Terroir**](https://jskarabot18.github.io/soul-of-wine/docs/layer2-descriptions.pdf) | The 59 factual terroir profiles (shared with Region Affinities). |
 
 ## Repository Structure
 
@@ -91,14 +76,22 @@ soul-of-wine/
 │   ├── regions.csv                     Same data as CSV
 │   ├── identity_pca.json              Identity PCA coordinates
 │   ├── terroir_pca.json               Terroir PCA coordinates
-│   ├── terroir_clusters.json          Terroir cluster assignments (k=7)
+│   ├── terroir_clusters.json          Terroir cluster assignments
 │   └── pipeline_report.txt            Reproducibility report
 ├── docs/
-│   ├── narrative.pdf                   The Map and the Soul (research paper)
-│   ├── technical.pdf                   Technical Appendix
-│   ├── layer1-descriptions.pdf        59 identity narratives
-│   ├── layer2-descriptions.pdf        59 terroir profiles
-│   └── methods-primer.pdf             Plain-language methods guide
+│   ├── SoulOfWine_Narrative.pdf        The Map and the Soul (narrative paper)
+│   ├── SoulOfWine_Summary.pdf          Summary
+│   ├── SoulOfWine_Technical_Appendix.pdf   Technical Appendix
+│   ├── SoulOfWine_Methods_Primer.pdf   Methods Primer
+│   ├── SoulOfWine_Data_Appendix.pdf    Data Appendix
+│   ├── layer1-descriptions.pdf         Region Reference — Identity
+│   └── layer2-descriptions.pdf         Region Reference — Terroir
+├── docs-source/
+│   ├── SoulOfWine_Summary.tex          LaTeX source — Summary
+│   ├── SoulOfWine_Technical_Appendix.tex   LaTeX source — Technical Appendix
+│   ├── SoulOfWine_Methods_Primer.tex   LaTeX source — Methods Primer
+│   ├── SoulOfWine_Data_Appendix.tex    LaTeX source — Data Appendix
+│   └── vinotheca.sty                   Shared Vinotheca LaTeX package
 ├── analysis/
 │   └── pipeline.py                     Reproducible analysis pipeline
 └── visualizations/
@@ -107,6 +100,8 @@ soul-of-wine/
     ├── movement-map.html               Terroir → Identity alluvial diagram
     └── d-score-dashboard.html          Full score matrix
 ```
+
+The four canonical PDFs (Summary, Technical Appendix, Methods Primer, Data Appendix) are byte-identical to the same documents shipped at `region-affinities/public/docs/` — they are the shared documentation of The Soul of Wine + Region Affinities Work, per the Vinotheca §2 architecture (two faces, shared PDFs).
 
 ## Reproducing the Analysis
 
@@ -119,7 +114,7 @@ cd analysis
 python pipeline.py
 ```
 
-The pipeline reproduces identity clustering (D-scores → k-means, k=6), terroir clustering (Layer 2 TF-IDF → k-means, k=7), and the independence test. Terroir clustering is fully model-derived — no manual anchors or hand-curation. The pipeline outputs PCA coordinates, cluster assignments, and a full report as JSON files to `data/`.
+The pipeline reproduces identity clustering (D-scores → k-means), terroir clustering (Layer 2 TF-IDF → k-means), and the ARI independence test. It outputs PCA coordinates and cluster assignments as JSON files to `data/`.
 
 ## Coverage
 
@@ -134,6 +129,10 @@ The pipeline reproduces identity clustering (D-scores → k-means, k=6), terroir
 * Hubert, L. & Arabie, P. (1985). Comparing partitions. *Journal of Classification*, 2(1), 193–218.
 * Demossier, M. (2018). *Burgundy: The Global Story of Terroir.* Berghahn Books.
 * Trubek, A. (2008). *The Taste of Place: A Cultural Journey into Terroir.* University of California Press.
+
+## Author
+
+**Jure Skarabot** · The Soul of Wine Research Project · April 2026 (study) · May 2026 (documentation update)
 
 ---
 

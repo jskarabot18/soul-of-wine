@@ -1,0 +1,246 @@
+\documentclass[11pt]{article}
+\usepackage{vinotheca}
+\usepackage{pdflscape}
+
+\begin{document}
+
+\vinothecaTitle{The Soul of Wine}{Data Appendix}{Source Data, Tables, and Reference Materials}
+\vinothecaAuthor{Jure Skarabot}{May 2026}
+\vinothecaCompanions{Summary \textperiodcentered{} Technical Appendix \textperiodcentered{} Methods Primer \textperiodcentered{} Data Appendix \textperiodcentered{} Region Reference (Identity, Terroir)}
+
+\section*{Table of Contents}
+\begin{itemize}[leftmargin=2em,itemsep=0.1em,topsep=0.1em]
+\item D.1 Region Roster (59 regions, 16 countries)
+\item D.2 D-Score Matrix and Identity Cluster Membership
+\item D.3 Terroir Cluster Membership
+\item D.4 Identity $\times$ Terroir Contingency Table
+\item D.5 Per-Cluster Silhouette Breakdown
+\item D.6 SME Change Log
+\end{itemize}
+
+\section*{D.1 Region Roster}
+The 59 regions analysed in this study, grouped by country of primary regulatory affiliation. Old World total: 39 regions across 10 countries. New World total: 20 regions across 6 countries.
+
+\begin{center}
+\begin{tabular}{@{}lp{10cm}@{}}
+\toprule
+Country & Regions \\
+\midrule
+\multicolumn{2}{l}{\textit{Old World}} \\
+Austria   & Kamptal, Steiermark, Wachau, Wagram \\
+Croatia   & Dalmatian Coast \\
+France    & Alsace, Beaujolais, Bordeaux, Burgundy, Champagne, Ch\^ateauneuf-du-Pape, Jura, Loire, Northern Rh\^one, Provence \\
+Germany   & Baden, Mosel, Nahe, Pfalz, Rheingau \\
+Greece    & Macedonia, Santorini \\
+Hungary   & Tokaj \\
+Italy     & Alto Adige, Campania, Etna, Friuli-Venezia Giulia, Liguria, Piedmont, Sardinia, Sicily, Tuscany, Veneto \\
+Portugal  & Douro \\
+Slovenia  & Gori\v{s}ka Brda \\
+Spain     & Catalonia, Galicia, Ribera del Duero, Rioja \\
+\midrule
+\multicolumn{2}{l}{\textit{New World}} \\
+Argentina   & Mendoza, Patagonia \\
+Australia   & Barossa Valley, Hunter Valley, Margaret River \\
+Chile       & Maipo Valley \\
+New Zealand & Central Otago, Hawke's Bay, Marlborough \\
+S.\ Africa  & Stellenbosch, Swartland \\
+USA         & Columbia Valley, Finger Lakes, Napa Valley, Paso Robles, Santa Barbara, Santa Cruz Mountains, Sonoma, Walla Walla, Willamette Valley \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{landscape}
+\section*{D.2 D-Score Matrix and Identity Cluster Membership}
+All 59 regions with the six identity D-scores ($D_1$--$D_6$ on $-2$ to $+2$ scale), the assigned identity cluster, and the canonical soul metaphor. Sorted by identity cluster, then by region number within each cluster. Cluster definitions: $D_1$ Interiority $\leftrightarrow$ Exteriority; $D_2$ Struggle $\leftrightarrow$ Ease; $D_3$ Tradition $\leftrightarrow$ Reinvention; $D_4$ Individual $\leftrightarrow$ Collective; $D_5$ Urgency $\leftrightarrow$ Timelessness; $D_6$ Earthly $\leftrightarrow$ Transcendent.
+
+\renewcommand{\arraystretch}{1.05}
+\small
+\begin{longtable}{@{}r l l l r r r r r r@{}}
+\toprule
+\# & Region & Country & Metaphor & $D_1$ & $D_2$ & $D_3$ & $D_4$ & $D_5$ & $D_6$ \\
+\midrule
+\endfirsthead
+\toprule
+\# & Region & Country & Metaphor & $D_1$ & $D_2$ & $D_3$ & $D_4$ & $D_5$ & $D_6$ \\
+\midrule
+\endhead
+\multicolumn{10}{l}{\textbf{Old World Interior} (10 regions)} \\
+9  & Burgundy             & France   & Devotion              & $+2$ & $+1$ & $+2$ & $+1$ & $-1$ & $-1$ \\
+25 & Campania             & Italy    & Memory                & $+1$ & $0$  & $+1$ & $0$  & $-1$ & $-1$ \\
+26 & Etna                 & Italy    & Awakening             & $+1$ & $+2$ & $0$  & $0$  & $+1$ & $-1$ \\
+37 & Galicia              & Spain    & Longing (Morri\~na)   & $+1$ & $+1$ & $+1$ & $+1$ & $0$  & $-1$ \\
+17 & Mosel                & Germany  & Poetry                & $+2$ & $+2$ & $+2$ & $+1$ & $-2$ & $-2$ \\
+14 & Northern Rh\^one     & France   & Solitude              & $+2$ & $+2$ & $+2$ & $+2$ & $-2$ & $-1$ \\
+29 & Piedmont             & Italy    & Philosophy            & $+2$ & $+1$ & $+2$ & $+1$ & $-2$ & $-1$ \\
+20 & Rheingau             & Germany  & Nobility              & $+1$ & $0$  & $+2$ & $+1$ & $-2$ & $0$  \\
+56 & Santa Cruz Mtns      & USA      & Obsession             & $+2$ & $+1$ & $0$  & $+2$ & $0$  & $0$  \\
+23 & Tokaj                & Hungary  & Melancholy            & $+2$ & $+1$ & $+2$ & $+1$ & $-2$ & $-1$ \\
+\midrule
+\multicolumn{10}{l}{\textbf{Outward Ease} (5 regions)} \\
+7  & Beaujolais           & France   & Joy                   & $-1$ & $-1$ & $-1$ & $-1$ & $+1$ & $+1$ \\
+48 & Marlborough          & NZ       & Assertion             & $-2$ & $0$  & $-1$ & $-1$ & $+2$ & $+1$ \\
+15 & Provence             & France   & Pleasure              & $-2$ & $-2$ & $0$  & $-1$ & $+1$ & $+1$ \\
+33 & Veneto               & Italy    & Commerce              & $-2$ & $0$  & $-1$ & $-1$ & $+1$ & $+1$ \\
+58 & Walla Walla          & USA      & Community             & $+1$ & $-1$ & $-1$ & $-2$ & $+1$ & $+1$ \\
+\midrule
+\multicolumn{10}{l}{\textbf{New World Reinvention} (12 regions)} \\
+36 & Catalonia            & Spain     & Identity             & $-1$ & $+1$ & $-2$ & $+1$ & $+2$ & $+1$ \\
+46 & Central Otago        & NZ        & Adventure            & $-1$ & $+1$ & $-1$ & $+1$ & $+1$ & $0$  \\
+51 & Columbia Valley      & USA       & Determination        & $-1$ & $+1$ & $-1$ & $+1$ & $+1$ & $+2$ \\
+52 & Finger Lakes         & USA       & Conviction           & $-1$ & $+1$ & $-1$ & $+1$ & $+1$ & $0$  \\
+40 & Mendoza              & Argentina & Reinvention          & $-1$ & $0$  & $-2$ & $0$  & $+1$ & $+1$ \\
+53 & Napa Valley          & USA       & Ambition             & $-2$ & $0$  & $-1$ & $-1$ & $+2$ & $+1$ \\
+54 & Paso Robles          & USA       & Independence         & $-1$ & $0$  & $-2$ & $+1$ & $+1$ & $+1$ \\
+41 & Patagonia            & Argentina & Extremity            & $0$  & $+2$ & $-2$ & $+1$ & $+2$ & $0$  \\
+31 & Sicily               & Italy     & Resurrection         & $-1$ & $+1$ & $-2$ & $+1$ & $+1$ & $+1$ \\
+49 & Stellenbosch         & S. Africa & Aspiration           & $-1$ & $0$  & $-1$ & $+1$ & $+1$ & $+1$ \\
+50 & Swartland            & S. Africa & Rebellion            & $-1$ & $+1$ & $-2$ & $+1$ & $+2$ & $+1$ \\
+57 & Sonoma               & USA       & Authenticity         & $-1$ & $0$  & $-1$ & $+1$ & $0$  & $+1$ \\
+\midrule
+\multicolumn{10}{l}{\textbf{Old World Exterior} (7 regions)} \\
+16 & Baden                & Germany  & Warmth                & $-1$ & $-1$ & $+1$ & $-1$ & $-1$ & $+1$ \\
+8  & Bordeaux             & France   & Business              & $-2$ & $-1$ & $+2$ & $-2$ & $0$  & $+1$ \\
+10 & Champagne            & France   & Society               & $-2$ & $-1$ & $+2$ & $-2$ & $0$  & $-1$ \\
+11 & Ch\^ateauneuf-du-Pape & France  & Family                & $-1$ & $0$  & $+2$ & $-2$ & $-1$ & $+1$ \\
+5  & Dalmatian Coast      & Croatia  & Tranquility           & $+2$ & $-2$ & $+1$ & $-1$ & $-2$ & $+2$ \\
+19 & Pfalz                & Germany  & Generosity            & $-1$ & $-2$ & $+1$ & $-1$ & $-1$ & $+1$ \\
+39 & Rioja                & Spain    & Patience              & $-1$ & $0$  & $+2$ & $-1$ & $-1$ & $+1$ \\
+\midrule
+\multicolumn{10}{l}{\textbf{Against the Odds} (10 regions)} \\
+42 & Barossa Valley       & Australia & Fortitude            & $+1$ & $+2$ & $+1$ & $0$  & $0$  & $+1$ \\
+34 & Douro                & Portugal  & Endurance            & $+1$ & $+2$ & $+2$ & $+1$ & $-1$ & $+1$ \\
+43 & Hunter Valley        & Australia & Defiance             & $+1$ & $+2$ & $+1$ & $+1$ & $-1$ & $+1$ \\
+12 & Jura                 & France    & Eccentricity         & $+2$ & $+1$ & $+2$ & $+1$ & $0$  & $+1$ \\
+28 & Liguria              & Italy     & Intimacy             & $+2$ & $+1$ & $+1$ & $+1$ & $-1$ & $+1$ \\
+21 & Macedonia            & Greece    & Austerity            & $+2$ & $+2$ & $+2$ & $+1$ & $0$  & $+1$ \\
+38 & Ribera del Duero     & Spain     & Severity             & $+1$ & $+2$ & $+1$ & $+1$ & $0$  & $+2$ \\
+22 & Santorini            & Greece    & Survival             & $+2$ & $+2$ & $+1$ & $+1$ & $+1$ & $+1$ \\
+30 & Sardinia             & Italy     & Stubbornness         & $+2$ & $+1$ & $+2$ & $-1$ & $-1$ & $+2$ \\
+4  & Wagram               & Austria   & Earth                & $+2$ & $0$  & $+2$ & $0$  & $0$  & $+1$ \\
+\midrule
+\multicolumn{10}{l}{\textbf{The Moderates} (15 regions)} \\
+6  & Alsace               & France    & Duality              & $0$  & $0$  & $+1$ & $0$  & $0$  & $0$  \\
+24 & Alto Adige           & Italy     & Precision            & $0$  & $0$  & $+1$ & $0$  & $0$  & $+1$ \\
+27 & Friuli-VG            & Italy     & Dialogue             & $-1$ & $0$  & $0$  & $0$  & $0$  & $0$  \\
+35 & Gori\v{s}ka Brda     & Slovenia  & Fortune              & $-1$ & $0$  & $0$  & $0$  & $0$  & $+1$ \\
+47 & Hawke's Bay          & NZ        & Confidence           & $0$  & $0$  & $0$  & $0$  & $-1$ & $+1$ \\
+1  & Kamptal              & Austria   & Discipline           & $+1$ & $0$  & $+1$ & $+1$ & $0$  & $0$  \\
+13 & Loire                & France    & Sentimentality       & $-1$ & $0$  & $0$  & $0$  & $0$  & $0$  \\
+45 & Maipo Valley         & Chile     & Pride                & $-1$ & $0$  & $+1$ & $0$  & $-1$ & $+1$ \\
+44 & Margaret River       & Australia & Composure            & $0$  & $0$  & $0$  & $0$  & $-1$ & $0$  \\
+18 & Nahe                 & Germany   & Subtlety             & $+1$ & $0$  & $+1$ & $+1$ & $-1$ & $0$  \\
+55 & Santa Barbara        & USA       & Serendipity          & $-1$ & $0$  & $0$  & $0$  & $0$  & $+1$ \\
+2  & Steiermark           & Austria   & Clarity              & $+1$ & $0$  & $0$  & $+1$ & $+1$ & $+1$ \\
+32 & Tuscany              & Italy     & Art                  & $-1$ & $-1$ & $0$  & $+1$ & $0$  & $0$  \\
+3  & Wachau               & Austria   & Monumentality        & $0$  & $0$  & $+1$ & $+1$ & $0$  & $+1$ \\
+59 & Willamette Valley    & USA       & Idealism             & $-1$ & $+1$ & $-1$ & $+1$ & $0$  & $-1$ \\
+\bottomrule
+\end{longtable}
+\end{landscape}
+
+\section*{D.3 Terroir Cluster Membership}
+The terroir partition is fully model-derived: Layer 2 TF-IDF $\rightarrow$ PCA (10 components) $\rightarrow$ K-means ($k = 7$). Cluster count, membership, and naming are determined by the algorithm with no manual override. Top TF-IDF terms indicate the vocabulary features that most distinguish each cluster.
+
+\begin{description}[leftmargin=2em,itemsep=0.4em]
+\item[Iberian Continental (6).] Top terms: \emph{spain, rioja, do.}\\
+Douro, Catalonia, Galicia, Ribera del Duero, Rioja, Mendoza.
+
+\item[Southern Hemisphere \& International (12).] Top terms: \emph{zealand, new zealand, australia.}\\
+Alto Adige, Patagonia, Barossa Valley, Hunter Valley, Margaret River, Maipo Valley, Central Otago, Hawke's Bay, Marlborough, Stellenbosch, Swartland, Napa Valley.
+
+\item[American West Coast (7).] Top terms: \emph{ava, wineries, california.}\\
+Columbia Valley, Paso Robles, Santa Barbara, Santa Cruz Mountains, Sonoma, Walla Walla, Willamette Valley.
+
+\item[French Viticultural (10).] Top terms: \emph{france, c\^ote, de.}\\
+Alsace, Beaujolais, Bordeaux, Burgundy, Champagne, Ch\^ateauneuf-du-Pape, Jura, Loire, Northern Rh\^one, Provence.
+
+\item[Germanic Rhine (5).] Top terms: \emph{germany, vdp, mosel.}\\
+Baden, Mosel, Nahe, Pfalz, Rheingau.
+
+\item[Austrian Danube (3).] Top terms: \emph{dac, veltliner, austria.}\\
+Kamptal, Wachau, Wagram.
+
+\item[Mediterranean \& Volcanic (16).] Top terms: \emph{italy, di, indigenous.}\\
+Steiermark, Dalmatian Coast, Macedonia, Santorini, Tokaj, Campania, Etna, Friuli-Venezia Giulia, Liguria, Piedmont, Sardinia, Sicily, Tuscany, Veneto, Gori\v{s}ka Brda, Finger Lakes.
+\end{description}
+
+\section*{D.4 Identity $\times$ Terroir Contingency Table}
+The full $6 \times 7$ contingency table $\{n_{ij}\}$ counting regions in each (identity, terroir) cell. Row totals $a_i$ are the identity-cluster sizes; column totals $b_j$ are the terroir-cluster sizes; the grand total is $n = 59$.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}l|ccccccc|c@{}}
+\toprule
+ & Iber.\ & S.Hem. & Am.W. & Fre. & Ger. & Aus. & Med. & $a_i$ \\
+\midrule
+Old World Interior      & 1 & 0 & 1 & 1 & 1 & 0 & 6  & 10 \\
+Outward Ease            & 0 & 1 & 1 & 2 & 0 & 0 & 1  & 5  \\
+New World Reinvention   & 2 & 5 & 1 & 0 & 0 & 0 & 4  & 12 \\
+Old World Exterior      & 1 & 0 & 0 & 3 & 2 & 0 & 1  & 7  \\
+Against the Odds        & 2 & 2 & 0 & 1 & 0 & 1 & 4  & 10 \\
+The Moderates           & 0 & 4 & 4 & 3 & 2 & 2 & 0  & 15 \\
+\midrule
+$b_j$                   & 6 & 12 & 7 & 10 & 5 & 3 & 16 & \textbf{59} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Test statistics on this table: $\chi^2 = 38.776$, $\mathrm{df} = 30$, $p = 0.131$. $\mathrm{ARI} = 0.023$.
+
+\section*{D.5 Per-Cluster Silhouette Breakdown}
+Mean silhouette score per cluster, with cluster size in parentheses. The overall identity silhouette is $S_I = 0.3029$; the overall terroir silhouette is $S_T = 0.2457$.
+
+\begin{center}
+\begin{tabular}{@{}lr|lr@{}}
+\toprule
+\multicolumn{2}{c|}{\textit{Identity}} & \multicolumn{2}{c}{\textit{Terroir}} \\
+Cluster (n) & Mean $s$ & Cluster (n) & Mean $s$ \\
+\midrule
+Old World Interior (10)      & 0.34 & Iberian Continental (6)               & 0.27 \\
+Outward Ease (5)             & 0.31 & Southern Hem.\ \& International (12) & 0.21 \\
+New World Reinvention (12)   & 0.32 & American West Coast (7)               & 0.26 \\
+Old World Exterior (7)       & 0.27 & French Viticultural (10)              & 0.28 \\
+Against the Odds (10)        & 0.33 & Germanic Rhine (5)                    & 0.31 \\
+The Moderates (15)           & 0.25 & Austrian Danube (3)                   & 0.29 \\
+                             &      & Mediterranean \& Volcanic (16)        & 0.20 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The Moderates is the weakest identity cluster ($s = 0.25$), reflecting its definitional character as the cluster of pluralistic regions where no single identity force dominates. Mediterranean \& Volcanic is the weakest terroir cluster ($s = 0.20$), reflecting its size (16 regions) and substantive heterogeneity (Etna and Santorini volcanic; Tuscany and Piedmont continental Mediterranean; Finger Lakes a New World outlier sharing terroir vocabulary with the Mediterranean group).
+
+\section*{D.6 SME Change Log}
+Sixteen score and metaphor changes across thirteen regions, applied after subject-matter expert review of the Pass 5 D-score matrix. All changes are final and incorporated into the canonical documents. Three intentional cluster shifts resulted: Etna and Santa Cruz Mountains $\rightarrow$ Old World Interior; Nahe and Wachau $\rightarrow$ The Moderates; Sonoma $\rightarrow$ New World Reinvention.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}lll p{6.5cm}@{}}
+\toprule
+Region & Metaphor & Change & Rationale \\
+\midrule
+Bordeaux         & Business      & $D_3$: $+1 \to +2$ & Deeper institutional tradition anchor; separates from Outward Ease. \\
+Champagne        & Society       & $D_3$: $+1 \to +2$ & Matches Bordeaux reasoning; tradition as dominant institutional force. \\
+Etna             & Awakening     & $D_1$: $-1 \to +1$, $D_2$: $+1 \to +2$, $D_3$: $-1 \to 0$ & Volcanic introspection is interior; extreme conditions justify $+2$ struggle. Cluster shift: $\to$ Old World Interior. \\
+Gori\v{s}ka Brda & Fortune       & Metaphor: Serendipity $\to$ Fortune; $D_3$: $-1 \to 0$ & Resolves duplicate metaphor with Santa Barbara; accidental fortune, not reinvention. \\
+Rioja            & Patience      & Metaphor: Memory $\to$ Patience & Resolves duplicate with Campania; Patience captures extended ageing philosophy. \\
+Santa Barbara    & Serendipity   & $D_3$: $-1 \to 0$ & Serendipity is discovery, not disruption; balanced on tradition/reinvention axis. \\
+Santa Cruz Mtns  & Obsession     & $D_2$: $+2 \to +1$ & Obsessive private vision, not extreme endurance. Cluster shift: $\to$ Old World Interior. \\
+Sonoma           & Authenticity  & $D_1$: $0 \to -1$, $D_3$: $0 \to -1$ & Deliberate informality masking serious intent; moderately outward-facing. Cluster shift: $\to$ New World Reinvention. \\
+Stellenbosch     & Aspiration    & $D_4$: $0 \to +1$ & Individual professional ambition; anchors in New World Reinvention. \\
+Tuscany          & Art           & Metaphor: Heritage $\to$ Art; $D_2$: $0 \to -1$, $D_3$: $+1 \to 0$ & Art better captures Renaissance cultural frame; moderate ease and balanced tradition. \\
+Wachau           & Monumentality & $D_1$: $+1 \to 0$, $D_2$: $+1 \to 0$ & Balanced, composed grandeur, not extreme struggle. Cluster shift: $\to$ The Moderates. \\
+Wagram           & Earth         & $D_1$: $+1 \to +2$, $D_3$: $+1 \to +2$, $D_6$: $+2 \to +1$ & Deeply earthly and grounded; strong custodial tradition of the loess landscape. \\
+Walla Walla      & Community     & $D_1$: $0 \to +1$ & Place-anchored community identity; inward-facing despite collaborative outreach. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{References}
+
+\begin{itemize}[leftmargin=2em,itemsep=0.2em]
+\item Hubert, L. \& Arabie, P. (1985). Comparing partitions. \emph{Journal of Classification}, 2(1), 193--218.
+\item Pearson, K. (1900). On the criterion that a given system of deviations from the probable. \emph{Philosophical Magazine}, 50(302), 157--175.
+\item Rousseeuw, P. J. (1987). Silhouettes: A graphical aid to the interpretation and validation of cluster analysis. \emph{Journal of Computational and Applied Mathematics}, 20, 53--65.
+\end{itemize}
+
+\end{document}
