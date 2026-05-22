@@ -22,6 +22,9 @@
 
 % --- Math and tables ---
 \RequirePackage{amsmath,amssymb,amsthm}
+% Math shorthands used across documents (\R for the reals, \norm for vector norm)
+\providecommand{\R}{\mathbb{R}}
+\providecommand{\norm}[1]{\left\lVert #1 \right\rVert}
 \RequirePackage{booktabs}
 \RequirePackage{longtable}
 \RequirePackage{array}
@@ -68,6 +71,10 @@
     {\small\itshape Companion documents: #1}
   \end{center}
   \vspace{1em}
+  \begin{center}
+    {\footnotesize Vinotheca \textperiodcentered{} published under CC BY-NC 4.0}
+  \end{center}
+  \vspace{0.5em}
   \hrule
   \vspace{1.5em}
 }
