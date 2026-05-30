@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cluster Map — The Soul of Wine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --wine: #7B2D26;
+  --wine-dark: #5A1F1A;
+  --wine-light: #A04038;
+  --cream: #FAF6F1;
+  --parchment: #F2EBE0;
+  --ink: #1A1A1A;
+  --ink-light: #4A4A4A;
+  --ink-muted: #7A7A7A;
+  --border: #E0D8CC;
+  --white: #FFFFFF;
+  --c-owi: #7B2D26; --c-oe: #C4883A; --c-nwr: #3A7D6E;
+  --c-owe: #5B6AAF; --c-ato: #8B5E3C; --c-mod: #6B7B6B;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; }
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--cream); color: var(--ink);
+  line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+
+nav {
+  background: rgba(250,246,241,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.8rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 1000;
+}
+nav .brand a {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600; font-size: 1.15rem;
+  color: var(--wine); text-decoration: none; letter-spacing: 0.04em;
+}
+nav .links { display: flex; gap: 1.4rem; }
+nav .links a { font-size: 0.85rem; font-weight: 500; color: var(--ink-light); text-decoration: none; letter-spacing: 0.03em; transition: color 0.2s; }
+nav .links a:hover, nav .links a.active { color: var(--wine); }
+
+.page-header { padding: 2.5rem 2rem 1rem; max-width: 1200px; margin: 0 auto; }
+.page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 500; color: var(--ink); margin-bottom: 0.3rem; }
+.page-header p { font-size: 0.95rem; color: var(--ink-muted); max-width: 75ch; }
+
+.content { max-width: 1200px; margin: 0 auto; padding: 1rem 2rem 4rem; }
+
+/* ── Filters ── */
+.filters {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.filter-btn {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.82rem; font-weight: 500;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--white);
+  color: var(--ink-light);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn:hover { border-color: var(--wine-light); color: var(--wine); }
+.filter-btn.active { background: var(--wine); border-color: var(--wine); color: var(--white); }
+.filter-btn .dot {
+  display: inline-block; width: 8px; height: 8px;
+  border-radius: 50%; margin-right: 0.3rem; vertical-align: middle;
+}
+
+/* ── Two-panel layout ── */
+.panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+@media (max-width: 850px) {
+  .panels { grid-template-columns: 1fr; }
+}
+
+.panel {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+.panel-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem; font-weight: 600;
+  color: var(--ink); margin-bottom: 0.2rem;
+}
+.panel-subtitle {
+  font-size: 0.82rem; color: var(--ink-muted);
+  margin-bottom: 1rem;
+}
+
+/* Scatter canvas */
+.scatter-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  max-height: 480px;
+}
+.scatter-wrap canvas {
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+/* Tooltip */
+.scatter-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(26,26,26,0.92);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.scatter-tooltip.visible { opacity: 1; }
+.scatter-tooltip .tt-region {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600; font-size: 0.95rem;
+}
+.scatter-tooltip .tt-meta { font-size: 0.72rem; opacity: 0.7; }
+.scatter-tooltip .tt-metaphor {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; color: #E8B4A8;
+}
+
+/* Placeholder */
+.placeholder-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  max-height: 480px;
+  background: var(--parchment);
+  border-radius: 8px;
+  text-align: center;
+  padding: 2rem;
+}
+.placeholder-content svg {
+  width: 48px; height: 48px;
+  stroke: var(--border); fill: none;
+  margin-bottom: 1rem;
+}
+.placeholder-content p {
+  font-size: 0.9rem; color: var(--ink-muted);
+  max-width: 28ch; line-height: 1.5;
+}
+.placeholder-content .coming {
+  font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--wine); margin-top: 0.8rem;
+}
+
+/* ── Legend ── */
+.map-legend {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.legend-title {
+  font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-muted); margin-right: 0.5rem;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 0.35rem;
+  font-size: 0.82rem; color: var(--ink-light);
+}
+.legend-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.12);
+}
+
+/* ── Insight ── */
+.insight-box {
+  background: var(--parchment);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem 2rem;
+}
+.insight-box h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem; font-weight: 600;
+  color: var(--ink); margin-bottom: 0.5rem;
+}
+.insight-box p {
+  font-size: 0.9rem; color: var(--ink-light);
+  line-height: 1.65; max-width: 75ch;
+}
+
+footer { padding: 2rem; text-align: center; border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--ink-muted); }
+footer a { color: var(--wine); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand"><a href="../index.html">The Soul of Wine</a></div>
+  <div class="links">
+    <a href="cluster-explorer.html">Clusters</a>
+    <a href="cluster-map.html" class="active">Map</a>
+    <a href="movement-map.html">Movement</a>
+    <a href="d-score-dashboard.html">Dashboard</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Cluster Map</h1>
+  <p>Regions projected onto their first two principal components. Identity clusters (left) are derived from D-scores; terroir clusters (right) from Layer 2 TF-IDF. If terroir determined identity, the two plots would show the same structure. They do not.</p>
+</div>
+
+<div class="content">
+
+  <div class="filters" id="filters"></div>
+
+  <div class="panels">
+    <div class="panel">
+      <div class="panel-title">Identity Clusters</div>
+      <div class="panel-subtitle">D-scores → PCA → K-means (k=6) · Silhouette: 0.3110</div>
+      <div class="scatter-wrap" id="identityWrap">
+        <canvas id="identityCanvas"></canvas>
+        <div class="scatter-tooltip" id="identityTooltip"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Terroir Clusters</div>
+      <div class="panel-subtitle">Layer 2 TF-IDF → PCA → K-means (k=6)</div>
+      <div class="scatter-wrap" id="terroirWrap">
+        <canvas id="terroirCanvas"></canvas>
+        <div class="scatter-tooltip" id="terroirTooltip"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="map-legend" id="legend"></div>
+
+  <div class="insight-box">
+    <h3>Reading the scatter plot</h3>
+    <p>Each dot is a wine region. Proximity means similar identity profile — regions close together score alike on the six D-score dimensions. Colour marks cluster membership. Well-separated, cohesive colour groups indicate strong cluster structure. Overlap between colours shows where the boundaries are softer — particularly among The Moderates, whose defining feature is the absence of extremes. When the terroir panel is populated, compare the two: regions that are neighbours in identity space are often scattered in terroir space, and vice versa.</p>
+  </div>
+
+</div>
+
+<footer>
+  The Soul of Wine · <a href="../index.html">Home</a> · <a href="https://github.com/jskarabot18/soul-of-wine">GitHub</a>
+</footer>
+
+<script>
+const CLUSTERS = [
+  { name: "Old World Interior", color: "#7B2D26" },
+  { name: "Outward Ease", color: "#C4883A" },
+  { name: "New World Reinvention", color: "#3A7D6E" },
+  { name: "Old World Exterior", color: "#5B6AAF" },
+  { name: "Against the Odds", color: "#8B5E3C" },
+  { name: "The Moderates", color: "#6B7B6B" }
+];
+
+const TERROIR_COLORS = {
+  "French Atlantic": "#8C6D4F",
+  "European Mediterranean": "#C4883A",
+  "International Terroir": "#5B6AAF",
+  "Germanic Continental": "#3A7D6E",
+  "New World Cool-Climate": "#7B2D26",
+  "Austrian Danube": "#6B7B6B"
+};
+
+const DIMS = ["D1","D2","D3","D4","D5","D6"];
+
+let allData = [];
+let pcaCoords = [];
+let terroirData = [];
+let activeCluster = null;
+
+function clusterColor(name) {
+  const c = CLUSTERS.find(c => c.name === name);
+  return c ? c.color : "#999";
+}
+
+function terroirColor(name) {
+  return TERROIR_COLORS[name] || "#999";
+}
+
+/* ── PCA: standardise then power-iteration for top 2 eigenvectors ── */
+function computePCA(regions) {
+  const n = regions.length;
+  const d = DIMS.length;
+
+  const raw = regions.map(r => DIMS.map(dim => r[dim]));
+
+  // Standardise columns
+  const means = [], stds = [];
+  for (let j = 0; j < d; j++) {
+    const col = raw.map(row => row[j]);
+    const mean = col.reduce((a, b) => a + b, 0) / n;
+    const std = Math.sqrt(col.reduce((a, b) => a + (b - mean) ** 2, 0) / n) || 1;
+    means.push(mean);
+    stds.push(std);
+  }
+  const X = raw.map(row => row.map((v, j) => (v - means[j]) / stds[j]));
+
+  // Covariance
+  const cov = Array.from({ length: d }, () => new Array(d).fill(0));
+  for (let i = 0; i < d; i++) {
+    for (let j = i; j < d; j++) {
+      let s = 0;
+      for (let k = 0; k < n; k++) s += X[k][i] * X[k][j];
+      cov[i][j] = s / n;
+      cov[j][i] = cov[i][j];
+    }
+  }
+
+  // Power iteration with deflation
+  function topEigenvectors(mat, numVecs) {
+    const sz = mat.length;
+    const vecs = [];
+    let M = mat.map(r => [...r]);
+
+    for (let v = 0; v < numVecs; v++) {
+      let vec = Array.from({ length: sz }, (_, i) => Math.sin(i * 7.3 + v * 13.1));
+      for (let iter = 0; iter < 300; iter++) {
+        const nv = new Array(sz).fill(0);
+        for (let i = 0; i < sz; i++)
+          for (let j = 0; j < sz; j++)
+            nv[i] += M[i][j] * vec[j];
+        const norm = Math.sqrt(nv.reduce((a, b) => a + b * b, 0)) || 1;
+        vec = nv.map(x => x / norm);
+      }
+      vecs.push(vec);
+
+      const eigenval = vec.reduce((s, vi, i) => {
+        let mv = 0;
+        for (let j = 0; j < sz; j++) mv += M[i][j] * vec[j];
+        return s + vi * mv;
+      }, 0);
+      for (let i = 0; i < sz; i++)
+        for (let j = 0; j < sz; j++)
+          M[i][j] -= eigenval * vec[i] * vec[j];
+    }
+    return vecs;
+  }
+
+  const evecs = topEigenvectors(cov, 2);
+
+  return X.map(row => ({
+    pc1: row.reduce((s, v, j) => s + v * evecs[0][j], 0),
+    pc2: row.reduce((s, v, j) => s + v * evecs[1][j], 0)
+  }));
+}
+
+/* ── Generic scatter draw function ── */
+function drawGenericScatter(canvasId, wrapId, tooltipId, points, getColor, getCluster, filterKey) {
+  const canvas = document.getElementById(canvasId);
+  const wrap = document.getElementById(wrapId);
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+
+  const rect = wrap.getBoundingClientRect();
+  const W = rect.width;
+  const H = rect.height;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const pad = 44;
+  const plotW = W - pad * 2;
+  const plotH = H - pad * 2;
+
+  const pc1Vals = points.map(p => p.pc1);
+  const pc2Vals = points.map(p => p.pc2);
+  const pc1Min = Math.min(...pc1Vals), pc1Max = Math.max(...pc1Vals);
+  const pc2Min = Math.min(...pc2Vals), pc2Max = Math.max(...pc2Vals);
+  const pc1Range = pc1Max - pc1Min || 1;
+  const pc2Range = pc2Max - pc2Min || 1;
+  const m = 0.1;
+
+  function toX(v) { return pad + ((v - pc1Min) / pc1Range * (1 - 2*m) + m) * plotW; }
+  function toY(v) { return pad + plotH - ((v - pc2Min) / pc2Range * (1 - 2*m) + m) * plotH; }
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Light grid
+  ctx.strokeStyle = '#ECE6DC';
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i <= 4; i++) {
+    const x = pad + (i/4) * plotW;
+    const y = pad + (i/4) * plotH;
+    ctx.beginPath(); ctx.moveTo(x, pad); ctx.lineTo(x, pad + plotH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(pad + plotW, y); ctx.stroke();
+  }
+
+  // Zero crosshair
+  ctx.strokeStyle = '#D0C8BC';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 3]);
+  if (pc1Min < 0 && pc1Max > 0) {
+    const zx = toX(0);
+    ctx.beginPath(); ctx.moveTo(zx, pad); ctx.lineTo(zx, pad + plotH); ctx.stroke();
+  }
+  if (pc2Min < 0 && pc2Max > 0) {
+    const zy = toY(0);
+    ctx.beginPath(); ctx.moveTo(pad, zy); ctx.lineTo(pad + plotW, zy); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // Axis labels
+  ctx.font = '500 11px Source Sans 3, sans-serif';
+  ctx.fillStyle = '#7A7A7A';
+  ctx.textAlign = 'center';
+  ctx.fillText('PC1', pad + plotW / 2, H - 6);
+  ctx.save();
+  ctx.translate(13, pad + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('PC2', 0, 0);
+  ctx.restore();
+
+  // Dimmed points when filtering
+  if (activeCluster) {
+    points.forEach((pt, i) => {
+      if (getCluster(pt, i) === activeCluster) return;
+      ctx.beginPath();
+      ctx.arc(toX(pt.pc1), toY(pt.pc2), 4, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(200,192,180,0.3)';
+      ctx.fill();
+    });
+  }
+
+  // Active points
+  const pointData = [];
+  points.forEach((pt, i) => {
+    if (activeCluster && getCluster(pt, i) !== activeCluster) return;
+    const x = toX(pt.pc1);
+    const y = toY(pt.pc2);
+    const color = getColor(pt, i);
+
+    ctx.beginPath();
+    ctx.arc(x, y, 6, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.globalAlpha = 0.85;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    pointData.push({ x, y, pt, idx: i });
+  });
+
+  canvas._pointData = pointData;
+}
+
+/* ── Draw both panels ── */
+function drawScatters() {
+  // Identity panel
+  drawGenericScatter('identityCanvas', 'identityWrap', 'identityTooltip',
+    pcaCoords.map((p, i) => ({ ...p, region: allData[i] })),
+    (pt) => clusterColor(pt.region.cluster),
+    (pt) => pt.region.cluster,
+    'cluster'
+  );
+
+  // Terroir panel
+  if (terroirData.length > 0) {
+    drawGenericScatter('terroirCanvas', 'terroirWrap', 'terroirTooltip',
+      terroirData,
+      (pt) => terroirColor(pt.terroir_cluster),
+      (pt) => {
+        // When filtering by identity cluster, dim regions not in that cluster
+        const region = allData.find(r => r.region === pt.name);
+        return region ? region.cluster : '';
+      },
+      'terroir_cluster'
+    );
+  }
+}
+
+/* ── Hover setup ── */
+function setupHover(canvasId, tooltipId, wrapId, getTooltipHTML) {
+  const canvas = document.getElementById(canvasId);
+  const tooltip = document.getElementById(tooltipId);
+  const wrap = document.getElementById(wrapId);
+
+  canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    let closest = null, minDist = 16;
+    (canvas._pointData || []).forEach(p => {
+      const dist = Math.hypot(p.x - mx, p.y - my);
+      if (dist < minDist) { minDist = dist; closest = p; }
+    });
+
+    if (closest) {
+      tooltip.innerHTML = getTooltipHTML(closest);
+      tooltip.classList.add('visible');
+
+      const wrapRect = wrap.getBoundingClientRect();
+      let tx = closest.x + 14;
+      let ty = closest.y - 10;
+      if (tx + 170 > wrapRect.width) tx = closest.x - 170;
+      if (ty < 10) ty = closest.y + 14;
+      tooltip.style.left = tx + 'px';
+      tooltip.style.top = ty + 'px';
+    } else {
+      tooltip.classList.remove('visible');
+    }
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    tooltip.classList.remove('visible');
+  });
+}
+
+/* ── Filters ── */
+function buildFilters() {
+  const el = document.getElementById('filters');
+  let html = `<button class="filter-btn active" onclick="filterCluster(null)">All (59)</button>`;
+  CLUSTERS.forEach(c => {
+    const count = allData.filter(r => r.cluster === c.name).length;
+    html += `<button class="filter-btn" data-cluster="${c.name}" onclick="filterCluster('${c.name}')">
+      <span class="dot" style="background:${c.color}"></span>${c.name} (${count})
+    </button>`;
+  });
+  el.innerHTML = html;
+}
+
+function buildLegend() {
+  const el = document.getElementById('legend');
+  let html = `<span class="legend-title">Identity Clusters</span>`;
+  CLUSTERS.forEach(c => {
+    html += `<div class="legend-item">
+      <span class="legend-dot" style="background:${c.color}"></span>${c.name}
+    </div>`;
+  });
+
+  // Terroir legend
+  html += `<span class="legend-title" style="margin-left:1.5rem">Terroir Clusters</span>`;
+  Object.entries(TERROIR_COLORS).forEach(([name, color]) => {
+    html += `<div class="legend-item">
+      <span class="legend-dot" style="background:${color}"></span>${name}
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+window.filterCluster = function(cluster) {
+  activeCluster = cluster;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    const bc = b.dataset.cluster || null;
+    b.classList.toggle('active', bc === cluster || (cluster === null && !bc));
+  });
+  drawScatters();
+};
+
+/* ── Init ── */
+Promise.all([
+  fetch('../data/regions.json').then(r => r.json()),
+  fetch('../data/terroir_pca.json').then(r => r.json()).catch(() => [])
+]).then(([regionsData, terroirPcaData]) => {
+  allData = regionsData.regions;
+  pcaCoords = computePCA(allData);
+  terroirData = terroirPcaData;
+  buildFilters();
+  buildLegend();
+  drawScatters();
+
+  setupHover('identityCanvas', 'identityTooltip', 'identityWrap', (p) => {
+    const r = p.pt.region;
+    return `<div class="tt-region">${r.region}</div>
+      <div class="tt-meta">${r.country} · ${r.cluster}</div>
+      <div class="tt-metaphor">${r.metaphor}</div>`;
+  });
+
+  setupHover('terroirCanvas', 'terroirTooltip', 'terroirWrap', (p) => {
+    const r = p.pt;
+    return `<div class="tt-region">${r.name}</div>
+      <div class="tt-meta">${r.country} · ${r.terroir_cluster}</div>
+      <div class="tt-metaphor">${r.metaphor} · Identity: ${r.identity_cluster}</div>`;
+  });
+
+  window.addEventListener('resize', drawScatters);
+});
+</script>
+</body>
+</html>
