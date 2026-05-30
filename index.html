@@ -245,6 +245,8 @@
       max-width: 65ch;
     }
     #applications p:last-of-type { margin-bottom: 0; }
+    #applications a { color: var(--wine); text-decoration: none; border-bottom: 1px solid var(--wine-light); }
+    #applications a:hover { color: var(--wine-dark); border-bottom-color: var(--wine-dark); }
 
     .discipline-grid {
       display: grid;
@@ -268,58 +270,6 @@
       font-size: 0.85rem; color: var(--ink-muted); line-height: 1.5;
       margin-bottom: 0;
     }
-
-    /* ── EXPLORE ── */
-    .explore-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-    .explore-card {
-      background: var(--paper-raised);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 2rem;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: column;
-      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
-    }
-    .explore-card:hover {
-      border-color: var(--wine);
-      box-shadow: 0 6px 28px rgba(123,45,38,0.1);
-      transform: translateY(-3px);
-    }
-    .explore-icon {
-      width: 44px; height: 44px;
-      border-radius: 10px;
-      background: rgba(123,45,38,0.07);
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 1.2rem;
-    }
-    .explore-icon svg { width: 22px; height: 22px; stroke: var(--wine); fill: none; stroke-width: 1.6; }
-    .explore-card h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.3rem; font-weight: 600;
-      color: var(--ink);
-      margin-bottom: 0.5rem;
-    }
-    .explore-card p {
-      font-size: 0.9rem;
-      color: var(--ink-light);
-      line-height: 1.6;
-      flex: 1;
-    }
-    .explore-card .arrow {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      font-size: 0.85rem; font-weight: 500;
-      color: var(--wine);
-      margin-top: 1.2rem;
-      transition: gap 0.3s;
-    }
-    .explore-card:hover .arrow { gap: 0.7rem; }
 
     /* ── DOCUMENTS ── */
     .docs-grid {
@@ -466,7 +416,7 @@
       nav .links { gap: 1rem; }
       nav .links a { font-size: 0.78rem; }
       section { padding: 3rem 1.2rem; }
-      .findings-grid, .explore-grid, .docs-grid { grid-template-columns: 1fr; }
+      .findings-grid, .docs-grid { grid-template-columns: 1fr; }
       .method-steps { grid-template-columns: 1fr 1fr; }
       .numbers-bar { gap: 1.5rem; }
       .discipline-grid { grid-template-columns: 1fr; }
@@ -481,7 +431,6 @@
     <a href="#abstract">The Question</a>
     <a href="#findings">Findings</a>
     <a href="#applications">Why It Matters</a>
-    <a href="#explore">Explore</a>
     <a href="#documents">Documents</a>
     <a href="#method">Method</a>
   </div>
@@ -568,7 +517,7 @@
     <div class="section-label">Why This Matters</div>
     <div class="section-title">A new way to explore wine</div>
     <p>
-      If you have ever found yourself drawn to a region without quite knowing why — or surprised by a connection between two places that share nothing on the map — this study offers a framework for understanding that instinct. The identity clusters reveal affinities that geography alone cannot explain, and they open new paths for the curious wine explorer.
+      If you have ever found yourself drawn to a region without quite knowing why — or surprised by a connection between two places that share nothing on the map — this study offers a framework for understanding that instinct. The identity clusters reveal affinities that geography alone cannot explain, and they open new paths for the curious wine explorer. Explore all fifty-nine regions interactively in <a href="https://jskarabot18.github.io/region-affinities/">Region Affinities</a>, the companion tool.
     </p>
     <div class="discipline-grid">
       <div class="discipline-item">
@@ -612,34 +561,6 @@
         <h4>Neuroscience</h4>
         <p>Structural brain connectivity constrains but does not determine functional connectivity — the brain's physical wiring and its emergent cognitive states are partially independent systems.</p>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── EXPLORE ── -->
-<section id="explore" style="background: var(--parchment); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
-  <div class="container-wide">
-    <div class="section-label">Interactive Tools</div>
-    <div class="section-title">Explore the data</div>
-
-    <div class="explore-grid">
-      <a href="visualizations/cluster-map.html" class="explore-card">
-        <div class="explore-icon">
-          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        </div>
-        <h3>Cluster Map</h3>
-        <p>Regions projected into two-dimensional space, coloured by cluster. The identity map shows clear groupings; the terroir map does not predict them.</p>
-        <span class="arrow">View the map →</span>
-      </a>
-
-      <a href="visualizations/movement-map.html" class="explore-card">
-        <div class="explore-icon">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        </div>
-        <h3>Movement Map</h3>
-        <p>An alluvial diagram showing how regions flow from terroir clusters to identity clusters. The criss-crossing bands are the visual proof: the two systems are independent.</p>
-        <span class="arrow">View the map →</span>
-      </a>
     </div>
   </div>
 </section>
