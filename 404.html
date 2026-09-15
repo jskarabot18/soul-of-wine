@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Soul of Wine has moved</title>
+<meta name="robots" content="noindex">
+<script>
+(function () {
+  var repo = "soul-of-wine";
+  var home = "https://thevinotheca.com/library/inquiries/soul-of-wine/";
+  var prefix = "/" + repo + "/";
+  var p = location.pathname;
+  var tail = "";
+  if (p.indexOf(prefix) === 0) { tail = p.slice(prefix.length); }
+  var target = home + tail + location.search + location.hash;
+  document.addEventListener("DOMContentLoaded", function () {
+    var a = document.getElementById("target");
+    a.href = target;
+    a.textContent = target;
+  });
+  location.replace(target);
+})();
+</script>
+<style>body{font-family:Georgia,serif;max-width:36em;margin:4em auto;padding:0 1em;line-height:1.5}</style>
+</head>
+<body>
+<p>The Soul of Wine is now part of the Library of Vinotheca. This page has moved to
+<a id="target" href="https://thevinotheca.com/library/inquiries/soul-of-wine/">https://thevinotheca.com/library/inquiries/soul-of-wine/</a>.</p>
+</body>
+</html>
